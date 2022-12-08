@@ -331,19 +331,19 @@ public class Util
         resultado = pHttpContextAccessor.HttpContext.Session.Get<List<DKbase.web.cCadeteriaRestricciones>>("RecuperarTodosCadeteriaRestricciones");
         return resultado;
     }
-    public static String get_home_IdOferta(IHttpContextAccessor pHttpContextAccessor)
+    public static int? get_home_IdOferta(IHttpContextAccessor pHttpContextAccessor)
     {
-        String resultado = pHttpContextAccessor.HttpContext.Session.GetString("home_IdOferta");
+        int? resultado = pHttpContextAccessor.HttpContext.Session.GetInt32("home_IdOferta");
         return resultado;
     }
-    public static String get_home_IdTransfer(IHttpContextAccessor pHttpContextAccessor)
+    public static int? get_home_IdTransfer(IHttpContextAccessor pHttpContextAccessor)
     {
-        String resultado = pHttpContextAccessor.HttpContext.Session.GetString("home_IdTransfer");
+        int? resultado = pHttpContextAccessor.HttpContext.Session.GetInt32("home_IdTransfer");
         return resultado;
     }
-    public static String get_home_Tipo(IHttpContextAccessor pHttpContextAccessor)
+    public static int? get_home_Tipo(IHttpContextAccessor pHttpContextAccessor)
     {
-        String resultado = pHttpContextAccessor.HttpContext.Session.GetString("home_Tipo");
+        int? resultado = pHttpContextAccessor.HttpContext.Session.GetInt32("home_Tipo");
         return resultado;
     }
     public static void CargarAccionesEnVariableSession(IHttpContextAccessor pHttpContextAccessor)
@@ -495,11 +495,125 @@ public class Util
     public static bool isPromocionescliente_TIPO(IHttpContextAccessor pHttpContextAccessor)
     {
         bool result = false;
-        if (!string.IsNullOrEmpty(pHttpContextAccessor.HttpContext.Session.GetString("promocionescliente_TIPO")) && pHttpContextAccessor.HttpContext.Session.GetString("promocionescliente_TIPO") ==  "1")
+        if (!string.IsNullOrEmpty(pHttpContextAccessor.HttpContext.Session.GetString("promocionescliente_TIPO")) && pHttpContextAccessor.HttpContext.Session.GetString("promocionescliente_TIPO") == "1")
         {
             result = true;
         }
         return result;
     }
+    public static DKbase.web.cjSonBuscadorProductos RecuperarProductosBase_V3(IHttpContextAccessor pHttpContextAccessor, int? pIdOferta, string pTxtBuscador, List<string> pListaColumna, bool pIsBuscarConOferta, bool pIsBuscarConTransfer)
+    {
+        DKbase.web.cjSonBuscadorProductos resultado = null;
+        if (!string.IsNullOrEmpty(pTxtBuscador) || pIdOferta != null)
+        {
+            DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
+            DKbase.web.Usuario user = getSessionUsuario(pHttpContextAccessor);
+            if (!string.IsNullOrEmpty(pTxtBuscador) && pTxtBuscador.Trim() != string.Empty && oCliente != null)
+            {
+                DKbase.Util.InsertarPalabraBuscada(pTxtBuscador.ToUpper(), user.id, DKbase.generales.Constantes.cTABLA_PRODUCTO);
+            }
+            resultado = RecuperarProductosGeneral_V3(pHttpContextAccessor, pIdOferta, pTxtBuscador, pListaColumna, oCliente.cli_tomaOfertas, oCliente.cli_tomaTransfers);
+            if (pIsBuscarConOferta || pIsBuscarConTransfer)
+            {
+                if (resultado != null)
+                {
+                    if (pIsBuscarConOferta && pIsBuscarConTransfer)
+                    {
+                        resultado.listaProductos = resultado.listaProductos.Where(x => x.pro_ofeporcentaje > 0 || x.isTieneTransfer || x.isProductoFacturacionDirecta).ToList();
+                    }
+                    else
+                    {
+                        if (pIsBuscarConOferta)
+                        {
+                            resultado.listaProductos = resultado.listaProductos.Where(x => x.pro_ofeporcentaje > 0).ToList();
+                        }
+                        else if (pIsBuscarConTransfer)
+                        {
+                            resultado.listaProductos = resultado.listaProductos.Where(x => x.isTieneTransfer || x.isProductoFacturacionDirecta).ToList();
+                        }
+                    }
+                }
+            }
 
+
+        }
+        return resultado;
+    }
+    public static DKbase.web.cjSonBuscadorProductos RecuperarProductosGeneral_V3(IHttpContextAccessor pHttpContextAccessor, int? pIdOferta, string pTxtBuscador, List<string> pListaColumna, bool pIsOrfeta, bool pIsTransfer)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
+        List<string> l_Sucursales = RecuperarSucursalesDelCliente(pHttpContextAccessor);
+        return DKbase.web.FuncionesPersonalizadas_base.RecuperarProductosGeneral_V3(l_Sucursales, oCliente, pIdOferta, pTxtBuscador, pListaColumna, pIsOrfeta, pIsTransfer); ;
+    }
+    public static string RecuperarProductos_generarPaginador(IHttpContextAccessor pHttpContextAccessor, DKbase.web.cjSonBuscadorProductos resultado, int pPage)
+    {
+        int pageSize = DKbase.generales.Constantes.cCantidadFilaPorPagina;
+        resultado.CantidadRegistroTotal = resultado.listaProductos.Count;
+        if (!DKweb.Controllers.mvcController.isSubirPedido(pHttpContextAccessor) && resultado.listaProductos.Count > DKbase.generales.Constantes.cCantidadFilaPorPagina)
+        {
+            resultado.listaProductos = resultado.listaProductos.Skip((pPage - 1) * pageSize).Take(pageSize).ToList();
+        }
+        pHttpContextAccessor.HttpContext.Session.Set<DKbase.web.cjSonBuscadorProductos>("PedidosBuscador_productosOrdenar", resultado);
+        return DKbase.generales.Serializador_base.SerializarAJson(resultado);
+    }
+    public static DKbase.web.cjSonBuscadorProductos RecuperarProductosGeneral_OfertaTransfer(IHttpContextAccessor pHttpContextAccessor, bool pIsOrfeta, bool pIsTransfer)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
+        List<string> l_Sucursales = RecuperarSucursalesDelCliente(pHttpContextAccessor);
+        return DKbase.web.FuncionesPersonalizadas_base.RecuperarProductosGeneral_OfertaTransfer(l_Sucursales, oCliente, pIsOrfeta, pIsTransfer); ;
+    }
+    public static int BorrarCarrito(IHttpContextAccessor pHttpContextAccessor, string pSucursal, string pTipo, string pAccion)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
+        return DKbase.web.capaDatos.capaCAR_base.BorrarCarrito(oCliente.cli_codigo, pSucursal, pTipo, pAccion);
+    }
+    public static void clearHorarioCierre(IHttpContextAccessor pHttpContextAccessor)
+    {
+        List<string> l = pHttpContextAccessor.HttpContext.Session.Get<List<string>>("sucursalesDelCliente");
+        if (l != null)
+        {
+            foreach (var itemSucursal in l)
+            {
+                pHttpContextAccessor.HttpContext.Session.Remove("horario_" + itemSucursal);
+                pHttpContextAccessor.HttpContext.Session.Remove("horario_siguiente" + itemSucursal);
+            }
+        }
+    }
+    public static string ObtenerHorarioCierre(IHttpContextAccessor pHttpContextAccessor, string pSucursal, string pSucursalDependiente, string pCodigoReparto)
+    {
+        return getObtenerHorarioCierre(pHttpContextAccessor, pSucursalDependiente);
+    }
+    public static string ObtenerHorarioCierreAnterior(IHttpContextAccessor pHttpContextAccessor, string pSucursal, string pSucursalDependiente, string pCodigoReparto, string pHorarioCierre)
+    {
+        string result = string.Empty;
+        DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
+        string nameSession = "horario_siguiente" + pSucursal;
+        string horario_siguiente = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
+
+        if (horario_siguiente == null)
+        {
+            pHttpContextAccessor.HttpContext.Session.SetString(nameSession, DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierreAnterior(oCliente, pSucursalDependiente, pHorarioCierre));
+        }
+        horario_siguiente = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
+        if (horario_siguiente != null)
+        {
+            result = horario_siguiente;
+            DateTime? fechaHorarioCierre = DKbase.web.FuncionesPersonalizadas_base.getFecha_Horario(getObtenerHorarioCierre(pHttpContextAccessor, pSucursal));
+            DateTime? fechaGuarda = DKbase.web.FuncionesPersonalizadas_base.getFecha_Horario(result);
+            if (fechaHorarioCierre != null && fechaGuarda != null && fechaGuarda.Value < fechaHorarioCierre.Value)
+            {
+                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierreAnterior(oCliente, pSucursalDependiente, pHorarioCierre));
+                result = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
+            }
+        }
+        return result;
+    }
+    public static DKbase.web.capaDatos.cOferta RecuperarOfertaPorId(int pIdOferta)
+    {
+        DKbase.web.capaDatos.cOferta resultado = null;
+        System.Data.DataTable tabla = DKbase.web.capaDatos.capaHome_base.RecuperarOfertaPorId(pIdOferta);
+        if (tabla != null && tabla.Rows.Count > 0)
+            resultado = DKbase.web.capaDatos.capaHome_base.ConvertToOferta(tabla.Rows[0]);
+        return resultado;
+    }
 }

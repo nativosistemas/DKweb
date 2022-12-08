@@ -45,7 +45,7 @@ if (!app.Environment.IsDevelopment())
          if (exceptionHandlerPathFeature?.Error is Exception)
          {
          
-             DKbase.generales.Log.grabarLog_generico("Excepción no controlada", exceptionHandlerPathFeature?.Error, DateTime.Now,string.Empty,DKbase.Helper.getTipoApp);
+             DKbase.generales.Log.grabarLog_generico("Program_cs: Excepción no controlada", exceptionHandlerPathFeature?.Error, DateTime.Now,string.Empty,DKbase.Helper.getTipoApp);
          }
          if (exceptionHandlerPathFeature?.Error is FileNotFoundException)
          {

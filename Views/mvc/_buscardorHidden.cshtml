@@ -49,7 +49,7 @@
         resultado += "<input type=\"hidden\" id=\"hiddenListaSucursalesInfo\" value=\"" +
         System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(listaSucursal)) + "\" />";
         resultado += "<input type=\"hidden\" id=\"hiddenCantidadProductoParametrizado\" value=\"" +
-        System.Net.WebUtility.HtmlEncode(DKweb.Codigo.Util.RecuperarProductoParametrizadoCantidad(Accessor).ToString()) + "\" />";
+        DKweb.Codigo.Util.RecuperarProductoParametrizadoCantidad(Accessor) + "\" />";
         resultado += "<input type=\"hidden\" id=\"hiddenListaTipoEnviosSucursales\" value=\"" +
         System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(DKweb.Codigo.Util.RecuperarTiposDeEnvios(Accessor)))
         + "\" />";
@@ -57,26 +57,26 @@
         System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson((DKweb.Codigo.Util.RecuperarTodosCadeteriaRestricciones(Accessor))))
         + "\" />";
         resultado += "<input type=\"hidden\" id=\"hiddenCantidadFilaPorPagina\" value=\"" +
-        System.Net.WebUtility.HtmlEncode(DKweb.Codigo.Util.getCantidadFilaPorPagina(Accessor).ToString()) + "\" />";
+        DKweb.Codigo.Util.getCantidadFilaPorPagina(Accessor) + "\" />";
         resultado += "<input type=\"hidden\" id=\"hiddenLimiteDePaginador\" value=\"" +
-        System.Net.WebUtility.HtmlEncode(DKbase.generales.Constantes.cLimiteDePaginador.ToString()) + "\" />";
+        DKbase.generales.Constantes.cLimiteDePaginador + "\" />";
 
-        if (!string.IsNullOrEmpty( DKweb.Codigo.Util.get_home_IdOferta(Accessor) ))
+        if (DKweb.Codigo.Util.get_home_IdOferta(Accessor) != null)
         {
             resultado += "<input type=\"hidden\" id=\"hiddenHomeIdOferta\" value=\"" +
-            System.Net.WebUtility.HtmlEncode(DKweb.Codigo.Util.get_home_IdOferta(Accessor)) + "\" />";
+            DKweb.Codigo.Util.get_home_IdOferta(Accessor) + "\" />";//System.Net.WebUtility.HtmlEncode()
             //HttpContext.Current.Session["home_IdOferta"] = null;
             Accessor.HttpContext.Session.Remove("home_IdOferta");
         }
-        if (!string.IsNullOrEmpty( DKweb.Codigo.Util.get_home_IdTransfer(Accessor) ))
+        if ( DKweb.Codigo.Util.get_home_IdTransfer(Accessor)!= null)
         {
             resultado += "<input type=\"hidden\" id=\"hiddenhomeIdTransfer\" value=\"" +
-            System.Net.WebUtility.HtmlEncode(DKweb.Codigo.Util.get_home_IdTransfer(Accessor)) + "\" />";
+            DKweb.Codigo.Util.get_home_IdTransfer(Accessor) + "\" />";
              Accessor.HttpContext.Session.Remove("home_IdTransfer");
         }
-        if (!string.IsNullOrEmpty( DKweb.Codigo.Util.get_home_Tipo(Accessor) ))
+        if ( DKweb.Codigo.Util.get_home_Tipo(Accessor) != null)
         {
-            resultado += "<input type=\"hidden\" id=\"hiddenhomeTipo\" value=\"" + System.Net.WebUtility.HtmlEncode(DKweb.Codigo.Util.get_home_Tipo(Accessor)) + "\" />";
+            resultado += "<input type=\"hidden\" id=\"hiddenhomeTipo\" value=\"" + DKweb.Codigo.Util.get_home_Tipo(Accessor) + "\" />";
             Accessor.HttpContext.Session.Remove("home_Tipo");
         }
 
@@ -86,11 +86,11 @@
     if (DKweb.Controllers.mvcController.isCarritoExclusivo(Accessor))
     {
         resultado += "<input type=\"hidden\" id=\"hiddenIsCarritoExclusivo\" value=\"" +
-        System.Net.WebUtility.HtmlEncode("true") + "\" />";
+        "true" + "\" />";
     }
     if (DKweb.Controllers.mvcController.isSubirPedido(Accessor))
     {
-        resultado += "<input type=\"hidden\" id=\"hiddenIsSubirPedido\" value=\"" + System.Net.WebUtility.HtmlEncode("true") +
+        resultado += "<input type=\"hidden\" id=\"hiddenIsSubirPedido\" value=\"" + "true" +
         "\" />";
     }
 
