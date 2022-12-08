@@ -1,0 +1,121 @@
+@inject IHttpContextAccessor Accessor
+@{
+    string hrefCarritoGenerico = "";
+    string strController = Accessor.HttpContext.GetRouteValue("action").ToString();;
+    switch (strController)
+    {
+        case "Buscador":
+        case "carrito":
+            hrefCarritoGenerico = "/mvc/carrito";
+            break;
+        case "Diferido":
+        case "carritoDiferido":
+            hrefCarritoGenerico = "/mvc/carritoDiferido";
+            break;
+        default:
+            break;
+    }
+
+}
+
+@{
+    if (!DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+    {
+        <style>
+            input[type=number], .cant_trasf_combo, .btn_confirmar, .cssFocusCantProdCarrito {
+                display: none !important;
+            }
+
+            .pt_transf_combo {
+                width: 100%;
+            }
+            .pt_stock, .pt_sin_stock, .pt_critico {
+                float: none;
+            }
+        </style>
+    }
+}
+
+<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 col_PedidosBuscador">
+    <div id="divContenedorBaseCuentaRegresivaCelular" style="display:none;" class="div_cierre_reparto">
+    </div>
+    <div class="col-lg-12 no-padding">
+        @*<form>*@
+        <input class="form-control buscador" id="txtBuscador" name="txtBuscador" placeholder="Buscar por nombre, c&oacute;digo, laboratorio, otro"
+               onkeypress="onkeypressEnter(event, this)" onfocus="onNullBuscar(this)" onblur="onNullBuscar(this)"
+               autocomplete="off" /><a class="btn_buscar" href="#" onclick="onClickBuscar(); return false;"></a>
+        @*</form>*@
+    </div>
+    <div class="clear15"></div>
+    @*<div class="col-lg-5 no-padding"><a id="opciones_avanzadas" class="btn_a14-g" href="#">Opciones avanzadas<i id="eye_opciones_avanzadas" class="fa fa-eye-slash"></i></a></div>*@
+    <div class="col-lg-5 col-xs-6 no-padding"><div class="clear10 visible-xs"></div> <a id="opciones_avanzadas" class="btn_a14-g" href="#">Opciones avanzadas<i id="eye_opciones_avanzadas" class="fa fa-eye-slash"></i></a></div>
+    <div class="col-lg-7 no-padding text-right hidden-xs"><div class="div-pt_buscador no-margin-r">Sin stock</div><div class="pt_sin_stock pt_buscador"></div><div class="div-pt_buscador">Crítico</div><div class="pt_critico pt_buscador"></div><div class="div-pt_buscador">Stock</div><div class="pt_stock pt_buscador"></div></div>
+    @{
+        if (!DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+        {
+            <div class="col-xs-6 no-padding text-right visible-xs"><a class="btn_carrito_cant" href=@{ WriteLiteral(hrefCarritoGenerico);}>Carrito<span id="spanCarritoCantidad"></span></a></div>
+        }
+    }
+
+    <div class="clear15"></div>
+    <div id="filtros_opciones_avanzadas" class="col-lg-12 no-padding">
+        <div class="radio-checkbox rc_buscador">
+            <input id="checkNombre" class="checkbox" type="checkbox" value="pro_nombre" checked>
+            <label for="checkNombre" value="">Nombre</label>
+        </div>
+        <div class="radio-checkbox rc_buscador">
+            <input id="checkBoxCodigoBarra" class="checkbox" type="checkbox" value="pro_codigobarra" checked>
+            <label for="checkBoxCodigoBarra" value="">C&oacute;digo de barra</label>
+        </div>
+        <div class="radio-checkbox rc_buscador">
+            <input id="checkBoxLaboratorio" class="checkbox" type="checkbox" value="pro_laboratorio" checked>
+            <label for="checkBoxLaboratorio" value="">Laboratorio</label>
+        </div>
+        <div class="radio-checkbox rc_buscador">
+            <input id="checkBoxMonodroga" class="checkbox" type="checkbox" value="pro_monodroga" checked>
+            <label for="checkBoxMonodroga" value="">Monodroga</label>
+        </div>
+        <div class="radio-checkbox rc_buscador">
+            <input id="checkBoxCodigoAlfaBeta" class="checkbox" type="checkbox" value="pro_codigoalfabeta">
+            <label for="checkBoxCodigoAlfaBeta" value="">C&oacute;digo AlfaBeta</label>
+        </div>
+        <div class="radio-checkbox rc_buscador">
+            <input id="checkBoxTroquel" class="checkbox" type="checkbox" value="pro_troquel">
+            <label for="checkBoxTroquel" value="">Troquel</label>
+        </div>
+        <div class="radio-checkbox rc_buscador">
+            <input id="checkBoxFamilia" class="checkbox" type="checkbox" value="pro_familia">
+            <label for="checkBoxFamilia" value="">Familia</label>
+        </div>
+        @{if (DKweb.Controllers.mvcController.isClienteTomaOferta(Accessor))
+            {
+                <div class="radio-checkbox rc_buscador">
+                    <input id="checkBoxTodosOfertas" class="checkbox" type="checkbox" value="">
+                    <label for="checkBoxTodosOfertas" value="">Solo las ofertas</label>
+                </div>
+            }
+        }
+        @{if (DKweb.Controllers.mvcController.isClienteTomaTransfer(Accessor))//
+            {
+                <div class="radio-checkbox rc_buscador">
+                    <input id="checkBoxTodosTransfer" class="checkbox" type="checkbox" value="">
+                    <label for="checkBoxTodosTransfer" value="">Solo los transfers</label>
+                </div>} }
+        @{if (DKweb.Controllers.mvcController.isClienteTomaOferta(Accessor))
+            {
+                <a class="btn_a13-st" href="" onclick="onClickVerOfertas(); return false;">Todos los productos en ofertas</a>
+            }
+        }
+        @{if (DKweb.Controllers.mvcController.isClienteTomaTransfer(Accessor))//
+            {
+                <a class="btn_a13-st" href="" onclick="onClickVerTransfer(); return false;">Todos los productos en transfer</a>
+            }
+        }
+        <div class="clear10"></div>
+    </div>
+
+
+    <div id="divResultadoBuscador"></div>
+    <div id="divPaginador">
+    </div>
+</div>

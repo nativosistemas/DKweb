@@ -1,10 +1,570 @@
+@inject IHttpContextAccessor Accessor
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
+<head>
     <title>Droguería Kellerhoff</title>
-  </head>
-  <body>
-           @RenderBody()
-  </body>
+    <script type="text/javascript">
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-91993710-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="author" content="Nativo Sistemas" />
+    <meta name="distribution" content="Global" />
+    <meta name="city" content="Rosario" />
+    <meta name="country" content="Argentina" />
+    <meta name="geography" content="Pueyrredón 1149 - S2000QIG - Rosario - Santa Fe - Argentina" />
+    <meta name="robots" content="noindex,nofollow,noarchive,noodp,nosnippet" />
+    <meta name="language" content="Spanish" />
+    <meta name="theme-color" content="#2C3E50" />
+    <link rel="shortcut icon" href="~/favicon.ico" />
+
+    @RenderSection("head", required: false)
+    <link href="../includes/css/main.css?n=22" rel="stylesheet">
+    <link href="../includes/css/select2.min.css?n=3" rel="stylesheet">
+    <link href="../includes/css/main-overwrite.css?n=57" rel="stylesheet">
+</head>
+@{
+    if (DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+    {
+        <style>
+            .btn_confirmar {
+                display: none !important;
+            }
+        </style>
+    }
+}
+<body id="divBody" class="bd_sec" onresize="onresizeBody()">
+    <div id="divCargandoContenedorGeneralFondo"></div>
+    @*<div id="modalModuloCelular" class="modal md-effect-1 md-content portfolio-modal in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>*@
+    <div id="modalModulo" class="modal md-effect-1 md-content portfolio-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+    <div id="modalModuloAlert" class="modal md-effect-1 md-content portfolio-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+    <header id="divHeader" class="wrapCelular">
+        <nav id="hdr" class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-2 col-md-2 col-sm-2 hidden-xs">
+                        @{
+                            string hrefHOME;
+                            if (DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+                            {
+                                hrefHOME = " href=\" /ctacte/composicionsaldo\" ";
+                            }
+                            else
+                            {
+                                hrefHOME = " href=\"/mvc/Buscador\" ";                              
+                            }
+                        }
+                        <a class="navbar-brand" @{WriteLiteral(hrefHOME);}>&nbsp;</a>
+                    </div>
+                    <div class="col-xs-12 visible-xs">
+                        <div class="col-xs-2 no-padding-left">
+                            <a id="menu-toggle" href="#" class="navbar-toggle float-left"><i class="fa fa-bars"></i></a>
+                        </div>
+                        <div class="col-xs-1 no-padding">
+                            <a @{WriteLiteral(hrefHOME);} class="float-left" style="margin-top:5px"><img src="/../../img/mvc/logos/logo_ch.png" /></a>
+                        </div>
+                        <div class="col-xs-9 no-padding text-right">
+                            <div class="col-xs-11 bienv_xs">
+                                <span>Bienvenido!</span><div class="clear"></div>@{
+                                  DKbase.web.capaDatos.cClientes oCliente  = DKweb.Codigo.Util.getSessionCliente(Accessor);
+                                  DKbase.web.Usuario  oUsuario = DKweb.Codigo.Util.getSessionUsuario(Accessor);
+                                    if (oUsuario != null)
+                                    {
+                                        WriteLiteral(oUsuario.NombreYApellido);
+                                    }}
+                            </div>
+                            <div class="col-xs-1"><div class="clear15"></div><a class="user_xs" href="#"><i class="fa fa-user-circle-o"></i></a></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-10 col-md-10 col-sm-10 hidden-xs">
+                        <ul class="nav navbar-nav navbar-right">
+                            @{
+                                string classPedidos = "";
+                                string classCuentasCorrientes = "";
+                                string classMediosDePagos = "";
+                                string classDescargas = "";
+                                string classDevo = "";
+                                string classRevista = "";
+                                string strController = Accessor.HttpContext.GetRouteValue("action").ToString();
+                                switch (strController)
+                                {
+                                    case "Buscador":
+                                    case "carrito":
+                                    case "Diferido":
+                                    case "carritoDiferido":
+                                    case "subirpedido":
+                                    case "subirarchivoresultado":
+                                    case "subirarchivoresultado_msg":
+                                    case "estadopedidos":
+                                    case "estadopedidosresultado":
+                                    case "recuperador":
+                                    case "promocionescliente":
+                                    case "reservavacunas":
+                                    case "reservavacunas_mis":
+                                    case "reservavacunas_total":
+                                        classPedidos = " class=\"active\" ";
+                                        break;
+                                    case "Documento":
+                                    case "FichaDebeHaberSaldo":
+                                    case "descargaResumenes":
+                                    case "descargaResumenesDetalle":
+                                    case "composicionsaldo":
+                                    case "composicionsaldoCtaCte":
+                                    case "composicionsaldoCtaResumen":
+                                    case "composicionsaldochequecuenta":
+                                    case "ConsultaDeComprobantes":
+                                    case "RespuestaConsultaDeComprobantes":
+                                    case "comprobantescompleto":
+                                    case "ConsultaDeComprobantesObraSocial":
+                                    case "ConsultaDeComprobantesObraSocialResultado":
+                                    case "ConsultaDeComprobantesObraSocialResultadoRango":
+                                    case "deudaVencida":
+                                        classCuentasCorrientes = " class=\"active\" ";
+                                        break;
+                                    case "mediosdepago1":
+                                    case "mediosdepago2":
+                                    case "mediosdepago3":
+                                    case "mediosdepago4":
+                                    case "mediosdepago5":
+                                        classMediosDePagos = " class=\"active\" ";
+                                        break;
+                                    case "catalogo":
+                                    case "descarga":
+                                        classDescargas = " class=\"active\" ";
+                                        break;
+                                    case "Devoluciones":
+                                    case "NuevaDevolucion":
+                                    case "NuevaDevolucionVencidos":
+                                        classDevo = " class=\"active\" ";
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                            }
+                            @{
+                                if (DKweb.Codigo.Util.IsPermisoSeccion(Accessor,DKbase.generales.Constantes.cSECCION_PEDIDOS))
+                                {
+                                    <li><a @{ WriteLiteral(classPedidos);} href="/mvc/Buscador"><h3>PEDIDOS</h3></a></li>
+                                }
+                                if (DKweb.Codigo.Util.IsPermisoSeccion(Accessor,DKbase.generales.Constantes.cSECCION_DEVOLUCIONES))
+                                {
+                                    <li class="nuevo" data-fecha="2021-01-01"><a href="/devoluciones/Devoluciones" @{ WriteLiteral(classDevo);}><h3>DEVOLUCIONES</h3></a></li>
+                                }
+                                if (DKweb.Codigo.Util.IsPermisoSeccion(Accessor,DKbase.generales.Constantes.cSECCION_CUENTASCORRIENTES))
+                                {
+                                    <li><a href="/ctacte/composicionsaldo" @{ WriteLiteral(classCuentasCorrientes);}><h3>CUENTAS CORRIENTES</h3></a></li>
+                                }
+                                <li class="hidden-sm"><a @{ WriteLiteral(classMediosDePagos);} href="/config/mediosdepago1"><h3>MEDIOS DE PAGOS</h3></a></li>
+                                <li class="hidden-sm"><a @{ WriteLiteral(classRevista);} target="_blank" @{WriteLiteral(DKweb.Codigo.Util.getHrefRevista(Accessor));}><h3>REVISTA ONLINE</h3></a></li>
+                                if (DKweb.Codigo.Util.IsPermisoSeccion(Accessor,DKbase.generales.Constantes.cSECCION_DESCARGAS))
+                                {
+                                    <li class="hidden-sm"><a href="/config/catalogo" @{ WriteLiteral(classDescargas);}><h3>DESCARGAS</h3></a></li>
+                                }
+                            }
+                            <li>
+                                <a data-toggle="dropdown" class="user" href="#"><span><i class="fa fa-circle"></i></span><i class="fa fa-user-circle-o"></i></a>
+                                <ul class="dropdown-menu">
+                                    <li><span>Bienvenido!</span></li>
+                                    <li>
+                                        @{
+                                            if (oUsuario != null)
+                                            {
+                                                WriteLiteral(oUsuario.NombreYApellido);
+                                            }}
+                                    </li>
+                                    <li><div class="separate"></div></li>
+                                    @{
+                                        if (!DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+                                        {
+                                            <li><a href="/config/mensajes"><i class="fa fa-envelope"></i>Mensajes<span class="msj_active">@{WriteLiteral(DKweb.Codigo.Util.ObtenerCantidadMensaje(Accessor));}</span></a></li>
+                                        }
+                                        <li><a href="/config/perfil"><i class="fa fa-key"></i>Contrase&ntilde;a</a></li>
+                                        if (!DKweb.Codigo.Util.IsUsuariosOPERADORCLIENTE(Accessor) &&
+                                        !DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+                                        {
+                                            <li><a href="/config/usuarios"><i class="fa fa-users"></i>Usuarios</a></li>
+                                        }
+
+                                    }
+                                    <li><a class="off" href="#" onclick="onclickSignOff(); return false;"><i class="fa fa-power-off"></i>SALIR</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- menu mobile -->
+        <nav id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <div class="row sidebar-hdr">
+                    <a id="menu-close" href="#" class="toggle">X</a>
+                    <img src="../img/mvc/logos/logo.png" class="img_logo_xs" />
+                </div>
+                <div class="clear"></div>
+                @*inicio FARMASHOW*@
+                @*<li>
+                        <a class="s_menu1 btnFarmashow" id="filter_FARMASHOW" @{WriteLiteral(hrefFARMASHOW);} target="_blank">FARMASHOW</a>
+                    </li>*@
+                @*fin FARMASHOW*@
+                @{ if (DKweb.Codigo.Util.IsPermisoSeccion(Accessor,DKbase.generales.Constantes.cSECCION_PEDIDOS))
+                    {
+                        <li>
+                            <a class="s_menu" id="filter_1" href="#">PEDIDOS<i id="angle_filter_1" class="fa fa-angle-down"></i></a>
+                            <div class="div_filter" id="d_filter_1">
+                                <a href="/mvc/Buscador"><i class="fa fa-search"></i>BUSCADOR</a>
+                                @{
+                                    if (!DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+                                    {
+                                        <a href="/mvc/Diferido"><i class="fa fa-shopping-basket"></i>CARRO SECUNDARIO</a>
+                                    }
+                                }
+                                <a href="/mvc/estadopedidos"><i class="fa fa-file-text"></i>MIS PEDIDOS</a>
+                                @{
+                                    if (!DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+                                    {
+                                        <a href="/mvc/recuperador?t=1"><i class="fa fa-recycle"></i>RECUPERADOR</a>
+                                        <a href="/mvc/subirpedido"><i class="fa fa-upload"></i>SUBIR PEDIDOS</a>
+                                    }
+                                }
+                                <a href="/mvc/promocionescliente"><i class="fa fa-percent"></i>OFERTAS</a>
+                            </div>
+                        </li>
+                    }
+                    if (DKweb.Codigo.Util.IsPermisoSeccion(Accessor,DKbase.generales.Constantes.cSECCION_DEVOLUCIONES))
+                    {
+                        <li>
+                            <a class="s_menu nuevo-celu" id="filter_6" href="#" data-fecha="2021-01-01">DEVOLUCIONES<i id="angle_filter_6" class="fa fa-angle-down"></i></a>
+                            <div class="div_filter" id="d_filter_6">
+                                <a href="/devoluciones/Devoluciones"><i class="fa fa-file-text"></i>DEVOLUCIONES</a>
+                                @{
+                                    if (!DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+                                    {
+                                        <a href="/devoluciones/NuevaDevolucion"><i class="fa fa-reply"></i>DEVOLUCIÓN NORMAL</a>
+                                        <a href="/devoluciones/NuevaDevolucionVencidos"><i class="fa fa-calendar-minus-o"></i>DEVOLUCIÓN DE VENCIDOS</a>
+                                        <a href="/devoluciones/DevolucionesFacturadoNoEnviado" class="nuevo-celu" data-fecha="2021-06-01"><i class="fa fa-calendar-minus-o"></i>FACTURADO NO ENVIADO</a>
+                                    }
+                                }
+                            </div>
+                        </li>
+                    }
+                    if (DKweb.Codigo.Util.IsPermisoSeccion(Accessor,DKbase.generales.Constantes.cSECCION_CUENTASCORRIENTES))
+                    {
+                        <li>
+                            <a class="s_menu" id="filter_2" href="#">CUENTAS CORRIENTES<i id="angle_filter_2" class="fa fa-angle-down"></i></a>
+                            <div class="div_filter" id="d_filter_2">
+                                <a href="/ctacte/deudaVencida"><i class="fa fa-calendar-times-o"></i>DEUDA VENCIDA</a>
+                                <a href="#" onclick="onclickCreditoDisponible(); return false;"><i class="fa fa-usd"></i>CREDITO DISPONIBLE</a>
+                                <a href="/ctacte/composicionsaldo"><i class="fa fa-balance-scale"></i>COMPOSICI&Oacute;N DE SALDOS</a>
+                                <a href="/ctacte/FichaDebeHaberSaldo"><i class="fa fa-exchange"></i>FICHA MOVIMIENTOS</a>
+                                <a href="/ctacte/ConsultaDeComprobantes"><i class="fa fa-file"></i>COMPROBANTES</a>
+                                <a href="/ctacte/ConsultaDeComprobantesObraSocial"><i class="fa fa-medkit"></i>OBRAS SOCIALES</a>
+                                <a href="/ctacte/descargaResumenes"><i class="fa fa-file-pdf-o"></i>RESUMENES</a>
+                                <a href="#" onclick="onclickObtenerSaldoFinalADiciembrePorCliente(); return false;"><i class="fa fa-usd"></i>SALDO AL 31/12</a>
+                                @{
+                                    if (!DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+                                    {
+                                        <a href="#" onclick="onclickConsultasCtaCte(); return false;"><i class="fa fa-envelope"></i>CONSULTAS</a>
+                                    }
+                                }
+
+                            </div>
+                        </li>
+                    }
+                    <li>
+                        <a class="s_menu" id="filter_3" href="#">MEDIOS DE PAGO<i id="angle_filter_3" class="fa fa-angle-down"></i></a>
+                        <div class="div_filter" id="d_filter_3">
+                            <a href="/config/mediosdepago1"><i class="fa fa-dollar"></i>SERVICIO RECAUDATORIO</a>
+                            <a href="/config/mediosdepago2"><i class="fa fa-credit-card-alt"></i>TARJETA DE DEPOSITO</a>
+                            <a href="/config/mediosdepago3"><i class="fa fa-bank"></i>Depositos y transferencias bancarias</a>
+                            <a href="/config/mediosdepago4"><i class="fa fa-credit-card"></i>Tarjetas de Crédito</a>
+                            <a href="/config/mediosdepago5"><i class="fa fa-file-text-o"></i>Sistema Cobinpro</a>
+                        </div>
+                    </li>
+                    if (DKweb.Codigo.Util.IsPermisoSeccion(Accessor,DKbase.generales.Constantes.cSECCION_DESCARGAS))
+                    {
+                        <li>
+                            <a class="s_menu" id="filter_4" href="#">DESCARGAS<i id="angle_filter_4" class="fa fa-angle-down"></i></a>
+                            <div class="div_filter" id="d_filter_4">
+                                <a href="/config/catalogo"><i class="fa fa-file-text-o"></i>CATALOGO Y FOLLETOS</a>
+                                <a href="/config/descarga"><i class="fa fa-download"></i>ARCHIVOS PARA DESCARGAR</a>
+                            </div>
+                        </li>
+                    }
+
+                    <li>
+                        <a class="s_menu" id="filter_5" href="#">PERFIL<i id="angle_filter_5" class="fa fa-angle-down"></i></a>
+                        <div class="div_filter" id="d_filter_5">
+                            @{
+                                if (!DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+                                {
+                                    <a href="/config/mensajes"><i class="fa fa-envelope"></i>MENSAJES<span class="msj_active">@{WriteLiteral(DKweb.Codigo.Util.ObtenerCantidadMensaje(Accessor));}</span></a>
+                                }
+                                <a href="/config/perfil"><i class="fa fa-key"></i>CONTRASE&Ntilde;A</a>
+                                if (!DKweb.Codigo.Util.IsUsuariosOPERADORCLIENTE(Accessor) &&
+                                    !DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+                                {
+                                    <a href="/config/usuarios"><i class="fa fa-users"></i>USUARIOS</a>
+                                }
+                            }
+                        </div>
+                    </li>
+                    <li>
+                        <a class="off" href="#" onclick="onclickSignOff(); return false;"><i class="fa fa-power-off"></i>SALIR</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </header>
+    <section class="section-gris-claro wrapCelular">
+        <div class="col-xs-12">
+            @* Inicio Promotores Y Encargados *@
+            @{
+                if (oUsuario != null && oUsuario.idRol == DKbase.generales.Constantes.cROL_PROMOTOR)
+                {
+                    <p class="TitleCliente">Seleccione un cliente</p> 
+                    List<DKbase.web.capaDatos.cClientes> colClientes = DKweb.Codigo.Util.spRecuperarTodosClientesByPromotor(Accessor, oUsuario.ApNombre);
+
+                    <select class="form-control cmbCliente" id="cmbCliente" name="cmdCliente">
+                        @{
+                            foreach (DKbase.web.capaDatos.cClientes oCli in colClientes)
+                            {
+                                string inhabilitado;
+
+                                if (oCli.cli_estado == "INH")
+                                {
+                                    inhabilitado = "<span style='color: red;'> (INHABILITADO) </span>";
+                                }
+                                else
+                                {
+                                    inhabilitado = "";
+                                }
+                                if (oCliente.cli_codigo == oCli.cli_codigo)
+                                {
+                                    <option value="@{ WriteLiteral(oCli.cli_codigo); }" selected>
+                                        @{ WriteLiteral(oCli.cli_codigo); } - @{ WriteLiteral(oCli.cli_nombre); } @{ WriteLiteral(inhabilitado);}
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@{ WriteLiteral(oCli.cli_codigo); }">@{ WriteLiteral(oCli.cli_codigo); } - @{ WriteLiteral(oCli.cli_nombre); } @{ WriteLiteral(inhabilitado);} </option>
+                                }
+                            }
+                        }
+                    </select>
+                }
+
+                if (oUsuario != null && oUsuario.idRol == DKbase.generales.Constantes.cROL_ENCGRAL)
+                {
+                    <p class="TitleCliente">Seleccione un cliente</p>
+                    List<DKbase.web.capaDatos.cClientes> colClientes = DKweb.Codigo.Util.RecuperarTodosClientes(Accessor);
+
+                    <select class="form-control cmbCliente" id="cmbCliente" name="cmdCliente">
+                        @{
+                            foreach (DKbase.web.capaDatos.cClientes oCli in colClientes)
+                            {
+                                string inhabilitado;
+
+                                if (oCli.cli_estado == "INH")
+                                {
+                                    inhabilitado = "<span style='color: red;'> (INHABILITADO) </span>";
+                                }
+                                else
+                                {
+                                    inhabilitado = "";
+                                }
+                                if (oCliente.cli_codigo == oCli.cli_codigo)
+                                {
+                                    <option value="@{ WriteLiteral(oCli.cli_codigo); }" selected>
+                                        @{ WriteLiteral(oCli.cli_codigo); } - @{ WriteLiteral(oCli.cli_nombre); } @{ WriteLiteral(inhabilitado);}
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@{ WriteLiteral(oCli.cli_codigo); }">@{ WriteLiteral(oCli.cli_codigo); } - @{ WriteLiteral(oCli.cli_nombre); } @{ WriteLiteral(inhabilitado);} </option>
+                                }
+                            }
+                        }
+                    </select>
+                }
+
+                if (oUsuario != null && oUsuario.idRol == DKbase.generales.Constantes.cROL_GRUPOCLIENTE)
+                {
+                    <p class="TitleCliente">Seleccione un cliente</p>
+                    string[] GrupoCliente;
+
+                    GrupoCliente = oUsuario.NombreYApellido.Split(' ');
+
+                    List<DKbase.web.capaDatos.cClientes> colClientes = DKweb.Codigo.Util.RecuperarTodosClientesByGrupoCliente(Accessor,GrupoCliente[0]);
+                    <select class="form-control cmbCliente" id="cmbCliente" name="cmdCliente">
+                        @{
+                            foreach (DKbase.web.capaDatos.cClientes oCli in colClientes)
+                            {
+                                string inhabilitado;
+
+                                if (oCli.cli_estado == "INH")
+                                {
+                                    inhabilitado = "<span style='color: red;'> (INHABILITADO) </span>";
+                                }
+                                else
+                                {
+                                    inhabilitado = "";
+                                }
+                                if (oCliente.cli_codigo == oCli.cli_codigo)
+                                {
+                                    <option value="@{ WriteLiteral(oCli.cli_codigo); }" selected>
+                                        @{ WriteLiteral(oCli.cli_codigo); } - @{ WriteLiteral(oCli.cli_nombre); } @{ WriteLiteral(inhabilitado);}
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@{ WriteLiteral(oCli.cli_codigo); }">@{ WriteLiteral(oCli.cli_codigo); } - @{ WriteLiteral(oCli.cli_nombre); } @{ WriteLiteral(inhabilitado);} </option>
+                                }
+                            }
+                        }
+                    </select>
+                }
+
+                if (oUsuario != null && oUsuario.idRol == DKbase.generales.Constantes.cROL_ENCSUCURSAL)
+                {
+                    <p class="TitleCliente">Seleccione un cliente</p>
+                    string IdSuc;
+
+                    IdSuc = oUsuario.NombreYApellido.Substring(9, 2);
+
+                    List<DKbase.web.capaDatos.cClientes> colClientes = DKweb.Codigo.Util.RecuperarTodosClientesBySucursal(Accessor,IdSuc);
+                    <select class="form-control cmbCliente" id="cmbCliente" name="cmdCliente">
+                        @{
+                            foreach (DKbase.web.capaDatos.cClientes oCli in colClientes)
+                            {
+                                string inhabilitado;
+
+                                if (oCli.cli_estado == "INH")
+                                {
+                                    inhabilitado = "<span style='color: red;'> (INHABILITADO) </span>";
+                                }
+                                else
+                                {
+                                    inhabilitado = "";
+                                }
+                                if (oCliente.cli_codigo == oCli.cli_codigo)
+                                {
+                                    <option value="@{ WriteLiteral(oCli.cli_codigo); }" selected>
+                                        @{ WriteLiteral(oCli.cli_codigo); } - @{ WriteLiteral(oCli.cli_nombre); } @{ WriteLiteral(inhabilitado);}
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@{ WriteLiteral(oCli.cli_codigo); }">@{ WriteLiteral(oCli.cli_codigo); } - @{ WriteLiteral(oCli.cli_nombre); } @{ WriteLiteral(inhabilitado);} </option>
+                                }
+                            }
+                        }
+                    </select>
+                }
+            }
+            @* Fin Promotores *@
+        </div>
+        <div id="contenidoRender" class="container-fluid">
+            @RenderBody()
+        </div>
+    </section>
+    @*borrar*@
+    <div id="divContenedorOfertas" class="off_fxd wrapCelular">
+    </div>
+
+    @*fin borrar*@
+    <footer id="idFooter" class="footer wrapCelular"></footer>
+
+    <div class="container-fluid footer_legales wrapCelular">
+        <div class="row">
+
+            <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12 padding_left_ftr ftr_contacto">
+                <div class="clear15"></div>
+                <p class="p_11 color_white">&copy;   @{ WriteLiteral(DateTime.Now.Year.ToString()); }  Droguer&iacute;a Kellerhoff </p>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-6 col-xs-12 padding_left_ftr ftr_contacto">
+                <table border="0" cellspacing="0" cellpadding="0" class="hidden-xs">
+                    <tr>
+                        <td align="right" class="ftr_firma">Desarrollo&nbsp;&nbsp;&nbsp;</td>
+                        <td>
+                            <a style="display: inline-block; width: auto; margin-top: 7px;" class="float-left" href="http://www.nativosistemas.com.ar/" target="_blank" title="Nativo Sistemas">
+                                <img src="~/img/mvc/logos/nativo.png" style="height:28px;" />
+                            </a>
+                        </td>
+                        <td align="center" class="ftr_firma">&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td align="right" class="ftr_firma">Diseño</td>
+                        <td><a class="mtz" href="http://mestizosweb.com/" target="_blank" title="Mestizos Comunicaci&oacute;n"></a></td>
+                    </tr>
+                </table>
+                <div class="col-xs-12 text-right visible-xs"><a href="http://www.nativosistemas.com.ar/" target="_blank" title="Nativo Sistemas"> <img src="~/img/mvc/logos/nativo.png" style="height:28px;" /></a></div>
+            </div>
+            @*<div class="clear25 visible-xs"></div>*@
+            <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12"><a class="buttonontop" title="Subir" href="#"><i class="fa fa-caret-up"></i></a></div>
+        </div>
+    </div>
+    @{
+        string resultado = string.Empty;
+        if (oCliente != null)
+        {
+            resultado += "<input type=\"hidden\" id=\"hiddenCliente\" value=\"" + System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(oCliente)) + "\" />";
+            if (oCliente.cli_estado == DKbase.generales.Constantes.cESTADO_HAB
+            && DKweb.Codigo.Util.IsPermisoSeccion(Accessor,DKbase.generales.Constantes.cSECCION_PEDIDOS))
+            {
+                List<DKbase.web.capaDatos.cOferta> l_Ofertas =   DKweb.Codigo.Util.RecuperarTodasOfertaPublicar(Accessor);
+                if (l_Ofertas != null)
+                {
+                    resultado += "<input type=\"hidden\" id=\"hiddenListaOfertas\" value=\"" + System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(l_Ofertas)) + "\" />";
+                }
+            }
+
+            if (DKweb.Codigo.Util.ClientesBase_isLogeo(Accessor)
+                && oUsuario != null)
+            {
+                DKweb.Codigo.Util.ClientesBase_isLogeo_null(Accessor);
+                bool isUsuarioVerMensajes_PopUp = true;                
+                isUsuarioVerMensajes_PopUp = !(!string.IsNullOrEmpty(oCliente.cli_GrupoCliente) && oCliente.cli_GrupoCliente.Trim().ToUpper() == "FARMACITY");
+                if (isUsuarioVerMensajes_PopUp)
+                {
+                    List<DKbase.web.capaDatos.cMensaje>
+                        listaMensaje = DKweb.Codigo.Util.RecuperartTodosMensajeNewPorSucursal(Accessor,oCliente.cli_codsuc,oCliente.cli_codrep);
+                    resultado += "<input type=\"hidden\" id=\"hiddenListaMensajeImportante\" value=\"" + System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(listaMensaje)) + "\" />";
+                    List<DKbase.web.capaDatos.cArchivo> listaPopUp = DKweb.Codigo.Util.RecuperarPopUpPorCliente(Accessor,oCliente.cli_codigo, oCliente.cli_codsuc);
+                    resultado += "<input type=\"hidden\" id=\"hiddenListaPopUp\" value=\"" + System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(listaPopUp)) + "\" />";
+                }
+            }
+        }
+
+
+        resultado += "<input type=\"hidden\" id=\"hiddenIsMostrarOferta\" value=\"" + System.Net.WebUtility.HtmlEncode(DKweb.Codigo.Util.isMostrarOferta(Accessor).ToString().ToLower()) + "\" />";
+        
+        WriteLiteral(resultado);
+    }
+    @RenderSection("sectionHidden", required: false)
+    <script type="text/javascript" src="../includes/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../includes/js/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../includes/js/jquery/owl.carousel.min.js"></script>
+    <script type="text/javascript" src="../includes/js/select2.full.min.js"></script>
+
+
+
+    <script src="~/includes/js/libreria.js?n=22" type="text/javascript"></script>
+    <script src="~/includes/js/oferta.js?n=19" type="text/javascript"></script>
+    <script src="~/includes/js/kellerhoff.js?n=53" type="text/javascript"></script>
+    <script src="~/includes/js/ajax.js?n=48" type="text/javascript"></script>
+    <script src="~/includes/js/mensaje.js?n=39" type="text/javascript"></script>
+    <script src="~/includes/js/promotores.js?n=4" type="text/javascript"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
 </html>

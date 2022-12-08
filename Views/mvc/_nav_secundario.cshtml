@@ -1,0 +1,88 @@
+@inject IHttpContextAccessor Accessor
+@{
+    string classBuscador = "";
+    string classDiferido = "";
+    string classSubirpedido = "";
+    string classEstadopedidos = "";
+    string classRecuperador = "";
+    string classPromocionesCliente = "";
+    string classNuevosLanzamientos = "";
+    string classReservaVacunas = "";
+    string strController = Accessor.HttpContext.GetRouteValue("action").ToString();//HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString();
+    switch (strController)
+    {
+        case "Buscador":
+        case "carrito":
+            classBuscador = " class=\"active\" ";
+            break;
+        case "Diferido":
+        case "carritoDiferido":
+            classDiferido = " class=\"active\" ";
+            break;
+        case "subirpedido":
+        case "subirarchivoresultado":
+        case "subirarchivoresultado_msg":
+            classSubirpedido = " class=\"active\" ";
+            break;
+        case "estadopedidos":
+        case "estadopedidosresultado":
+            classEstadopedidos = " class=\"active\" ";
+            break;
+        case "recuperador":
+            classRecuperador = " class=\"active\" ";
+            break;
+        case "promocionescliente":
+            if (Accessor.HttpContext?.Session.GetString("promocionescliente_TIPO") != null && Accessor.HttpContext?.Session.GetString("promocionescliente_TIPO") == "1")
+            {
+                classNuevosLanzamientos = " active ";
+            }
+            else { classPromocionesCliente = " active "; }
+
+            break;
+        case "reservavacunas":
+        case "reservavacunas_mis":
+        case "reservavacunas_total":
+            classReservaVacunas = " class=\"active\" ";
+            break;
+        default:
+            break;
+    }
+
+}
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="nav_sec">
+            <a href="/mvc/Buscador" @{ WriteLiteral(classBuscador);}><i class="fa fa-search" title="BUSCADOR"></i><span class="hidden-sm hidden-xs">BUSCADOR</span></a>
+            <div class="separate"></div>
+            @{
+                if (!DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+                {
+                    <a href="/mvc/Diferido" @{WriteLiteral(classDiferido);}><i class="fa fa-shopping-basket" title="CARRO SECUNDARIO"></i><span class="hidden-sm hidden-xs">CARRO SECUNDARIO</span></a>
+                    <div class="separate"></div>
+                }
+            }
+            <a href="/mvc/estadopedidos" @{WriteLiteral(classEstadopedidos);}><i class="fa fa-file-text" title="MIS PEDIDOS"></i><span class="hidden-sm hidden-xs">MIS PEDIDOS</span></a>
+            <div class="separate"></div>
+            @{
+                if (!DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+                {
+                    <a href="/mvc/recuperador?t=1" @{WriteLiteral(classRecuperador);}><i class="fa fa-recycle" title="RECUPERADOR"></i><span class="hidden-sm hidden-xs">RECUPERADOR</span></a>
+                    <div class="separate"></div>
+                    <a href="/mvc/subirpedido" @{ WriteLiteral(classSubirpedido);}><i class="fa fa-upload" title="SUBIR PEDIDOS"></i><span class="hidden-sm hidden-xs">SUBIR PEDIDOS</span></a>
+                    <div class="separate"></div>
+                }
+            }
+            <a href="/mvc/promocionescliente?t=0" class="oferta  @{ WriteLiteral(classPromocionesCliente);}"><i class="fa fa-percent" title="OFERTAS"></i><span class="hidden-sm hidden-xs hidden-md">OFERTAS</span></a>
+            <div class="separate"></div>
+            <a href="/mvc/promocionescliente?t=1" class="nuevoLanzamiento  @{ WriteLiteral(classNuevosLanzamientos);}"><i class="fa fa-percent" title="NUEVOS LANZAMIENTOS"></i><span class="hidden-sm hidden-xs hidden-md">NUEVOS LANZAMIENTOS</span></a>
+            <div class="separate"></div>
+            <a href="https://bit.ly/2E2EusC" target="_blank" class=""><img id="labbi" src="~/archivos/LABBI.jpg" /></a>
+            <div class="separate separateReservaVacunas"></div>
+            <a href="/mvc/reservavacunas" @{ WriteLiteral(classReservaVacunas);}><i class="fa fa-stethoscope" title="RESERVA VACUNAS 2023"></i><span class="hidden-sm hidden-xs hidden-md">RESERVA VACUNAS 2023</span></a>
+                
+        </div>
+    </div>
+</div>
+

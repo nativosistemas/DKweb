@@ -15,10 +15,18 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        //var result =  DKbase.web.acceso.RecuperarIdClientesConCarritos(5508);//result.First().cli_nombre;//
-        DKbase.Helper.getTipoApp =  "WEB";
-         //var result_1 =  DKbase.web.capaDatos.capaCAR_intranet_base.RecuperarCarritosPorSucursalYProductos_generica_intranet(5678, 5508,DKbase.generales.Constantes.cTipo_Carrito);
- 
+      /*  var result = DKbase.web.acceso.ObtenerReservasVacunas();////result.First().cli_nombre;//
+        if (result != null)
+        {
+            DKbase.Helper.getTipoApp = "WEB" + " - " + result.First().rdv_nombre + " - " + result.Last().rdv_nombre;
+        }
+        else
+        {
+            DKbase.Helper.getTipoApp = "WEB" + " - " + "Sin conexión sql";
+
+        }*/
+        //var result_1 =  DKbase.web.capaDatos.capaCAR_intranet_base.RecuperarCarritosPorSucursalYProductos_generica_intranet(5678, 5508,DKbase.generales.Constantes.cTipo_Carrito);
+
         return View();
     }
 

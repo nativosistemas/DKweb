@@ -1,0 +1,30 @@
+
+@{
+    Layout = "~/Views/Shared/_main.cshtml";
+
+}
+@Html.Partial("_nav_secundario")
+
+@section Scripts{
+    @Html.Partial("_scripts_buscadorGeneral")
+}
+@section sectionHidden{
+    @Html.Partial("_buscardorHidden")
+
+}
+<div class="row">
+    <!-- col -->
+
+    @Html.Partial("_filtros_buscador")
+
+
+    <!-- fin col -->
+    @*<div class="clear visible-md"></div>*@
+    <!-- col -->
+    <div class="col-lg-3 col-md-3 col-sm-12 hidden-xs no_pad_l-md">
+        @Html.Partial("_contenedoresCarrito")
+    </div>
+    <!-- fin col -->
+</div>
+@Html.Partial("_divDetalleProducto")
+

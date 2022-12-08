@@ -1,0 +1,636 @@
+﻿@import url('https://fonts.googleapis.com/css?family=Libre+Barcode+128|Libre+Barcode+39&display=swap');
+
+.footer {
+    background-color: #ededed;
+    height: 100%;
+}
+/*body {
+background-color: #ededed;
+}
+header {
+padding:0px;
+}*/
+.div_pop-over {
+    z-index: 1;
+    display: none;
+}
+
+.tdNombreProducto {
+    cursor: pointer;
+}
+
+#divPaginador {
+    float: right;
+}
+
+mark {
+    background-color: #f9f996;
+}
+
+#divContenedorBaseCuentaRegresiva {
+    display: none;
+}
+
+#divCargandoContenedorGeneralFondo {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #000;
+    filter: alpha(opacity=50);
+    -webkit-opacity: .5;
+    -moz-opacity: .5;
+    opacity: .5;
+}
+
+.centerLoading {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -16px; /* half width*/
+    margin-top: -16px; /* half height*/
+}
+
+.titleConfirmar {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    position: relative;
+    padding: .75rem 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.3em;
+}
+
+.errorFilaTransfer {
+    color: red !important;
+    margin-left: 87px !important;
+}
+/* modal celular*/
+@media (max-width:767px) {
+    /*body.modal-open > .wrapCelular {
+        display: none;
+    }*/
+    body.modal-open-Celular > .wrapCelular {
+        display: none;
+    }
+
+    a.btn_confirmar {
+        margin-right: 12px;
+    }
+}
+
+/* fin modal celular */
+#divNoHayCarritos {
+    font-family: Lato,sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: red;
+    text-align: center;
+    text-transform: uppercase;
+    display: none;
+}
+/* ---------------------------------------------- */
+
+/*.table-SubirArchivo tbody  {
+    display: block;
+    max-height: 55vh;
+    overflow-y: scroll;
+}*/
+.tableTheadSubirPedido {
+    margin-bottom: 0px;
+}
+
+/*.table-SubirArchivoTbody {
+      display: block;
+    height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 1200px;
+}*/
+.divSubirPedido {
+    max-height: 55vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.divSubirPedidoCabezaPie {
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+@media (max-width:767px) {
+    .div_carrito .div_carrito_cont {
+        overflow-y: auto !important;
+    }
+}
+
+.div_subirpedido .div_tblsubirpedido_cont {
+    max-height: 300px;
+}
+
+.div_gris {
+    margin: 20px 0;
+    font-family: Arial;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 700;
+    padding: 10px 20px;
+    background-color: #444449;
+    color: #fff !important;
+    text-align: center;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+@media (max-width:767px) {
+    .div_gris {
+        padding-left: 0%;
+        padding-right: 0%;
+    }
+}
+/*.col-item .photo a .bg_promo {
+  z-index: 0;
+}*/
+.PideSemana_false {
+    display: none;
+}
+
+.RangoFechaObraSocial {
+    display: none;
+}
+
+.siImprimir {
+    display: none;
+}
+
+@media print {
+    .noImprimir {
+        display: none !important;
+    }
+
+    .siImprimir {
+        display: block;
+    }
+}
+
+.detalleTransferModoCelular {
+    color: #66abd8 !important;
+}
+
+.pt_debitos {
+    margin-top: 8px;
+    width: 13px;
+    height: 13px;
+    display: inline-block;
+    float: left;
+    margin-right: 3px;
+    border-radius: 6px;
+    background-color: #b6fdb0;
+}
+
+    .pt_debitos.pt_buscador {
+        float: right;
+        margin-top: 0;
+    }
+/*.row_debitos td {
+    color: #1b82c5!important;
+    font-weight: bold!important;
+        background-color: #1b82c5!important;
+}
+.row_debitos td div {
+    color: #1b82c5!important;
+    font-weight: bold!important;
+}*/
+.table > tbody > tr.row_debitos {
+    background-color: #b6fdb0 !important;
+}
+
+.imgPopUp {
+    /*margin-left: 5%;
+    width:90%;*/
+    /*width:100%;*/
+}
+
+.modal-popUp {
+}
+
+@media (max-width:1024px) {
+    .imgPopUp {
+        width: 90%;
+    }
+}
+
+.divContenedorPopUp {
+    text-align: center;
+}
+
+#sidebar-wrapper {
+    display: none;
+}
+
+    #sidebar-wrapper.active {
+        display: block;
+    }
+/*.form-control.buscador {
+    width: 96%;
+}*/
+.cssInputNoMostrar {
+    display: none;
+}
+
+
+.cmbCliente {
+    text-align-last: center !important;
+    height: 50px !important;
+}
+
+.select2-container--default .select2-selection--single {
+    border: none !important;
+    border-radius: 0 !important;
+    text-align: center !important;
+    height: 50px !important;
+}
+
+    .select2-container--default .select2-selection--single:focus {
+        outline-width: 0 !important;
+        height: 50px !important;
+    }
+
+.btnFarmashow {
+    margin-top: 30px !important;
+    background: #2ECC71 !important;
+    color: black !important;
+}
+
+    .btnFarmashow:hover,
+    .btnFarmashow:focus,
+    .btnFarmashow:active,
+    .btnFarmashow:window-inactive,
+    .btnFarmashow:visited {
+        margin-top: 30px !important;
+        background: #2ECC71 !important;
+        color: black !important;
+    }
+
+    .btnFarmashow h3 {
+        padding: 15px !important;
+        color: black !important;
+    }
+
+.navbar-inverse .btnFarmashow {
+    margin-top: 14px !important;
+}
+
+.TitleCliente {
+    text-align: center;
+    background: white;
+    height: 40px;
+    line-height: 40px;
+    margin: 0;
+    font-weight: 600;
+}
+
+.msjList {
+    list-style: none;
+    text-align: center;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 30px;
+}
+
+    .msjList:nth-child(even) {
+        background: #f1f1f1;
+    }
+
+.lotesList {
+    list-style: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.headerlotesList {
+    list-style: none;
+    text-align: left;
+    font-size: 16px;
+    line-height: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.fven {
+    float: right;
+}
+
+.lotesList:nth-child(even) {
+    background: #f1f1f1;
+}
+
+#divPanelNroComprobante {
+    padding-bottom: 10px;
+    /*border-bottom: 1px solid #999;*/
+    margin-bottom: 1em;
+}
+
+    #divPanelNroComprobante input, #divPanelNroComprobante select {
+        margin-bottom: 15px !important;
+    }
+
+.tablaDevoluciones thead tr th {
+    padding: 11px 5px !important;
+    border-right: 1px solid #cecece;
+    vertical-align: middle;
+    font-weight: 400 !important;
+    font-size: 11px !important;
+    line-height: 11px;
+    color: #fff !important;
+    border-bottom: none !important;
+}
+
+    .tablaDevoluciones thead tr th:last-child {
+        border-right: none !important;
+    }
+
+.tablaDevoluciones {
+    border-bottom: 2px solid #34495e;
+}
+
+.botonera_dev {
+    background: #fff;
+    padding: 1em;
+}
+
+
+.tablaDevoluciones td {
+    font-size: 12px !important;
+}
+
+    .tablaDevoluciones td .label {
+        font-size: 11px !important;
+    }
+
+.refresh-input {
+    margin-top: 1em;
+}
+
+#form_reclamos {
+    transition: all 1s ease-in-out;
+    -webkit-transition: all 1s ease-in-out;
+}
+
+.SaldoFinalADiciembreH4 {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    color: #1b82c5;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.SaldoFinalADiciembreH5 {
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 24px;
+    color: #1b82c5;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+    .vtos-sm {
+        display: none !important;
+    }
+}
+
+.nav li.nuevo a h3 {
+    color: forestgreen;
+}
+
+.nuevo {
+    margin-left: 60px !important;
+}
+
+.nav li.nuevo a h3::before {
+    content: '';
+    background-image: url(/archivos/new2.png);
+    width: 58px !important;
+    height: 18px;
+    position: absolute;
+    left: -60px;
+    top: -2px;
+}
+
+.nuevo-sublink::after {
+    content: '';
+    background-image: url(/archivos/new2.png);
+    width: 58px !important;
+    height: 18px;
+    position: absolute;
+    margin-left: 10px;
+    top: 10px;
+}
+
+.sidebar-nav li a.nuevo-celu::after {
+    content: '';
+    background-image: url(/archivos/new.png);
+    width: 58px !important;
+    height: 18px;
+    position: relative;
+    display: inline-block;
+    left: 10px;
+}
+
+.badge-danger {
+    background-color: #e74c3c !important;
+    font-weight: 100;
+    font-size: 16px !important;
+}
+
+@media (min-width : 768px) {
+    .badge-danger {
+        background-color: #e74c3c !important;
+        font-weight: 100;
+        font-size: 12px !important;
+    }
+}
+
+header .nav li {
+    margin-right: 15px !important;
+    padding: 0;
+    width: auto !important;
+}
+
+.box {
+    background: white;
+    padding: 1em;
+    border-radius: 0.2rem;
+}
+
+.chk-filtros {
+    height: 17px !important;
+    margin-right: 10px !important;
+    margin-top: 2px !important;
+    float: left !important;
+}
+
+.nav.nav-tabs {
+    margin-bottom: 10px !important;
+    border-bottom: 1px solid darkgrey;
+}
+
+    .nav.nav-tabs li {
+        padding: 0 !important;
+        margin-bottom: -1px !important;
+    }
+
+        .nav.nav-tabs li .active {
+            border: 1px solid darkgrey;
+            /*background: ;*/
+            color: steelblue !important;
+            border-bottom-color: #ededed !important;
+        }
+
+        .nav.nav-tabs li a:hover {
+            background: #ddd;
+        }
+
+.titleNoCumplenConCondicion {
+    text-align: center;
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    font-size: 12px;
+    padding: .75rem 1.25rem;
+    margin-bottom: 0.3em;
+}
+
+.tdSeparadorGrilla {
+    border-right: 2px solid #717171 !important;
+}
+
+.tr_thead > td {
+    border-right: none !important;
+}
+
+#labbi {
+    max-width: 80px;
+    position: absolute;
+    top: 3px;
+}
+
+@media (min-width : 992px) {
+    #labbi {
+        top: 35px;
+        right: 0;
+    }
+}
+
+@media (min-width : 1020px) {
+    #labbi {
+        top: 3px;
+        right: auto;
+    }
+}
+
+.linkWP {
+    color: #1abc9c;
+}
+
+    .linkWP:active {
+        color: #1abc9c;
+    }
+
+    .linkWP:hover {
+        color: #1abc9c;
+    }
+
+    .linkWP:link {
+        color: #1abc9c;
+    }
+
+    /* visited link */
+    .linkWP:visited {
+        color: #1abc9c;
+    }
+
+.linkWP_icon {
+    padding-right: 5px;
+    padding-left: 3px;
+    font-size: 12px;
+}
+/* fin nuevo lanzamientos */
+.nav_sec a.nuevoLanzamiento i {
+    color: #5ca679 !important;
+}
+
+.nav_sec a.nuevoLanzamiento {
+    color: #5ca679 !important;
+}
+    .nav_sec a.nuevoLanzamiento.active {
+        background-color: #5ca679 !important;
+        color: #fff !important;
+    }
+        .nav_sec a.nuevoLanzamiento.active i {
+            color: #fff !important;
+            
+        }
+.divFondoLanzamiento {
+    background-color: rgb(212,212,212);
+    /*rgba(255, 255, 255, 0.5);*/
+}
+.divContenedorLanzamiento {
+    margin:10px;
+}
+.divFondoDescLanzamiento {
+    /*background-color: rgba(255, 255, 255, 0.5);*/
+}
+.img-responsive-lanzamiento {
+margin:auto;
+}
+.modal-lanzamiento {
+    width:auto;
+}
+/* fin nuevo lanzamientos */
+a.mtz {
+    z-index: 0;
+}
+.separateReservaVacunas {
+    margin-left: 80px;
+}
+.labelMsgError {
+    display: none;
+    color: red;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+@keyframes anim {
+    0% {
+        background-color: #315e7b;
+    }
+    25% {
+        background-color: #1b82c5;
+    }
+    50% {
+        background-color: #315e7b;
+    }
+    75% {
+        background-color: #1b82c5;
+    }
+    100% {
+        background-color: #315e7b;
+    }
+}
+
+#botonOferta {
+    animation-name: anim;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+}

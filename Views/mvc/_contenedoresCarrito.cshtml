@@ -1,0 +1,27 @@
+@inject IHttpContextAccessor Accessor
+@{
+    string resultadoHtmlCarritosTransfer = string.Empty;
+
+    List<string> ListaSucursal = DKweb.Codigo.Util.RecuperarSucursalesDelCliente(Accessor);
+
+    if (!DKweb.Controllers.mvcController.isCarritoExclusivo(Accessor))
+    {
+        resultadoHtmlCarritosTransfer += "<div class=\"div_cierre_reparto\" id=\"divContenedorBaseCuentaRegresiva\" >";
+        resultadoHtmlCarritosTransfer += "</div>";
+    }
+    if (!DKweb.Codigo.Util.IsUsuariosDK(Accessor) && ListaSucursal != null)
+    {
+        foreach (string item in ListaSucursal)
+        {
+            resultadoHtmlCarritosTransfer += "<div id=\"divContenedorBase_" + item + "\" > </div>";
+
+        }
+        foreach (string item in ListaSucursal)
+        {
+            resultadoHtmlCarritosTransfer += "<div id=\"divContenedorBaseTransfer_" + item + "\" > </div>";
+        }
+    }
+
+    WriteLiteral(resultadoHtmlCarritosTransfer);
+
+}

@@ -1,0 +1,98 @@
+@inject IHttpContextAccessor Accessor
+@{
+    string resultado = string.Empty;
+    DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(Accessor);
+    DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(Accessor);
+    if (oCliente != null)
+    {
+        List<DKbase.web.cSucursal> listaSucursal = DKweb.Codigo.Util.RecuperarTodasSucursales(Accessor);
+        List<DKbase.web.cSucursal> listaSucursalInfo = new List<DKbase.web.cSucursal>();
+        //// Inicio S7
+        List<string> ListaSucursalOptimizar = DKweb.Codigo.Util.RecuperarSucursalesDelCliente(Accessor);
+        //// Fin S7
+        foreach (string itemSucursalOptimizar in ListaSucursalOptimizar)
+        {
+            foreach (DKbase.web.cSucursal itemSucursalInfoAux in listaSucursal)
+            {
+                if (itemSucursalOptimizar == itemSucursalInfoAux.sde_sucursal)
+                {
+                    listaSucursalInfo.Add(itemSucursalInfoAux);
+                    break;
+                }
+            }
+        }
+        // Fin Optimizar
+        resultado += "<input type=\"hidden\" id=\"hiddenListaSucursalesDependienteInfo\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(listaSucursalInfo)) + "\" />";
+        List<DKbase.web.capaDatos.cCarrito> listaCarrito = new List<DKbase.web.capaDatos.cCarrito>();
+        List<DKbase.web.capaDatos.cSucursalCarritoTransfer> listaCarritoTransfer = new List<DKbase.web.capaDatos.cSucursalCarritoTransfer>();
+        if (DKweb.Controllers.mvcController.isDiferido(Accessor))
+        {
+            listaCarrito = DKweb.Codigo.Util.RecuperarCarritosPorSucursalYProductos(Accessor,
+            DKbase.generales.Constantes.cTipo_CarritoDiferido);
+            listaCarritoTransfer = DKweb.Codigo.Util.RecuperarCarritosTransfer_generico(Accessor,
+            DKbase.generales.Constantes.cTipo_CarritoDiferidoTransfers);
+            resultado += "<input type=\"hidden\" id=\"hiddenIsCarritoDiferido\" value=\"" + System.Net.WebUtility.HtmlEncode("true")
+            + "\" />";
+        }
+        else if (DKweb.Controllers.mvcController.isBuscador(Accessor))
+        {
+            listaCarrito = DKweb.Codigo.Util.RecuperarCarritosPorSucursalYProductos(Accessor,
+            DKbase.generales.Constantes.cTipo_Carrito);
+            listaCarritoTransfer = DKweb.Codigo.Util.RecuperarCarritosTransfer_generico(Accessor,
+            DKbase.generales.Constantes.cTipo_CarritoTransfers);
+        }
+        resultado += "<input type=\"hidden\" id=\"hiddenListaCarritosTransferPorSucursal\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(listaCarritoTransfer)) + "\" />";
+        resultado += "<input type=\"hidden\" id=\"hiddenListaCarritos\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(listaCarrito)) + "\" />";
+        resultado += "<input type=\"hidden\" id=\"hiddenListaSucursalesInfo\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(listaSucursal)) + "\" />";
+        resultado += "<input type=\"hidden\" id=\"hiddenCantidadProductoParametrizado\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKweb.Codigo.Util.RecuperarProductoParametrizadoCantidad(Accessor).ToString()) + "\" />";
+        resultado += "<input type=\"hidden\" id=\"hiddenListaTipoEnviosSucursales\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(DKweb.Codigo.Util.RecuperarTiposDeEnvios(Accessor)))
+        + "\" />";
+        resultado += "<input type=\"hidden\" id=\"hiddenListaCadeteriaRestricciones\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson((DKweb.Codigo.Util.RecuperarTodosCadeteriaRestricciones(Accessor))))
+        + "\" />";
+        resultado += "<input type=\"hidden\" id=\"hiddenCantidadFilaPorPagina\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKweb.Codigo.Util.getCantidadFilaPorPagina(Accessor).ToString()) + "\" />";
+        resultado += "<input type=\"hidden\" id=\"hiddenLimiteDePaginador\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.generales.Constantes.cLimiteDePaginador.ToString()) + "\" />";
+
+        if (!string.IsNullOrEmpty( DKweb.Codigo.Util.get_home_IdOferta(Accessor) ))
+        {
+            resultado += "<input type=\"hidden\" id=\"hiddenHomeIdOferta\" value=\"" +
+            System.Net.WebUtility.HtmlEncode(DKweb.Codigo.Util.get_home_IdOferta(Accessor)) + "\" />";
+            //HttpContext.Current.Session["home_IdOferta"] = null;
+            Accessor.HttpContext.Session.Remove("home_IdOferta");
+        }
+        if (!string.IsNullOrEmpty( DKweb.Codigo.Util.get_home_IdTransfer(Accessor) ))
+        {
+            resultado += "<input type=\"hidden\" id=\"hiddenhomeIdTransfer\" value=\"" +
+            System.Net.WebUtility.HtmlEncode(DKweb.Codigo.Util.get_home_IdTransfer(Accessor)) + "\" />";
+             Accessor.HttpContext.Session.Remove("home_IdTransfer");
+        }
+        if (!string.IsNullOrEmpty( DKweb.Codigo.Util.get_home_Tipo(Accessor) ))
+        {
+            resultado += "<input type=\"hidden\" id=\"hiddenhomeTipo\" value=\"" + System.Net.WebUtility.HtmlEncode(DKweb.Codigo.Util.get_home_Tipo(Accessor)) + "\" />";
+            Accessor.HttpContext.Session.Remove("home_Tipo");
+        }
+
+    }
+    resultado += "<input id=\"hiddenIndexCarrito\" type =\"hidden\" />";
+
+    if (DKweb.Controllers.mvcController.isCarritoExclusivo(Accessor))
+    {
+        resultado += "<input type=\"hidden\" id=\"hiddenIsCarritoExclusivo\" value=\"" +
+        System.Net.WebUtility.HtmlEncode("true") + "\" />";
+    }
+    if (DKweb.Controllers.mvcController.isSubirPedido(Accessor))
+    {
+        resultado += "<input type=\"hidden\" id=\"hiddenIsSubirPedido\" value=\"" + System.Net.WebUtility.HtmlEncode("true") +
+        "\" />";
+    }
+
+    WriteLiteral(resultado);
+}

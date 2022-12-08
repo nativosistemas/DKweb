@@ -1,0 +1,12 @@
+@Html.Partial("_nav_secundario")
+<div class="row">
+    <div class="col-xs-12">
+        <div id="divContenedorBaseCuentaRegresivaCelular" style="display:none;" class="div_cierre_reparto">
+        </div>
+        <div class="col-xs-6 no-padding"><a class="btn_volver" href="#" onclick="volverBuscador_Base(); return false;"><i class="fa fa-play"></i>VOLVER</a></div>
+        <div class="clear15"></div>
+        <div id="divNoHayCarritos">No hay carritos cargados</div>
+
+        @Html.Partial("_contenedoresCarrito")
+    </div>
+</div>

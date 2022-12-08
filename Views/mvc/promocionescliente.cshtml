@@ -1,0 +1,38 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_secundario")
+@section Scripts{
+    <style type="text/css">
+        /*.col-item {
+            border: 5px solid #fff;
+        }*/
+    </style>
+    <script type="text/javascript">
+
+
+    </script>
+}
+@section sectionHidden{
+    @{
+        string resultado = string.Empty;
+        List<DKbase.web.capaDatos.cOferta> l = DKbase.Util.RecuperarTodasOfertaPublicar(DKweb.Codigo.Util.isPromocionescliente_TIPO(Accessor));
+        resultado += "<input type=\"hidden\" id=\"hiddenListaPromocionesClientes\" value=\"" + System.Net.WebUtility.HtmlEncode(l == null ? string.Empty : DKbase.generales.Serializador_base.SerializarAJson(l)) + "\" />";
+
+        WriteLiteral(resultado);
+    }
+}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="clear15"></div>
+            <div id="carousel-lg" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <div class="row" id="divContenedorOfertasPromocionesClientes">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>            
