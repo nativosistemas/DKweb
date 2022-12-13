@@ -1,0 +1,173 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_secundario")
+
+@section Scripts{
+@Html.Partial("_scripts_buscadorGeneral")
+ @Html.Partial("_scripts_subirArchivo")
+}
+@{
+
+    string resultadoHidden = string.Empty;
+     DKbase.web.capaDatos.cClientes oCliente =DKweb.Codigo.Util.getSessionCliente(Accessor);
+    if (oCliente != null)
+    {
+        List<DKbase.web.capaDatos.cHistorialArchivoSubir> listaHistorial =DKbase.Util.RecuperarHistorialSubirArchivo(oCliente.cli_codigo);
+        if (listaHistorial != null && listaHistorial.Count > 0)
+        {
+            resultadoHidden += "<input type=\"hidden\" id=\"hiddenPrimerArchivoSubidos\" value=\"" + System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(listaHistorial.OrderBy(x=> x.has_fecha).Last())) + "\" />";
+        }
+    }
+    
+    if (DKweb.Codigo.Util.subirpedido_isRepetido(Accessor))
+    {
+        resultadoHidden += "<input type=\"hidden\" id=\"hiddenIsSubirPedidoRepetido\" value=\"" + System.Net.WebUtility.HtmlEncode("true") + "\" />";
+       DKweb.Codigo.Util.subirpedido_isRepetido_null(Accessor);
+    }
+    WriteLiteral(resultadoHidden);
+}
+@using (Html.BeginForm("subirpedidoUpload", "mvc", FormMethod.Post, new { id = "my_form", enctype = "multipart/form-data" }))
+{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="col-xs-12 text-left">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 no-padding"><div class="clear" style="height:8px"></div>Seleccione el archivo a subir:</div>
+                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                    <div class="clear5"></div>
+                    <input type="file" id="fileUpload" name="fileUpload" />
+                </div>
+                <div class="clear10 visible-xs"></div>
+                <div class="col-lg-7 col-md-6 col-sm-5 col-xs-12 no-padding">
+                    <a class="btn_upload" href="#" onclick="CargarHtml_ElejirSucursal(); document.getElementById('my_form').submit(); return false;">SUBIR</a>
+                    @*<input type="submit" name="Submit" id="Submit" value="Upload" class="btn_upload"  />*@
+                    <p class="oblig pad_7">(*) Debe subir un archivo, con el formato correspondiente.</p>
+                </div>
+            </div>
+            <div class="clear20"></div>
+            <div class="col-xs-12 text-left">
+                <div class="est_ped st">Sucursales:</div>
+                @{
+                    string resultado = string.Empty;
+                    if (oCliente != null)
+                    {
+                        List<string> ListaSucursal = DKweb.Codigo.Util.RecuperarSucursalesDelCliente(Accessor);
+
+                        List<DKbase.web.cSucursal> listaSucursal = DKweb.Codigo.Util.RecuperarTodasSucursales(Accessor);
+                        bool isChecked = true;
+                        foreach (string item in ListaSucursal)
+                        {
+                            string htmlChecked = "";
+                            if (isChecked)
+                            {
+                                htmlChecked = " checked ";
+                                isChecked = false;
+                            }
+                            resultado += "<div class=\"radio radio-info radio-inline\" >";
+                            resultado += "<input type=\"radio\" name=\"RadioTipoSucursal\" id=\"radioSucursal" + item + "\"  " + htmlChecked + " value=\"" + item + "\" />";
+                            for (int i = 0; i < listaSucursal.Count; i++)
+                            {
+                                if (listaSucursal[i].suc_codigo == item)
+                                {
+                                    resultado += "<label for=\"radioSucursal" + item + "\">" + listaSucursal[i].suc_nombre + "</label>";
+                                    break;
+                                }
+                            }
+                            resultado += "</div>";
+                        }
+                    }
+                    WriteLiteral(resultado);
+                }
+            </div>
+            <div class="clear20"></div>
+            <div id="ultimoPedido" class="col-xs-12 text-left">
+                @*<div class="est_ped st">&Uacute;ltimo pedido realizado:<a class="p_lr" href="#" data-toggle="modal" data-target="#modalSubirarchivo">Sprueba.PED</a><div class="clear10 visible-xs"></div>C&oacute;rdoba - 11/04/2018 14:25:55 a.m.</div>*@
+            </div>
+            <div class="clear20"></div>
+            <div class="div_cont_pagos">
+                <div class="col-xs-12 text-left">
+                    <b>Formato requerido:</b>
+                    <div class="clear10"></div>
+                    <ul class="ul_bancos">
+                        <li>Ksoft</li>
+                        <li><a id="btn_MuestraOtroSistemas" href="#">Otros sistemas</a></li>
+                    </ul>
+                    <div id="divMuestraOtroSistemas" class="col-lg-4 col-md-5 col-sm-7 col-xs-12">
+                        <div class="clear15"></div>
+                        <p class="p_11"><b>REGRISTROS DE PEDIDOS GENERADOS POR OTROS SISTEMAS</b></p>
+                        <table class="footable table carrito table-stripped" width="100%" align="center" cellspacing="0" cellpadding="0" border="0">
+                            <thead>
+                                <tr>
+                                    <th class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">Nro</th>
+                                    <th class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-center">Campo</th>
+                                    <th class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">Tipo</th>
+                                    <th class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">Comentario</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <table class="footable table carrito table-stripped" data-empty="No hay informacion disponible" width="100%" align="center" cellspacing="0" cellpadding="0" border="0">
+                            <tbody>
+                                <tr class="wht">
+                                    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">1</td>
+                                    <td class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-center">cantidad</td>
+                                    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">N(5)</td>
+                                    <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center"></td>
+                                </tr>
+                                <tr class="grs">
+                                    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">2</td>
+                                    <td class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-center">código alfa-beta</td>
+                                    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">C(10)</td>
+                                    <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center"></td>
+                                </tr>
+                                <tr class="wht">
+                                    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">3</td>
+                                    <td class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-center">código troquel</td>
+                                    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">N(10)</td>
+                                    <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center"></td>
+                                </tr>
+                                <tr class="grs">
+                                    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">4</td>
+                                    <td class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-center">código de barras</td>
+                                    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">C(13)</td>
+                                    <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center"></td>
+                                </tr>
+                                <tr class="wht">
+                                    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">5</td>
+                                    <td class="col-lg-3 col-md-3 col-sm-3 col-xs-3 text-center">caracteristica</td>
+                                    <td class="col-lg-2 col-md-2 col-sm-2 col-xs-2 text-center">N(1)</td>
+                                    <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-center">0 - Normal<br />6 - Farmabono<br />7 - Tarjeta D<br />8 - Colfacor</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="clear15"></div>
+                        <p class="p_11"><b>Archivo:</b> "S" + "Nº de Cliente en Droguería" (4) + Autonumérico (3)</p>
+                        <p class="p_11"><b>Extensión:</b> ".PED"</p>
+                        <p class="p_11"><b>Ejemplo:</b> "S1234001.PED"</p>
+                    </div>
+                </div>
+                <div class="clear0"></div>
+            </div>
+            <div class="clear10"></div>
+            <div class="col-xs-12 text-left">
+                <div class="est_ped st">Historial:</div>
+                <div class="radio radio-info radio-inline">
+                    <input type="radio" id="inlineRadio3" value="0" name="group1" checked="">
+                    <label for="inlineRadio3">Hoy</label>
+                </div>
+                <div class="radio radio-inline">
+                    <input type="radio" id="inlineRadio4" value="7" name="group1">
+                    <label for="inlineRadio4">7 d&iacute;as</label>
+                </div>
+                <div class="radio radio-inline">
+                    <input type="radio" id="inlineRadio5" value="14" name="group1">
+                    <label for="inlineRadio5">14 d&iacute;as</label>
+                </div>
+                <div class="est_ped ls"><button class="btn_emp" onclick="return onclickHistorialSubirArchivo();">CONSULTAR</button></div>
+            </div>
+            <div class="clear10"></div>
+            <div class="col-xs-12 text-left" id="divTablaHistorial"></div>
+            </div>
+        <div class="clear20"></div>
+    </div>
+
+
+    <input type="hidden" id="HiddenFieldSucursalEleginda" name="HiddenFieldSucursalEleginda" value="" />
+                    }

@@ -1,0 +1,58 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_secundario")
+@section sectionHidden{
+@Html.Partial("_buscardorHidden")
+
+}
+@section Scripts{
+@Html.Partial("_scripts_buscadorGeneral")
+@Html.Partial("_scripts_subirArchivo")
+}
+<div class="col-xs-12 col_PedidosBuscador">
+    <div class="col-lg-8 col-md-8 col-sm-12 no-padding">
+        <a class="btn_volver float-left" href="#" onclick="volverSubirArchivo(); return false;"
+            style="margin-right:15px"><i class="fa fa-play"></i> VOLVER</a>
+        <div class="clear visible-xs"></div>
+        <div class="pad_t_5">
+            <a class="btn_a13-st" href="#" onclick="CargarOfertas(); return false;">Ordenar por ofertas</a>
+            <a class="btn_a13-st" href="#" onclick="OrdenarTransfer(); return false;">Ordenar por transfer</a>
+            <div class="clear0 visible-xs"></div>
+            <a class="btn_a13-st" href="#" data-toggle="modal" data-target="#modalFaltantes"
+                onclick="CargarListaSinStock(); return false;">Listar faltantes</a>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-12 no-padding text-right hidden-xs">
+        <div class="clear15"></div>
+        <div class="div-pt_buscador no-margin-r">Sin stock</div>
+        <div class="pt_sin_stock pt_buscador"></div>
+        <div class="div-pt_buscador">Crítico</div>
+        <div class="pt_critico pt_buscador"></div>
+        <div class="div-pt_buscador">Stock</div>
+        <div class="pt_stock pt_buscador"></div>
+    </div>
+    <div class="clear20 hidden-xs"></div>
+    <div class="clear10 visible-xs"></div>
+    <div id="divResultadoBuscador"></div>
+    <div id="divPaginador">
+    </div>
+</div>
+@{
+
+    string resultadoHidden = string.Empty;
+    List<DKbase.web.capaDatos.cProductosGenerico> l_subirpedido_ListaProductos =
+    DKweb.Codigo.Util.subirpedido_ListaProductos(Accessor);
+    if (l_subirpedido_ListaProductos != null)
+    {
+        DKbase.web.cjSonBuscadorProductos obj =
+        DKweb.Codigo.Util.RecuperarProductosGeneralSubirPedidos(Accessor, l_subirpedido_ListaProductos);
+        int pPage = 1;
+        DKweb.Codigo.Util.updatePedidosBuscador_productosTodos(Accessor, obj, pPage);
+        // Accessor?.HttpContext?.Session.Set<DKbase.web.cjSonBuscadorProductos>("PedidosBuscador_productosTodos", new DKbase.web.cjSonBuscadorProductos(obj));
+        //Accessor?.HttpContext?.Session.SetInt32("PedidosBuscador_pPage", pPage);
+        resultadoHidden += "<input type=\"hidden\" id=\"hiddenArchivoSubirListaProductos\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKweb.Codigo.Util.RecuperarProductos_generarPaginador(Accessor, obj, pPage)) + "\" />";
+    }
+    WriteLiteral(resultadoHidden);
+}
+
+@Html.Partial("_divDetalleProducto")

@@ -358,4 +358,157 @@ public class mvcController : Controller
         }
         else { return string.Empty; }
     }
+    public string AgregarProductosTransfersAlCarrito(List<DKbase.web.capaDatos.cProductosAndCantidad> pListaProductosMasCantidad, int pIdTransfers, string pCodSucursal)
+    {
+        DKbase.web.ResultTransfer objResult = new DKbase.web.ResultTransfer();
+        string resultado = string.Empty;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        DKbase.web.Usuario user = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+        if (user != null && oCliente != null)
+        {
+            DKbase.Util.AgregarHistorialProductoCarritoTransfer(user.usu_codCliente.Value, pListaProductosMasCantidad, user.id);
+            objResult.isNotError = DKweb.Codigo.Util.AgregarProductosTransfersAlCarrito(pListaProductosMasCantidad, user.usu_codCliente.Value, user.id, pIdTransfers, pCodSucursal, DKbase.generales.Constantes.cTipo_CarritoTransfers);
+            objResult.oSucursalCarritoTransfer = DKweb.Codigo.Util.RecuperarCarritosTransferPorCliente_generico(_httpContextAccessor, oCliente, pCodSucursal, DKbase.generales.Constantes.cTipo_CarritoTransfers);
+            objResult.listProductosAndCantidadError = pListaProductosMasCantidad;
+            objResult.codSucursal = pCodSucursal;
+            resultado = DKbase.generales.Serializador_base.SerializarAJson(objResult);
+        }
+        return resultado;
+    }
+    public string RecuperarTransfer(string pNombreProducto)
+    {
+        List<DKbase.web.capaDatos.cTransfer> listaTransfer = null;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        List<string> listaSucursales = DKweb.Codigo.Util.RecuperarSucursalesDelCliente(_httpContextAccessor);
+        if (oCliente != null && listaSucursales != null)
+        {
+            listaTransfer = DKbase.Util.RecuperarTodosTransferMasDetallePorIdProducto(pNombreProducto, oCliente, listaSucursales).Where(x => x.tfr_facturaciondirecta == null ? true : !(bool)x.tfr_facturaciondirecta).ToList();
+        }
+        return DKbase.generales.Serializador_base.SerializarAJson(listaTransfer);
+    }
+    public string RecuperarTransferPorId(int pIdTransfer)
+    {
+
+        DKbase.web.capaDatos.cTransfer objTransfer = null;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        List<string> listaSucursales = DKweb.Codigo.Util.RecuperarSucursalesDelCliente(_httpContextAccessor);
+        if (oCliente != null && listaSucursales != null)
+        {
+            objTransfer = DKbase.Util.RecuperarTransferMasDetallePorIdTransfer(pIdTransfer, oCliente, listaSucursales);
+        }
+        if (objTransfer != null)
+        {
+            List<DKbase.web.capaDatos.cTransfer> listaTransfer = new List<DKbase.web.capaDatos.cTransfer>();
+            listaTransfer.Add(objTransfer);
+            return DKbase.generales.Serializador_base.SerializarAJson(listaTransfer);
+        }
+        else { return string.Empty; }
+    }
+    public ActionResult subirpedido()
+    {
+        _httpContextAccessor?.HttpContext?.Session.SetString("url_type", "subirpedido");
+        return View();
+    }
+    public ActionResult subirarchivoresultado()
+    {
+
+        return View();
+    }
+    public ActionResult subirarchivoresultado_msg()
+    {
+        _httpContextAccessor?.HttpContext?.Session.SetString("url_type", "subirarchivoresultado_msg");
+        return View();
+    }
+    /*[HttpPost]
+    public ActionResult subirpedidoUpload()
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+        string sucursal = "CC";
+        return RedirectToAction("subirpedido");
+        // DKbase.web.cSubirpedido_base.LeerArchivoPedido(oUsuario,oCliente,file, sucursal);
+        //Usuario oUsuario, cClientes oCliente, IFormFile pFileUpload, string pSucursal
+    }*/
+    [HttpPost]
+    public ActionResult subirpedidoUpload()//List<IFormFile> files
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente.cli_estado.ToUpper() == DKbase.generales.Constantes.cESTADO_INH)
+        {
+            return RedirectToAction("inhabilitado", "config");
+        }
+        else
+        {
+            if (Request.Form.Files.Count > 0)
+            {
+                var file = Request.Form.Files[0];
+                if (file != null)//&& file.ContentLength > 0
+                {
+                    //Request.Form["HiddenFieldSucursalEleginda"] != null && 
+                    DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+                    if (!string.IsNullOrEmpty(file.FileName))
+                    {
+                        string sucursal = Request.Form["HiddenFieldSucursalEleginda"];
+                        //Boolean? isNotRepetido = true;
+                        // Boolean? isNotRepetido = cSubirpedido.LeerArchivoPedido(file, sucursal);
+                        DKbase.web.cSubirPedido_return oResult = DKbase.web.cSubirpedido_base.LeerArchivoPedido(oUsuario, oCliente, file, sucursal);
+                        if (oResult == null)
+                        {
+                            return RedirectToAction("subirpedido");
+                        }
+                        else if (oResult.isCorrect)
+                        {
+                            _httpContextAccessor.HttpContext.Session.Set<List<DKbase.web.capaDatos.cProductosGenerico>>("subirpedido_ListaProductos", oResult.ListaProductos);
+                            _httpContextAccessor.HttpContext.Session.SetString("subirpedido_SucursalEleginda", oResult.SucursalEleginda);
+                            _httpContextAccessor.HttpContext.Session.SetString("subirpedido_nombreArchivoCompleto", oResult.nombreArchivoCompleto);
+                            _httpContextAccessor.HttpContext.Session.SetString("subirpedido_nombreArchivoCompletoOriginal", oResult.nombreArchivoCompletoOriginal);
+
+                            return RedirectToAction("subirarchivoresultado");
+                        }
+                        else
+                        {
+                            DKweb.Codigo.Util.subirpedido_isRepetido_true(_httpContextAccessor);
+                            return RedirectToAction("subirpedido");
+                        }
+                    }
+                }
+            }
+            return RedirectToAction("subirpedido");
+        }
+    }
+    public bool CargarArchivoPedidoDeNuevo(int has_id)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+        DKbase.web.cSubirPedido_return oResult = DKbase.web.cSubirpedido_base.CargarArchivoPedidoDeNuevo(oUsuario, oCliente, has_id);
+        _httpContextAccessor.HttpContext.Session.Set<List<DKbase.web.capaDatos.cProductosGenerico>>("subirpedido_ListaProductos", oResult.ListaProductos);
+        _httpContextAccessor.HttpContext.Session.SetString("subirpedido_SucursalEleginda", oResult.SucursalEleginda);
+        _httpContextAccessor.HttpContext.Session.SetString("subirpedido_nombreArchivoCompleto", oResult.nombreArchivoCompleto);
+        _httpContextAccessor.HttpContext.Session.SetString("subirpedido_nombreArchivoCompletoOriginal", oResult.nombreArchivoCompletoOriginal);
+        bool result = oResult == null ? false : oResult.isCorrect;
+        if (result)
+        {
+            DKweb.Codigo.Util.subirpedido_isRepetido_true(_httpContextAccessor);
+        }
+        return result;
+    }
+    public string ObtenerHistorialSubirArchivo(int pDia)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente == null)
+            return null;
+        List<DKbase.web.capaDatos.cHistorialArchivoSubir> resultado = null;
+        DateTime fechaDesdeAUX = DateTime.Now.AddDays(pDia * -1);
+        DateTime fechaDesde = new DateTime(fechaDesdeAUX.Year, fechaDesdeAUX.Month, fechaDesdeAUX.Day, 0, 0, 0);
+        List<DKbase.web.capaDatos.cHistorialArchivoSubir> listaArchivosSubir = DKbase.Util.RecuperarHistorialSubirArchivo(oCliente.cli_codigo);
+        if (listaArchivosSubir != null)
+        {
+            resultado = listaArchivosSubir.Where(x => x.has_fecha >= fechaDesde).ToList();
+        }
+
+        if (resultado != null)
+            return DKbase.generales.Serializador_base.SerializarAJson(resultado);
+        else
+            return null;
+    }
 }

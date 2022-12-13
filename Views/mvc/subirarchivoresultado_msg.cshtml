@@ -1,0 +1,13 @@
+@Html.Partial("_nav_secundario")
+
+@section sectionHidden{
+    @{
+        string resultado = "";
+        resultado += "<input type=\"hidden\" id=\"hiddenIsSubirPedidoRepetido\" value=\"" + System.Net.WebUtility.HtmlEncode("true") + "\" />";
+        WriteLiteral(resultado);
+    }
+}
+@section Scripts{
+   
+@Html.Partial("_scripts_subirArchivo")
+}

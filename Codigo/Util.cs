@@ -616,4 +616,74 @@ public class Util
             resultado = DKbase.web.capaDatos.capaHome_base.ConvertToOferta(tabla.Rows[0]);
         return resultado;
     }
+    public static bool AgregarProductosTransfersAlCarrito(List<DKbase.web.capaDatos.cProductosAndCantidad> pListaProductosMasCantidad, int pIdCliente, int pIdUsuario, int pIdTransfers, string pCodSucursal, string pTipo)
+    {
+        System.Data.DataTable pTablaDetalle = DKbase.web.FuncionesPersonalizadas_base.ConvertProductosAndCantidadToDataTable(pListaProductosMasCantidad);
+        return DKbase.web.capaDatos.capaCAR_base.AgregarProductosTransfersAlCarrito(pTablaDetalle, pIdCliente, pIdUsuario, pIdTransfers, pCodSucursal, pTipo);
+    }
+    public static List<DKbase.web.capaDatos.cSucursalCarritoTransfer> RecuperarCarritosTransfer_generico(IHttpContextAccessor pHttpContextAccessor, DKbase.web.capaDatos.cClientes pCliente, string pTipo)
+    {
+        List<DKbase.web.capaDatos.cSucursalCarritoTransfer> result = null;
+        result = DKbase.web.capaDatos.capaCAR_WebService_base.RecuperarCarritosTransferPorIdClienteOrdenadosPorSucursal(pCliente, pTipo);
+        if (result != null)
+        {
+            foreach (var item in result)
+            {
+                item.proximoHorarioEntrega = getObtenerHorarioCierre(pHttpContextAccessor, item.Sucursal);
+            }
+        }
+        return result;
+    }
+    public static DKbase.web.capaDatos.cSucursalCarritoTransfer RecuperarCarritosTransferPorCliente_generico(IHttpContextAccessor pHttpContextAccessor, DKbase.web.capaDatos.cClientes pCliente, string pIdSucursal, string pTipo)
+    {
+        return RecuperarCarritosTransfer_generico(pHttpContextAccessor, pCliente, pTipo).Where(x => x.Sucursal == pIdSucursal).FirstOrDefault();
+    }
+    public static bool subirpedido_isRepetido(IHttpContextAccessor pHttpContextAccessor)
+    {
+        bool result = false;
+        if (pHttpContextAccessor.HttpContext.Session.Get<Boolean?>("subirpedido_isRepetido") != null && pHttpContextAccessor.HttpContext.Session.Get<Boolean>("subirpedido_isRepetido"))
+        {
+            result = true;
+
+        }
+        return result;
+    }
+    public static void subirpedido_isRepetido_null(IHttpContextAccessor pHttpContextAccessor)
+    {
+        //pHttpContextAccessor.HttpContext.Session.SetString("ClientesBase_isLogeo", null);
+        pHttpContextAccessor.HttpContext.Session.Remove("subirpedido_isRepetido");
+    }
+    public static void subirpedido_isRepetido_true(IHttpContextAccessor pHttpContextAccessor)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<Boolean>("subirpedido_isRepetido", true);
+    }
+    public static DKbase.web.cjSonBuscadorProductos RecuperarProductosGeneralSubirPedidos(IHttpContextAccessor pHttpContextAccessor, List<DKbase.web.capaDatos.cProductosGenerico> pListaProveedor)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
+        string SucursalEleginda = pHttpContextAccessor.HttpContext.Session.GetString("subirpedido_SucursalEleginda");
+        List<string> l_Sucursales = RecuperarSucursalesDelCliente(pHttpContextAccessor);
+        List<DKbase.web.capaDatos.cProductosGenerico> listaProductosBuscador = DKbase.web.FuncionesPersonalizadas_base.ActualizarStockListaProductos_SubirArchico(oCliente, l_Sucursales, pListaProveedor, SucursalEleginda);
+        DKbase.web.cjSonBuscadorProductos ResultadoObj = new DKbase.web.cjSonBuscadorProductos();
+        ResultadoObj.listaSucursal = l_Sucursales;
+        ResultadoObj.listaProductos = listaProductosBuscador;
+        return ResultadoObj;
+    }
+    public static List<DKbase.web.capaDatos.cProductosGenerico> subirpedido_ListaProductos(IHttpContextAccessor pHttpContextAccessor)
+    {
+        List<DKbase.web.capaDatos.cProductosGenerico> result = null;
+        if (pHttpContextAccessor.HttpContext.Session.Get<List<DKbase.web.capaDatos.cProductosGenerico>>("subirpedido_ListaProductos") != null)
+        {
+            result = pHttpContextAccessor.HttpContext.Session.Get<List<DKbase.web.capaDatos.cProductosGenerico>>("subirpedido_ListaProductos");
+        }
+        return result;
+    }
+    public static void updatePedidosBuscador_productosTodos(IHttpContextAccessor pHttpContextAccessor, DKbase.web.cjSonBuscadorProductos pObj, int pPage)
+    {
+        pHttpContextAccessor?.HttpContext?.Session.Set<DKbase.web.cjSonBuscadorProductos>("PedidosBuscador_productosTodos", new DKbase.web.cjSonBuscadorProductos(pObj));
+        pHttpContextAccessor?.HttpContext?.Session.SetInt32("PedidosBuscador_pPage", pPage);
+    }
+    public static void subirpedido_ListaProductos_Get(IHttpContextAccessor pHttpContextAccessor, List<DKbase.web.capaDatos.cProductosGenerico> ListaProductos)
+    {
+         pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.web.capaDatos.cProductosGenerico>>("subirpedido_ListaProductos",ListaProductos);
+    }
 }
