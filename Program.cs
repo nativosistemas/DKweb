@@ -18,6 +18,8 @@ var app = builder.Build();
 
 DKbase.Helper.getTipoApp = "DKweb";
 DKbase.Helper.getFolder = @"C:\ArchivosSitioWEB";
+DKbase.Helper.getUrl_DKdll = "http://dll.kellerhoff.com.ar/api/";
+DKbase.Helper.getUrl_DKcore = "https://localhost:5001/api/";
 DKbase.Helper.getConnectionStringSQL = builder.Configuration.GetConnectionString("ConnectionSQL");
 
 //var optionsRewrite = new RewriteOptions()

@@ -1,0 +1,25 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_secundario")
+@Html.Partial("_nav_reservavacunas")
+@section Scripts{
+@Html.Partial("_scripts_reservavacunas")
+}
+
+@{
+
+    string resultado = string.Empty;
+    DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(Accessor);
+    List<DKbase.dll.cReservaVacuna> listaReservaVacunas = DKbase.web.acceso.ObtenerReservasVacunas_mis(oCliente);
+    if (listaReservaVacunas != null)
+    {
+        resultado += "<input type=\"hidden\" id=\"hiddenListaReservasVacunas_mis\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(listaReservaVacunas)) + "\" />";
+    }
+    WriteLiteral(resultado);
+}
+
+<div class="row">
+
+    <div class="col-xs-12" id="divGridReservaVacunas">
+    </div>
+</div>

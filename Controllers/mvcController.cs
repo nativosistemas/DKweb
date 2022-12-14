@@ -83,7 +83,7 @@ public class mvcController : Controller
 
     public IActionResult Index()
     {
-        var fff = DKweb.Codigo.Util.login(_httpContextAccessor, "labesme", "esme");
+        var fff = DKweb.Codigo.Util.login(_httpContextAccessor, "labesme", "esme");// "romanello ", "alberdi"
         var dd = _httpContextAccessor?.HttpContext?.Session.GetString("SessionVar");
         if (dd == null)
         {
@@ -510,5 +510,216 @@ public class mvcController : Controller
             return DKbase.generales.Serializador_base.SerializarAJson(resultado);
         else
             return null;
+    }
+    public List<string> ObtenerRangoFecha_pedidos(int pDia)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        DKbase.web.cRangoFecha_Pedidos o = DKbase.Util.ObtenerRangoFecha_pedidos(oCliente, pDia);
+        List<string> lista = o.lista;
+        DKweb.Codigo.Util.estadopedidos_Resultado_Set(_httpContextAccessor, o.resultadoObj);
+        return lista;
+    }
+    public ActionResult estadopedidos()
+    {
+        return View();
+    }
+    public ActionResult estadopedidosresultado()
+    {
+        return View();
+    }
+    public ActionResult recuperador(string t)
+    {
+        int tipo = 0;
+        if (int.TryParse(t, out tipo))
+        {
+            DKweb.Codigo.Util.clientes_pages_Recuperador_Tipo_Set(_httpContextAccessor, Convert.ToInt32(t));
+        }
+        return View();
+    }
+    public string RecuperarFaltasProblemasCrediticios(int pDia)
+    {
+        List<DKbase.web.capaDatos.cFaltantesConProblemasCrediticiosPadre> listaRecuperador = null;
+        int? tipo = DKweb.Codigo.Util.clientes_pages_Recuperador_Tipo(_httpContextAccessor);
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (tipo != null && oCliente != null)
+        {
+            //System.Web.HttpContext.Current.Session["clientes_pages_Recuperador_CantidadDia"] = pDia;
+            DKweb.Codigo.Util.clientes_pages_Recuperador_CantidadDia_Set(_httpContextAccessor, pDia);
+            listaRecuperador = DKbase.Util.RecuperarFaltasProblemasCrediticios(oCliente, tipo.Value, pDia, oCliente.cli_codsuc);
+        }
+        if (listaRecuperador != null)
+            return DKbase.generales.Serializador_base.SerializarAJson(listaRecuperador);
+        else
+            return null;
+    }
+    public string RecuperarFaltasProblemasCrediticiosTodosEstados(int pDia)
+    {
+        List<DKbase.web.capaDatos.cFaltantesConProblemasCrediticiosPadre> listaRecuperador = null;
+        int? tipo = DKweb.Codigo.Util.clientes_pages_Recuperador_Tipo(_httpContextAccessor);
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (tipo != null && oCliente != null)
+        {
+            DKweb.Codigo.Util.clientes_pages_Recuperador_CantidadDia_Set(_httpContextAccessor, pDia);
+            listaRecuperador = DKbase.Util.RecuperarFaltasProblemasCrediticios_TodosEstados(oCliente, tipo.Value, pDia, oCliente.cli_codsuc);
+        }
+        if (listaRecuperador != null)
+            return DKbase.generales.Serializador_base.SerializarAJson(listaRecuperador);
+        else
+            return null;
+    }
+    public bool AgregarProductosDelRecuperardorAlCarrito(string pSucursal, string[] pArrayNombreProducto, int[] pArrayCantidad, bool[] pArrayOferta)
+    {
+        DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        int? Recuperador_Tipo = DKweb.Codigo.Util.clientes_pages_Recuperador_Tipo(_httpContextAccessor);
+        int? Recuperador_CantidadDia = DKweb.Codigo.Util.clientes_pages_Recuperador_CantidadDia(_httpContextAccessor);
+        if (oUsuario != null && Recuperador_Tipo != null && oCliente != null && Recuperador_CantidadDia != null)
+        {
+            return DKbase.web.acceso.AgregarProductosDelRecuperardorAlCarrito(oCliente, oUsuario, pSucursal, pArrayNombreProducto, pArrayCantidad, pArrayOferta, Recuperador_Tipo.Value, Recuperador_CantidadDia.Value);
+        }
+        return false;
+    }
+    public string BorrarPorProductosFaltasProblemasCrediticios(string pSucursal, string[] pArrayNombreProducto)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        int? tipo = DKweb.Codigo.Util.clientes_pages_Recuperador_Tipo(_httpContextAccessor);
+        if (oCliente != null && tipo != null)
+        {
+            for (int i = 0; i < pArrayNombreProducto.Count(); i++)
+            {
+                DKbase.web.capaDatos.capaLogRegistro_base.BorrarPorProductosFaltasProblemasCrediticios(pSucursal, oCliente.cli_codigo, tipo.Value, pArrayNombreProducto[i]);
+            }
+        }
+        //System.Web.HttpContext.Current.Session["clientesDefault_CantRecuperadorFaltaFechaHora"] = null;
+        return "Ok";
+    }
+    public string TomarPedidoCarrito(string pIdSucursal, string pMensajeEnFactura, string pMensajeEnRemito, string pTipoEnvio, bool pIsUrgente)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+        List<DKbase.web.capaDatos.cCarrito> listaCarrito = DKbase.web.capaDatos.capaCAR_WebService_base.RecuperarCarritosPorSucursalYProductos_generica(oCliente, DKbase.generales.Constantes.cTipo_Carrito);
+        string horarioCierre = DKweb.Codigo.Util.getObtenerHorarioCierre(_httpContextAccessor, pIdSucursal);
+        pMensajeEnFactura = pMensajeEnFactura == null ? "" : pMensajeEnFactura;
+        pMensajeEnRemito = pMensajeEnRemito == null ? "" : pMensajeEnRemito;
+        var resultPedido = DKbase.web.capaDatos.capaCAR_WebService_base.TomarPedidoCarrito_generico(oUsuario, oCliente, listaCarrito, horarioCierre, DKbase.generales.Constantes.cTipo_Carrito, pIdSucursal, pMensajeEnFactura, pMensajeEnRemito, pTipoEnvio, pIsUrgente);
+        if (resultPedido == null)
+        {
+            return null;
+        }
+        else
+        {
+            return DKbase.generales.Serializador_base.SerializarAJson(resultPedido);
+        }
+    }
+    public string TomarPedidoCarritoDiferido(string pIdSucursal, string pMensajeEnFactura, string pMensajeEnRemito, string pTipoEnvio, bool pIsUrgente)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+        List<DKbase.web.capaDatos.cCarrito> listaCarrito = DKbase.web.capaDatos.capaCAR_WebService_base.RecuperarCarritosPorSucursalYProductos_generica(oCliente, DKbase.generales.Constantes.cTipo_CarritoDiferido);
+        string horarioCierre = DKweb.Codigo.Util.getObtenerHorarioCierre(_httpContextAccessor, pIdSucursal);
+        pMensajeEnFactura = pMensajeEnFactura == null ? "" : pMensajeEnFactura;
+        pMensajeEnRemito = pMensajeEnRemito == null ? "" : pMensajeEnRemito;
+        DKbase.dll.cDllPedido resultadoPedido = DKbase.web.capaDatos.capaCAR_WebService_base.TomarPedidoCarrito_generico(oUsuario, oCliente, listaCarrito, horarioCierre, DKbase.generales.Constantes.cTipo_CarritoDiferido, pIdSucursal, pMensajeEnFactura, pMensajeEnRemito, pTipoEnvio, pIsUrgente);
+        if (resultadoPedido == null)
+        {
+            return null;
+        }
+        else
+        {
+            return DKbase.generales.Serializador_base.SerializarAJson(resultadoPedido);
+        }
+    }
+    public string TomarTransferPedidoCarrito(bool pIsDiferido, string pIdSucursal, string pMensajeEnFactura, string pMensajeEnRemito, string pTipoEnvio)
+    {
+        string tipo = pIsDiferido ? DKbase.generales.Constantes.cTipo_CarritoDiferidoTransfers : DKbase.generales.Constantes.cTipo_CarritoTransfers;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+        List<DKbase.web.capaDatos.cCarritoTransfer> pListaCarrito = DKweb.Codigo.Util.RecuperarCarritosTransferPorIdCliente(_httpContextAccessor, oCliente, tipo, pIdSucursal);
+        pMensajeEnFactura = pMensajeEnFactura == null ? "" : pMensajeEnFactura;
+        pMensajeEnRemito = pMensajeEnRemito == null ? "" : pMensajeEnRemito;
+        List<DKbase.dll.cDllPedidoTransfer> resultadoPedido = DKbase.web.capaDatos.capaCAR_WebService_base.TomarTransferPedidoCarrito(oUsuario, oCliente, pListaCarrito, pIsDiferido, pIdSucursal, pMensajeEnFactura, pMensajeEnRemito, pTipoEnvio);
+        if (resultadoPedido == null)
+        {
+            return null;
+        }
+        else
+        {
+            return DKbase.generales.Serializador_base.SerializarAJson(resultadoPedido);
+        }
+    }
+    public string TomarPedidoCarritoFacturarseFormaHabitual(string pIdSucursal, string pMensajeEnFactura, string pMensajeEnRemito, string pTipoEnvio, bool pIsUrgente, string[] pListaNombreComercial, int[] pListaCantidad)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+        string horarioCierre = DKweb.Codigo.Util.getObtenerHorarioCierre(_httpContextAccessor, pIdSucursal);
+        pMensajeEnFactura = pMensajeEnFactura == null ? "" : pMensajeEnFactura;
+        pMensajeEnRemito = pMensajeEnRemito == null ? "" : pMensajeEnRemito;
+        DKbase.dll.cDllPedido resultadoPedido = DKbase.web.capaDatos.capaCAR_WebService_base.TomarPedidoCarritoFacturarseFormaHabitual(oUsuario, oCliente, horarioCierre, pIdSucursal, pMensajeEnFactura, pMensajeEnRemito, pTipoEnvio, pIsUrgente, pListaNombreComercial, pListaCantidad);
+        if (resultadoPedido == null)
+        {
+            return null;
+        }
+        else
+        {
+            return DKbase.generales.Serializador_base.SerializarAJson(resultadoPedido);
+        }
+    }
+    public string CargarCarritoDiferido(string pIdSucursal, string pNombreProducto, int pCantidadProducto)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+        if (oUsuario != null)
+        {
+            DKbase.web.ResultCargaProducto result = result = new DKbase.web.ResultCargaProducto();
+            result.isOk = DKbase.web.capaDatos.capaCAR_base.CargarCarritoDiferido(pIdSucursal, pNombreProducto, pCantidadProducto, oUsuario.usu_codCliente.Value, oUsuario.id);
+            return DKbase.generales.Serializador_base.SerializarAJson(result);
+        }
+        return null;
+    }
+    public string AgregarProductosTransfersAlCarritoDiferido(List<DKbase.web.capaDatos.cProductosAndCantidad> pListaProductosMasCantidad, int pIdTransfers, string pCodSucursal)
+    {
+        DKbase.web.ResultTransfer objResult = new DKbase.web.ResultTransfer();
+        string resultado = string.Empty;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+        if (oCliente != null && oUsuario != null)
+        {
+            DKbase.Util.AgregarHistorialProductoCarritoTransfer(oUsuario.usu_codCliente.Value, pListaProductosMasCantidad, oUsuario.id);
+            objResult.isNotError = DKweb.Codigo.Util.AgregarProductosTransfersAlCarrito(pListaProductosMasCantidad, oUsuario.usu_codCliente.Value, oUsuario.id, pIdTransfers, pCodSucursal, DKbase.generales.Constantes.cTipo_CarritoDiferidoTransfers);
+            objResult.oSucursalCarritoTransfer = DKweb.Codigo.Util.RecuperarCarritosTransferPorCliente_generico(_httpContextAccessor, oCliente, pCodSucursal, DKbase.generales.Constantes.cTipo_CarritoDiferidoTransfers);
+            objResult.listProductosAndCantidadError = pListaProductosMasCantidad;
+            objResult.codSucursal = pCodSucursal;
+            resultado = DKbase.generales.Serializador_base.SerializarAJson(objResult);
+        }
+        return resultado;
+    }
+    public void funReservaVacunas(List<DKbase.dll.cVacuna> pListaVacunas)
+    {
+        DKbase.web.capaDatos.capaDLL.AgregarVacunas(pListaVacunas);
+    }
+    public ActionResult reservavacunas(string t)
+    {
+        bool resultado = false;
+        if (!string.IsNullOrEmpty(t) && t == "1")
+        {
+            resultado = true;
+        }
+        _httpContextAccessor?.HttpContext?.Session.Set<Boolean>("clientes_pages_reservavacunas_SinTroquel", resultado);
+        _httpContextAccessor?.HttpContext?.Session.SetString("url_type", "reservavacunas");
+        if (!isUsuarioConPermisoPedido(_httpContextAccessor))
+        {
+            return RedirectToAction("reservavacunas_mis");
+        }
+        return View();
+    }
+    public ActionResult reservavacunas_mis()
+    {
+        _httpContextAccessor?.HttpContext?.Session.SetString("url_type", "reservavacunas_mis");
+        return View();
+    }
+    public ActionResult reservavacunas_total()
+    {
+        _httpContextAccessor?.HttpContext?.Session.SetString("url_type", "reservavacunas_total");
+        return View();
     }
 }

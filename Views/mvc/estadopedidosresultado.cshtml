@@ -1,0 +1,61 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_secundario")
+
+@section Scripts{
+@Html.Partial("_scripts_pedidos")
+}
+
+@section sectionHidden{
+@{
+
+string resultado = string.Empty;
+List<DKbase.dll.cDllPedido> listaPedidos = DKweb.Codigo.Util.estadopedidos_Resultado(Accessor);
+if (listaPedidos != null)
+{
+
+//Session["estadopedidos_ListaPendienteDeFacturar"] = null;
+List<DKbase.dll.cDllPedido> l_ListaPendienteDeFacturar = null;
+List<DKbase.dll.cDllPedido> l_ListaEnPreparacion = null;
+foreach (DKbase.dll.cDllPedido item in listaPedidos)
+{
+if (item.EstadoToString == "PendienteDeFacturar")
+{
+if (l_ListaPendienteDeFacturar == null)
+{
+l_ListaPendienteDeFacturar = new List<DKbase.dll.cDllPedido>();
+}
+l_ListaPendienteDeFacturar.Add(item);
+}
+if (item.EstadoToString == "EnPreparacion")
+{
+if (l_ListaEnPreparacion == null)//Session["estadopedidos_ListaEnPreparacion"]
+{
+l_ListaEnPreparacion = new List<DKbase.dll.cDllPedido>();
+}
+l_ListaEnPreparacion.Add(item);
+}
+}
+if (l_ListaPendienteDeFacturar != null){
+DKweb.Codigo.Util.estadopedidos_ListaPendienteDeFacturar_Set(Accessor, l_ListaPendienteDeFacturar);
+}
+if (l_ListaEnPreparacion != null){
+DKweb.Codigo.Util.estadopedidos_ListaEnPreparacion_Set(Accessor, l_ListaEnPreparacion);
+}
+resultado += "<input type=\"hidden\" id=\"hiddenListaPedidos\" value=\"" +
+System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(listaPedidos))+ "\" />";
+}
+WriteLiteral(resultado);
+}
+
+}
+<div class="row">
+    <div id="divResultadoPedidos" class="col-xs-12">
+        <div class="div_cont_pagos">
+            <div id="divResultadoPedidos_sinResultado" class="col-xs-12 text-center">
+                <a class="btn_volver float-left" href="../mvc/estadopedidos"><i class="fa fa-play"></i>VOLVER</a>
+                <div class="clear10"></div>
+            </div>
+            <div class="clear0"></div>
+        </div>
+    </div>
+</div>

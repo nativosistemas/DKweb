@@ -1,0 +1,29 @@
+@Html.Partial("_nav_secundario")
+
+@section Scripts{
+   @Html.Partial("_scripts_pedidos")
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="div_cont_pagos">
+            <div class="col-xs-12 text-left">
+                <div class="est_ped st">Pedidos de:</div>
+                <div class="radio radio-info radio-inline">
+                    <input id="radioHoy" type="radio" name="group1" value="0" checked="checked">
+                    <label for="radioHoy">Hoy</label>
+                </div>
+                <div class="radio radio-inline">
+                    <input  id="radio7dia" type="radio" name="group1" value="7" class="inputRadio">
+                    <label for="radio7dia">7 d&iacute;as</label>
+                </div>
+                <div class="radio radio-inline">
+                    <input  id="radio14dia" type="radio" name="group1" value="14" class="inputRadio" >
+                    <label for="radio14dia">14 d&iacute;as</label>
+                </div>
+                <div class="est_ped ls"><button class="btn_emp" onClick="onclickListaPedidos(); return false;">CONSULTAR</button></div>
+            </div>
+            <div class="clear0"></div>
+        </div>
+    </div>
+</div>

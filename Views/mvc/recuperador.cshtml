@@ -1,0 +1,91 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_secundario")
+
+@section Scripts{
+@Html.Partial("_scripts_pedidos")
+}
+@section sectionHidden{
+@{
+string resultado = string.Empty;
+List<DKbase.web.cSucursal> listaSucursal = DKweb.Codigo.Util.RecuperarTodasSucursales(Accessor);
+resultado += "<input type=\"hidden\" id=\"hiddenListaSucursalesInfo\" value=\"" +
+System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(listaSucursal)) + "\" />";
+int? tipo = DKweb.Codigo.Util.clientes_pages_Recuperador_Tipo(Accessor);
+if (tipo != null)
+{
+resultado += "<input type=\"hidden\" id=\"hiddenTipoRecuperador\" value=\"" +
+System.Net.WebUtility.HtmlEncode(tipo.Value.ToString()) + "\" />";
+}
+WriteLiteral(resultado);
+}
+}
+@{
+    string classFALTANTESTOCK = "";
+    string classLIMITECREDITO = "";
+    int? tipo = DKweb.Codigo.Util.clientes_pages_Recuperador_Tipo(Accessor);
+    if (tipo != null)
+    {
+        string strTipo = tipo.Value.ToString();
+        switch (strTipo)
+        {
+            case "1":
+                classFALTANTESTOCK = " active ";
+                break;
+            case "2":
+                classLIMITECREDITO = " active ";
+                break;
+            default:
+                break;
+        }
+    }
+
+}
+<div class="row">
+    <div class="col-xs-12">
+        <a class="btn_a_3n @{ WriteLiteral(classFALTANTESTOCK);}" href="/mvc/recuperador?t=1">FALTANTE EN STOCK</a>
+        <a class="btn_a_3n @{ WriteLiteral(classLIMITECREDITO);}" href="/mvc/recuperador?t=2">LIMITE DE
+            CR&Eacute;DITO</a>
+    </div>
+    <div class="clear20"></div>
+    <div class="col-xs-12">
+        <div class="col-lg-6 col-md-8 col-sm-12 text-left">
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-3 no-padding">
+                <div class="clear5"></div>Seleccione:
+            </div>
+            <div class="col-lg-5 col-md-4 col-sm-5 col-xs-9">
+                <select class="form-control" id="cmbDia" name="cmbDia" style="display:inline-block"
+                    onchange="funLlenarGrillaFaltasProblemasCrediticios();">
+                    <option value="1">1 día</option>
+                    <option value="7">7 días</option>
+                    <option value="14" selected="selected">14 días</option>
+                    <option value="21">21 días</option>
+                    <option value="28">28 días</option>
+                    <option value="45">45 días</option>
+                    <option value="60">60 días</option>
+                </select>
+            </div>
+            <div class="col-lg-5 col-md-6 col-sm-5 col-xs-12 no-padding">
+                <div class="clear hidden-xs" style="height:3px"></div>
+                <div class="clear10 visible-xs"></div>
+                <div class="radio-checkbox">
+                    <input id="inputEstado" name="inputEstado" class="checkbox" type="checkbox"
+                        onclick="funLlenarGrillaFaltasProblemasCrediticios();">
+                    <label for="inputEstado">Incluir productos que siguen en falta</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-4 col-sm-12 col-xs-12 text-right">
+            <div class="clear10"></div>
+            <div class="div-pt_buscador no-margin-r">Sin stock</div>
+            <div class="pt_sin_stock pt_buscador"></div>
+            <div class="div-pt_buscador">Crítico</div>
+            <div class="pt_critico pt_buscador"></div>
+            <div class="div-pt_buscador">Stock</div>
+            <div class="pt_stock pt_buscador"></div>
+        </div>
+    </div>
+    <div class="col-xs-12" id="divRecuperador">
+
+    </div>
+
+</div>

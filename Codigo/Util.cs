@@ -684,6 +684,67 @@ public class Util
     }
     public static void subirpedido_ListaProductos_Get(IHttpContextAccessor pHttpContextAccessor, List<DKbase.web.capaDatos.cProductosGenerico> ListaProductos)
     {
-         pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.web.capaDatos.cProductosGenerico>>("subirpedido_ListaProductos",ListaProductos);
+        pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.web.capaDatos.cProductosGenerico>>("subirpedido_ListaProductos", ListaProductos);
+    }
+    public static void estadopedidos_Resultado_Set(IHttpContextAccessor pHttpContextAccessor, List<DKbase.dll.cDllPedido> pListaDllPedido)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.dll.cDllPedido>>("estadopedidos_Resultado", pListaDllPedido);
+    }
+    public static List<DKbase.dll.cDllPedido> estadopedidos_Resultado(IHttpContextAccessor pHttpContextAccessor)
+    {
+        List<DKbase.dll.cDllPedido> result = null;
+        if (pHttpContextAccessor.HttpContext.Session.Get<List<DKbase.dll.cDllPedido>>("estadopedidos_Resultado") != null)
+        {
+            result = pHttpContextAccessor.HttpContext.Session.Get<List<DKbase.dll.cDllPedido>>("estadopedidos_Resultado");
+        }
+        return result;
+    }
+    public static void estadopedidos_ListaPendienteDeFacturar_Set(IHttpContextAccessor pHttpContextAccessor, List<DKbase.dll.cDllPedido> pListaDllPedido)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.dll.cDllPedido>>("estadopedidos_ListaPendienteDeFacturar", pListaDllPedido);
+    }
+    public static void estadopedidos_ListaEnPreparacion_Set(IHttpContextAccessor pHttpContextAccessor, List<DKbase.dll.cDllPedido> pListaDllPedido)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.dll.cDllPedido>>("estadopedidos_ListaEnPreparacion", pListaDllPedido);
+    }
+    public static void clientes_pages_Recuperador_Tipo_Set(IHttpContextAccessor pHttpContextAccessor, int pTipo)
+    {
+        pHttpContextAccessor.HttpContext.Session.SetInt32("clientes_pages_Recuperador_Tipo", pTipo);
+    }
+    public static int? clientes_pages_Recuperador_Tipo(IHttpContextAccessor pHttpContextAccessor)
+    {
+        int? result = null;
+        if (pHttpContextAccessor.HttpContext.Session.GetInt32("clientes_pages_Recuperador_Tipo") != null)
+        {
+            result = pHttpContextAccessor.HttpContext.Session.GetInt32("clientes_pages_Recuperador_Tipo").Value;
+        }
+        return result;
+    }
+    public static void clientes_pages_Recuperador_CantidadDia_Set(IHttpContextAccessor pHttpContextAccessor, int pTipo)
+    {
+        pHttpContextAccessor.HttpContext.Session.SetInt32("clientes_pages_Recuperador_CantidadDia", pTipo);
+    }
+    public static int? clientes_pages_Recuperador_CantidadDia(IHttpContextAccessor pHttpContextAccessor)
+    {
+        int? result = null;
+        if (pHttpContextAccessor.HttpContext.Session.GetInt32("clientes_pages_Recuperador_CantidadDia") != null)
+        {
+            result = pHttpContextAccessor.HttpContext.Session.GetInt32("clientes_pages_Recuperador_CantidadDia").Value;
+        }
+        return result;
+    }
+    public static List<DKbase.web.capaDatos.cCarritoTransfer> RecuperarCarritosTransferPorIdCliente(IHttpContextAccessor pHttpContextAccessor, DKbase.web.capaDatos.cClientes pCliente, string pTipo, string pIdSucursal)
+    {
+        DKbase.web.capaDatos.cSucursalCarritoTransfer o = RecuperarCarritosTransferPorCliente_generico(pHttpContextAccessor, pCliente, pTipo, pIdSucursal);
+        return o == null ? null : o.listaTransfer;
+    }
+    public static Boolean clientes_pages_reservavacunas_SinTroquel(IHttpContextAccessor pHttpContextAccessor)
+    {
+        Boolean result = false;
+        if (pHttpContextAccessor.HttpContext.Session.Get<Boolean>("clientes_pages_reservavacunas_SinTroquel") != null)
+        {
+            result = pHttpContextAccessor.HttpContext.Session.Get<Boolean>("clientes_pages_reservavacunas_SinTroquel");
+        }
+        return result;
     }
 }

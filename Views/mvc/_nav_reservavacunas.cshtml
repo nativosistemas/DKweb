@@ -1,0 +1,57 @@
+@inject IHttpContextAccessor Accessor
+@{
+    string reservavacunas = "";
+    string reservavacunas_mis = "";
+    string reservavacunas_total = "";
+    string reservaVacunasSinTroquel = " class=\" oferta\" ";
+    string strController = Accessor.HttpContext.GetRouteValue("action").ToString();
+    switch (strController)
+    {
+        case "reservavacunas":
+            bool isSinTroquel = false;
+            Boolean sinTroquel_Session = DKweb.Codigo.Util.clientes_pages_reservavacunas_SinTroquel( Accessor);
+            if (sinTroquel_Session)//sinTroquel_Session != null &&  
+            {
+                isSinTroquel = true;
+            }
+            if (isSinTroquel)
+            {
+                reservaVacunasSinTroquel = " class=\"active oferta\" ";//oferta active
+            }
+            else
+            {
+                reservavacunas = " class=\"active\" ";
+            }
+
+            break;
+        case "reservavacunas_mis":
+            reservavacunas_mis = " class=\"active\" ";
+            break;
+        case "reservavacunas_total":
+            reservavacunas_total = " class=\"active\" ";
+            break;
+        default:
+            break;
+    }
+
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="nav_sec">
+            @{
+                if (DKweb.Controllers.mvcController.isUsuarioConPermisoPedido(Accessor))
+                {
+                    <a href="/mvc/reservavacunas" @{ WriteLiteral(reservavacunas);}><i class="fa fa-file-text-o" title="RESERVAR VACUNAS"></i><span>RESERVAR VACUNAS</span></a>
+                    <div class="separate"></div>
+
+                    <a href="/mvc/reservavacunas?t=1" @{ WriteLiteral(reservaVacunasSinTroquel);}><i class="fa fa-file-text-o" title="RESERVAR VACUNAS TROQUEL ANULADO"></i><span class="hidden-sm hidden-xs hidden-md">RESERVAR VACUNAS TROQUEL ANULADO</span></a>
+                    <div class="separate "></div>
+                }
+            }
+            <a href="/mvc/reservavacunas_mis" @{ WriteLiteral(reservavacunas_mis);}><i class="fa fa-file-text-o" title="MIS RESERVAS"></i><span>MIS RESERVAS</span></a>
+            <div class="separate"></div>
+            <a href="/mvc/reservavacunas_total" @{ WriteLiteral(reservavacunas_total);}><i class="fa fa-file-text-o" title="TOTAL RESERVAS"></i><span>TOTAL RESERVAS</span></a>
+            <div class="clear0"></div>
+        </div>
+    </div>
+</div>
