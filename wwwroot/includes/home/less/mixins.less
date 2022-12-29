@@ -1,0 +1,98 @@
+//**********************
+//        MIXINS
+//**********************
+
+.ColorAndBackground(@color; @bg_color) {
+  color: @color;
+  background-color: @bg_color;
+}
+
+.ButtonStyle(@width; @padding) {
+  width: @width;
+  padding: @padding;
+  background-color: @color_emp_st !important;
+  color: @color_white !important;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 0px;
+  border: 2px solid @color_emp_st;
+}
+
+.ButtonStyleHover() {
+  border: 2px solid @color_emp_st;
+  background-color: @color_white !important;
+  color: @color_emp_st !important;
+}
+
+.ButtonFiltro(@color; @bg_color) {
+  display: block;
+  width: auto;
+  padding: 4px 10px;
+  background-color: @bg_color;
+  color: @color;
+  font-size: 15px;
+  font-weight: 400;
+  text-align: center;  
+  border-radius: 0px;
+  border: 2px solid @color_emp_st;
+  i {
+    padding-left: 10px;
+  }
+  &:hover {
+    border: 2px solid @color_emp_st;
+    background-color: @color;
+    color: @bg_color;
+  }
+}
+
+.H2Style(@color) {
+  font-size: 24px;
+  font-weight: 600;
+  color: @color;
+  i {
+    font-size: 18px;
+    margin: 0px;
+    padding-right: 7px;
+  }
+  span {
+    font-weight: 400;
+  }
+}
+
+.ButtonsHeaderDefaultStyle() {
+  font-size: 13px;
+  color: @color_white;
+  margin: 0 5px;
+  &:hover {
+    color: #ddd;
+  }
+  i {
+    font-size: 14px;
+    line-height: 0.5em;
+    margin: 0 5px
+  }
+}
+
+
+// Mixins generales
+.transition(@transition) {
+  -webkit-transition: @transition;
+  -moz-transition: @transition;
+  -ms-transition: @transition;
+  -o-transition: @transition;
+  transition: @transition;
+}
+
+.opacity(@opacity) {
+  -webkit-opacity: @opacity;
+  -moz-opacity: @opacity;
+  opacity: @opacity;
+}
+
+.transform(@function) {
+  -webkit-transform: @function;
+  -moz-transform: @function;
+  -ms-transform: @function;
+  -o-transform: @function;
+}

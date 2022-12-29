@@ -1,0 +1,288 @@
+.hdr_nd {
+	position:relative;
+	height:auto;
+	background-color:@color_emp_st;
+	padding:12px 25px;
+	font-weight:400;
+	font-size: 13px;
+	line-height:13px;
+	color: @color_white;
+	z-index:2;
+}
+
+.hdr_nd .cont_left {
+	width:auto; 
+	float:left; 
+	padding-top:10px
+}
+.hdr_nd .cont_left:first-child {
+	margin-right:24px;
+}
+
+.hdr_nd .cont_right {
+	width:auto; 
+	float:right; 
+}
+
+.hdr_nd .cont_right i,
+.hdr_nd .cont_left i {
+	font-size:14px;
+	padding-right:10px;
+}
+
+.hdr_nd .cont_right a {
+	display:block;
+	margin-top:10px !important;
+	font-weight:400;
+	font-size: 13px;
+	line-height:13px;
+	color: @color_white;
+}
+
+header {
+	width: 100%;
+	height: 90px;
+	z-index: 1;
+	padding:0 5px;
+	background-color: transparent !important;
+}
+header .nav {
+	margin:0px;
+	padding:0px;
+}
+header .nav ul {
+	margin:0px;
+	padding:0px;
+}
+header .nav li {
+	margin:0px;
+	margin-right:30px;
+	padding:0px;
+	width:auto !important;
+}
+header .nav li:last-child {
+	margin-right:0px !important;
+}
+header .nav a {
+	position:relative;
+	display:inline-block;
+	width:auto;
+	height:auto;
+	margin-top:45px;
+	margin-right:10px;
+	padding:0px !important;
+	color: @color_gris;
+	font-weight: 400 !important;
+	font-size: 13px;
+	line-height:13px;
+	&:hover {
+		background-color:transparent;
+		color:@color_emp_nd;
+	}
+}
+
+header .nav a.registracion {
+	position:relative;
+	padding:10px 12px !important;
+	margin-top:30px;
+	margin-right:0px !important;
+	background:@color_emp_st !important;
+	border:1px solid @color_emp_st !important;
+	&:hover {
+		background-color: @color_white !important;
+		-webkit-transition-duration: 0.5s; 
+		-moz-transition-duration: 0.5s; 
+		-ms-transition-duration: 0.5s; 
+		-o-transition-duration: 0.5s; 
+		transition-duration: 0.5s;
+	}
+}
+header .nav a.registracion h3 {
+	color:@color_white !important;
+}
+header .nav a.registracion i {
+	padding-top:1px;
+	padding-right:7px;
+	font-size:14px;
+	color:@color_white;
+}
+header .nav a.registracion:hover h3,
+header .nav a.registracion:hover i {
+	color:@color_emp_st !important;
+}
+header .navbar-home {
+	background-color: transparent !important;
+	border: none !important;
+}
+
+
+.navbar-default.navbar-scroll {
+  background-color: transparent !important; 
+  border-color: @color_white;
+  padding: 15px 0;
+}
+.navbar-default {
+  background-color: transparent;
+  border-color: none !important;
+}
+.bd_sec .navbar-default .navbar-brand,
+.navbar-default .navbar-brand {
+	width:213px;
+	height: 47px;
+	display: inline-block !important;
+	background:url(../../../img/home/logos/logo.png) no-repeat left top;
+	padding: 0;
+	margin:25px 20px 0 0;
+}
+.bd_sec .navbar-default {
+  background-color: @color_white;
+}
+.bd_sec .navbar-default .navbar-brand {
+	background:url(../../../img/home/logos/logo2.png) no-repeat left top;
+}
+.navbar-inverse .navbar-brand {
+	width:213px;
+	height: 47px;
+	display: inline-block !important;
+	background:url(../../../img/home/logos/logo2.png) no-repeat left top;
+	padding: 0;
+	margin:10px 0 0 0 !important;
+}
+
+header .navbar-inverse .nav a {
+	margin-top:28px;
+}
+header .navbar-inverse .nav a.registracion {
+	margin-top:13px;
+	margin-right:5px !important;
+}
+/*.bd_sec header .navbar-inverse .nav a.registracion {
+	margin-right:4px !important;
+}*/
+
+.navbar-right li:last-child a{
+	margin-right:0px !important;
+}
+
+.nav &>li &>a:focus {
+  color: @color_white!important;
+  background-color: transparent !important;
+}
+.nav .open > a,
+.nav .open > a:hover,
+.nav .open > a:focus {
+  background-color: transparent !important;
+}
+.nav a h3{
+	font-weight: 400;
+	font-size: 13px;
+	line-height:13px;
+	color: @color_gris;
+	&:hover {
+		color:@color_emp_rd;
+	}
+}
+header .nav li a.active h3 {
+	color:@color_emp_st !important;
+}
+
+/* Home */
+.bd_home .navbar-default {
+	position:absolute;
+	top:51px;
+	left:0;
+	right:0;
+	background-color: transparent !important;
+}
+.bd_home .navbar-default .nav a h3{
+	color: @color_white;
+	&:hover {
+		color:@color_emp_rd;
+	}
+}
+.bd_home .navbar-default .nav li:first-child a h3{
+	color:@color_white !important;
+}
+
+.bd_home .navbar-default .navbar-brand {
+	margin:28px 0 0 5px !important;
+}
+.bd_home header .nav li {
+	margin-top:3px !important;
+}
+.bd_home .navbar-default .nav li:last-child {
+	margin-right:10px !important;
+}
+.bd_sec header .nav li:last-child {
+	margin-right:5px !important;
+}
+
+a.acc_cli {
+	width:auto;
+	height:auto;
+	display:inline-block;
+	float: right;
+	padding:5px 0;
+	margin-top:15px;
+	font-weight: 400;
+	font-size: 14px;
+	line-height:14px;
+	color: @color_white !important;
+	z-index:3 !important;
+	&:hover {
+		color:@color_gris_claro;
+	}
+}
+a.acc_cli:before {
+	float:left;
+	content: '\f090'; 
+	font-family: FontAwesome;
+	padding-right:5px;
+	font-size:14px !important;
+	color:@color_emp_rd !important;	
+}
+
+@media (max-width: @screen-sm-max) { 
+	header .nav li {
+		margin-right:10px !important;
+	}
+	.nav.navbar-nav.navbar-right {
+		padding-right:0px !important;
+	}
+}
+@media (max-width: @screen-xs-max) { 
+	header {
+	  background-color: @color_emp_st !important;
+	  height:50px !important;
+	  overflow:hidden;
+	}
+	.bd_home .navbar-default {
+		position: relative !important;
+		left:0;
+		right:0;
+		top:0;
+		display:block; 
+		background-color: @color_emp_st !important;
+	}
+	.navbar-inverse.navbar-fixed-top,
+	.navbar-default,
+	header .navbar-home,
+	.navbar-default.navbar-scroll,
+	.bd_sec .navbar-default {
+	  background-color: @color_emp_st !important;
+	  border:none !important;
+	  height:50px !important;
+	  overflow:hidden;
+	  padding:0px !important
+	}
+	.navbar-brand {
+		visibility:hidden !important;
+	}
+	.navbar.navbar-inverse.navbar-fixed-top a.navbar-toggle{
+		margin-top:8px !important;
+	}
+	.navbar.navbar-default.navbar-static-top div:first-child,
+	.navbar.navbar-default.navbar-static-top div:last-child {
+  		padding: 0px 3px !important;
+	}		
+}

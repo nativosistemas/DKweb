@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,17 +15,27 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+.AddCookie(option => {
+option.LoginPath ="/Home/Index";
+option.ExpireTimeSpan = TimeSpan.FromHours(23);
+option.AccessDeniedPath ="/config/sinpermiso";
+});
+
 var app = builder.Build();
 
-DKbase.Helper.getTipoApp = "DKweb";
-DKbase.Helper.getFolder = @"C:\ArchivosSitioWEB";
-DKbase.Helper.getUrl_DKdll = "http://dll.kellerhoff.com.ar/api/";
-DKbase.Helper.getUrl_DKcore = "https://localhost:5001/api/";
+DKbase.Helper.getTipoApp = builder.Configuration.GetSection("appSettings")["getTipoApp"];
+DKbase.Helper.getFolder = builder.Configuration.GetSection("appSettings")["getFolder"];
+DKbase.Helper.getUrl_DKdll = builder.Configuration.GetSection("appSettings")["getUrl_DKdll"];
+DKbase.Helper.getUrl_DKcore = builder.Configuration.GetSection("appSettings")["getUrl_DKcore"];
+
 DKbase.Helper.getConnectionStringSQL = builder.Configuration.GetConnectionString("ConnectionSQL");
 
-//var optionsRewrite = new RewriteOptions()
-//.AddRedirect("servicios/thumbnail", "servicios/thumbnail");
-//app.UseRewriter(optionsRewrite);
+var optionsRewrite = new RewriteOptions()
+.AddRedirect("home/index.aspx", "home/index")
+.AddRedirect("home/empresa.aspx", "home/empresa");
+app.UseRewriter(optionsRewrite);
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -69,12 +80,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=mvc}/{action=Index}");
+    pattern: "{controller=Home}/{action=Index}");
 
 app.Run();

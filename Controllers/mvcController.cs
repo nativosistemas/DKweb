@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using DKweb.Models;
 using DKweb.Codigo;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DKweb.Controllers;
 
+[Authorize]
 public class mvcController : Controller
 {
     private readonly ILogger<mvcController> _logger;
@@ -79,22 +81,6 @@ public class mvcController : Controller
             return true;
         }
         return false;
-    }
-
-    public IActionResult Index()
-    {
-        var fff = DKweb.Codigo.Util.login(_httpContextAccessor, "labesme", "esme");// "romanello ", "alberdi"
-        var dd = _httpContextAccessor?.HttpContext?.Session.GetString("SessionVar");
-        if (dd == null)
-        {
-            _httpContextAccessor?.HttpContext?.Session.SetString("SessionVar", "0");
-        }
-        else
-        {
-            var nro = Convert.ToInt32(dd) + 1;
-            _httpContextAccessor?.HttpContext?.Session.SetString("SessionVar", nro.ToString());
-        }
-        return View();
     }
     //[Authorize]
     public ActionResult Buscador()
@@ -519,6 +505,7 @@ public class mvcController : Controller
         DKweb.Codigo.Util.estadopedidos_Resultado_Set(_httpContextAccessor, o.resultadoObj);
         return lista;
     }
+    [Authorize(Roles = DKbase.generales.Constantes.cROL_const_ADMINISTRADORCLIENTE)]
     public ActionResult estadopedidos()
     {
         return View();
@@ -527,6 +514,7 @@ public class mvcController : Controller
     {
         return View();
     }
+   [Authorize(Roles = DKbase.generales.Constantes.cROL_const_OPERADORCLIENTE)]
     public ActionResult recuperador(string t)
     {
         int tipo = 0;

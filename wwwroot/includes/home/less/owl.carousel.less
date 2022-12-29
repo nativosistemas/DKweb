@@ -1,0 +1,240 @@
+/* 
+ * 	Core Owl Carousel CSS File
+ *	v1.3.3
+ */
+
+/* clearfix */
+.owl-carousel .owl-wrapper:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+/* display none until init */
+.owl-carousel {
+	display: none;
+	position: relative;
+	width: 100%;
+	-ms-touch-action: pan-y;
+	margin-top:-90px !important;
+}
+.owl-carousel .owl-wrapper{
+	display: none;
+	position: relative;
+	-webkit-transform: translate3d(0px, 0px, 0px);
+}
+.owl-carousel .owl-wrapper-outer{
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+}
+.owl-carousel .owl-wrapper-outer.autoHeight{
+	-webkit-transition: height 500ms ease-in-out;
+	-moz-transition: height 500ms ease-in-out;
+	-ms-transition: height 500ms ease-in-out;
+	-o-transition: height 500ms ease-in-out;
+	transition: height 500ms ease-in-out;
+}
+	
+.owl-carousel .owl-item{
+	float: left;
+}
+.owl-controls .owl-page,
+.owl-controls .owl-buttons div{
+	cursor: pointer;
+}
+.owl-controls {
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/* mouse grab icon */
+.grabbing { 
+    cursor:url(grabbing.png) 8 8, move;
+}
+
+/* fix */
+.owl-carousel  .owl-wrapper,
+.owl-carousel  .owl-item{
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility:    hidden;
+	-ms-backface-visibility:     hidden;
+	-webkit-transform: translate3d(0,0,0);
+	-moz-transform: translate3d(0,0,0);
+	-ms-transform: translate3d(0,0,0);
+}
+
+#owl-demo .item .bg-slide {
+	position: absolute;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+	opacity:0.6;
+	background-color:#0d1217;
+	z-index:2 !important;
+}
+
+#owl-demo .item img {
+	width: 100%;
+	height: auto;
+	margin: 0 auto;
+	display: block;
+	z-index:1 !important;
+}
+#owl-demo .item .cont_item {
+	position:absolute;
+	padding-top:150px;
+	margin:0 auto;
+	left:0;
+	right:0;
+	z-index:3;
+}
+#owl-demo .item .cont_item div {
+	margin:0 auto !important;
+	padding:0 5px;
+	z-index:3;
+}
+
+.cont_item div div div h2 {
+	font-size: 55px;
+	line-height:60px;
+	font-weight: 600;
+	padding-bottom:10px;
+}
+.cont_item div div .dsc {
+	font-size: 15px;
+	line-height:20px;
+	font-weight:400;
+	color: @color_white !important;
+	padding-bottom:20px;
+	z-index:3 ;
+}
+.cont_item div div .boton {
+	padding-top:20px !important;
+}
+
+.cont_item div div .dsc a {
+	color: @color_white !important;
+}
+.owl-controls {
+	position:absolute; 
+	bottom:10px;
+	left:0;
+	right:0;
+	background-color:transparent !important;
+}
+.owl-theme .owl-controls .owl-page span {
+	background: transparent !important;
+	border:2px solid @color_white !important;
+	opacity:1 !important;
+}
+.owl-theme .owl-controls .owl-page.active span {
+	background:@color_white !important;
+}
+
+.owl-buttons div {
+	background: transparent !important;
+	border-radius: 0px !important; 
+	font-size: 60px !important;
+}
+
+.owl-carousel .owl-prev,
+.owl-carousel .owl-next {
+	position: absolute;
+	top: -300px;
+	height: 100%;
+	margin: auto !important;
+}
+
+.owl-carousel .owl-prev {
+	left: 20px;
+}
+.owl-carousel .owl-next {
+	right: 20px;
+}
+
+@media (min-width: 1281px) and (max-width:1366px) {
+	.cont_item div div div h2{
+		font-size: 45px;
+		line-height:50px;
+		padding-left:45px;
+	}
+	.cont_item div div .dsc{
+		padding-left:45px !important;
+	}
+	.cont_item div div .boton{
+		padding-left:45px !important;
+	}
+	.owl-carousel .owl-prev {
+		top: -250px;		
+	}
+	.owl-carousel .owl-next {
+		top: -250px;
+	}
+}
+@media (min-width: 1024px) and (max-width:1280px) {
+	#owl-demo .item .cont_item {
+		padding-top:100px;
+	}
+	.owl-carousel .owl-prev {
+		left: 0px;
+		top: -200px;		
+	}
+	.owl-carousel .owl-next {
+		right: 0px;
+		top: -200px;
+	}
+	.cont_item div div div h2{
+		font-size: 35px;
+		line-height:40px;
+		padding-left:45px;
+	}
+	.cont_item div div .dsc{
+		padding-left:45px !important;
+	}
+	.cont_item div div .boton{
+		padding-left:45px !important;
+	}
+}
+@media (max-width: @screen-sm-max) { 
+	#owl-demo .item .cont_item {
+		padding-top:220px;
+	}
+	.owl-carousel .owl-prev,
+	.owl-carousel .owl-next {
+		visibility:hidden;
+	}
+}
+@media (max-width: @screen-xs-max) { 
+	.owl-carousel {
+		margin-top:0px !important;
+	}
+	.owl-carousel .owl-prev,
+	.owl-carousel .owl-next {
+		visibility:hidden;
+	}
+	.owl-controls {
+		position:absolute; 
+		bottom:0px;
+	}
+	#owl-demo .item .cont_item {
+		padding-top:15%;
+	}
+	.cont_item div div div h2{
+		font-size: 30px;
+		line-height:35px;
+		padding-bottom:7px;
+	}
+	.cont_item div div .dsc{
+		font-size: 14px;
+		line-height:18px;
+		padding-bottom:20px;
+	}	
+}

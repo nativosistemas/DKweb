@@ -213,7 +213,7 @@ function volverBuscador_Base() {
 function onclickSignOff() {
     $.ajax({
         type: "POST",
-        url: "/config/SignOff",
+        url: "/Home/SignOff",
         success:
         function (response) {
             OnCallBackSignOff(response);
@@ -228,7 +228,7 @@ function onclickSignOff() {
 }
 function OnCallBackSignOff(args) {
     if (args == 'Ok') {
-        location.href = '../mvc/Index';
+        location.href = '../Home/Index';
     }
 }
 function OnCallBackLoginCarrito(args) {

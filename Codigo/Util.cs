@@ -331,6 +331,19 @@ public class Util
         resultado = pHttpContextAccessor.HttpContext.Session.Get<List<DKbase.web.cCadeteriaRestricciones>>("RecuperarTodosCadeteriaRestricciones");
         return resultado;
     }
+    public static void set_home_IdOferta(IHttpContextAccessor pHttpContextAccessor, int pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.SetInt32("home_IdOferta", pValue);
+    }
+    public static void set_home_IdTransfer(IHttpContextAccessor pHttpContextAccessor, int pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.SetInt32("home_IdTransfer", pValue);
+    }
+    public static void set_home_Tipo(IHttpContextAccessor pHttpContextAccessor, int pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.SetInt32("home_Tipo", pValue);
+
+    }
     public static int? get_home_IdOferta(IHttpContextAccessor pHttpContextAccessor)
     {
         int? resultado = pHttpContextAccessor.HttpContext.Session.GetInt32("home_IdOferta");
@@ -746,5 +759,55 @@ public class Util
             result = pHttpContextAccessor.HttpContext.Session.Get<Boolean>("clientes_pages_reservavacunas_SinTroquel");
         }
         return result;
+    }
+    public static string cssActive(IHttpContextAccessor pHttpContextAccessor, string name)
+    {
+        string result = string.Empty;
+        string strController = pHttpContextAccessor.HttpContext.GetRouteValue("action").ToString().ToLower();
+        if (strController == name)
+            result = " active ";
+        return result;
+    }
+    public static string htmlCssBody(IHttpContextAccessor pHttpContextAccessor)
+    {
+        if (pHttpContextAccessor.HttpContext.Session.GetString("homeBodyCss") != null)
+            return pHttpContextAccessor.HttpContext.Session.GetString("homeBodyCss");
+        else
+            return "bd_home";
+    }
+    public static string hrefLinkSucursalesMobile(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string result = string.Empty;
+        string strController = pHttpContextAccessor.HttpContext.GetRouteValue("action").ToString().ToLower();
+        if (strController == "index")
+            result = "../home/index#idFooter";
+        else
+            result = "../home/index#idFooter";
+        return result;
+    }
+    public static string htmlPublicarRevista(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string result = string.Empty;
+        if (pHttpContextAccessor.HttpContext.Session.GetString("homeIndex_Revista") != null)
+        {
+            result = pHttpContextAccessor.HttpContext.Session.GetString("homeIndex_Revista");
+        }
+        return result;
+    }
+    public static void first_htmlPublicarRevista(IHttpContextAccessor pHttpContextAccessor)
+    {
+        DKbase.web.capaDatos.cCatalogo o = DKbase.Util.RecuperarTodoCatalogo_PublicarHome();
+        if (o != null)
+        {
+            DKbase.web.capaDatos.cArchivo oArchivo = DKbase.Util.RecuperarTodosArchivos(o.tbc_codigo, DKbase.generales.Constantes.cTABLA_CATALOGO, string.Empty).FirstOrDefault();
+            if (oArchivo != null)
+            {
+                var str_homeIndex_Revista = "<a  class=\"pdf\" target =\"_blank\" href =\"../../" + "servicios/descargarArchivo?t=" + DKbase.generales.Constantes.cTABLA_CATALOGO + "&n=" + oArchivo.arc_nombre + "&inline=yes" + "\" >DESCARGAR</a>";
+                pHttpContextAccessor.HttpContext.Session.SetString("homeIndex_Revista", str_homeIndex_Revista);
+                var str_href_Revista = "href =\"../../" + "servicios/descargarArchivo.aspx?t=" + DKbase.generales.Constantes.cTABLA_CATALOGO + "&n=" + oArchivo.arc_nombre + "&inline=yes" + "\"";
+                pHttpContextAccessor.HttpContext.Session.SetString("href_Revista", str_href_Revista);
+
+            }
+        }
     }
 }

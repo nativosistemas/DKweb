@@ -1,0 +1,123 @@
+/* Side Menu */
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 0;
+	top:0;
+    width: 100%;
+    height: 100%;
+    margin-left: -100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+	background-color:@color_emp_st;
+    -webkit-transition: all 0.4s ease 0s;
+    -moz-transition: all 0.4s ease 0s;
+    -ms-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+}
+
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li {
+    text-indent: 15px;
+	font-weight: 400;
+	font-size: 14px;
+	line-height:14px;
+	color:@color_white;
+}
+.sidebar-nav li.tit {
+	font-weight: 600;
+	color:@color_emp_st;
+}
+
+.sidebar-nav li a,
+.sidebar-nav li a.s_menu {
+	display:block;
+	padding:10px 0 !important;
+	color: @color_white;
+	font-weight: 400;
+	font-size: 14px;
+	line-height:14px;
+	&:hover{
+		color:@color_gris_claro;
+	} 
+}
+.sidebar-nav li a {
+	color:@color_white;	
+}
+/*.sidebar-nav li a.s_menu:before {
+	content: '\f105'; 
+	font-family: FontAwesome;
+	float:right;
+	padding-right:15px;
+	font-size:17px !important;
+	color:@color_gris;
+}*/
+.sidebar-nav li i {
+	width:40px !important;
+	display:inline-block;
+	margin-left:-25px;
+	margin-right:10px !important;
+	padding:0px !important;
+	font-size:18px;
+	text-align:right;
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-hdr {
+	background-color:@color_emp_st;
+	padding:10px;
+/*	margin-bottom:20px;*/
+}
+
+#menu-toggle {
+    z-index: 1;
+	visibility:hidden;
+	color:@color_white
+}
+#sidebar-wrapper.active {
+    left: 100%;
+    width: 100%;
+    -webkit-transition: all 0.4s ease 0s;
+    -moz-transition: all 0.4s ease 0s;
+    -ms-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+	background-color:@color_emp_st;
+}
+
+.toggle {
+	padding:0px !important;
+    margin: 0px !important;
+}
+#menu-close {
+	width:auto;
+	display: inline-block;
+/*	padding:0 10px !important;*/
+	margin-left:20px !important;
+	padding:4px 10px 2px 10px !important;
+	font-size:20px;
+	color:@color_white;
+	background-color: @color_emp_rd !important;
+	border-radius:0px !important;
+	text-align:center;
+}
+
+.separate_hdr {
+	margin:15px 0;
+	height:1px;
+	background-color:@color_emp_rd;
+}
