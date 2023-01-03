@@ -733,7 +733,7 @@ function ValidarTransferTotal_sucursal(pIndice, pIndiceSursal) {
     }
     if (isGrabar) {
         if (isNotNullEmpty(UnidadesFijas)) {
-            if (UnidadesFijas == cantTotalEnTransfer) {
+            if (UnidadesFijas != cantTotalEnTransfer) {
                 mensaje_alert('El transfer es diferente de la unidad fija');
                 isGrabar = false;
             }
@@ -817,7 +817,7 @@ function ValidarTransferPorProducto(pIndiceTransfer, pIndiceProducto) {
                 }
             }
             if (isNotNullEmpty(UnidadesFijas)) {
-                if (UnidadesFijas == cantidad) {
+                if (UnidadesFijas != cantidad) {
                     intTipoMensaje = -1;
                     $('#tdError' + pIndiceTransfer + '_' + pIndiceProducto).html('La cantidad es diferente de la unidad fija');
                 }
