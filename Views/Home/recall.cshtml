@@ -1,0 +1,111 @@
+@inject IHttpContextAccessor Accessor
+@{
+    Layout = "_master";
+}
+@section head
+{
+<style type="text/css">
+    .wysiwyg-color-black {
+        color: black;
+    }
+
+    .wysiwyg-color-silver {
+        color: silver;
+    }
+
+    .wysiwyg-color-gray {
+        color: gray;
+    }
+
+    .wysiwyg-color-white {
+        color: white;
+    }
+
+    .wysiwyg-color-maroon {
+        color: maroon;
+    }
+
+    .wysiwyg-color-red {
+        color: red;
+    }
+
+    .wysiwyg-color-purple {
+        color: purple;
+    }
+
+    .wysiwyg-color-fuchsia {
+        color: fuchsia;
+    }
+
+    .wysiwyg-color-green {
+        color: green;
+    }
+
+    .wysiwyg-color-lime {
+        color: lime;
+    }
+
+    .wysiwyg-color-olive {
+        color: olive;
+    }
+
+    .wysiwyg-color-yellow {
+        color: yellow;
+    }
+
+    .wysiwyg-color-navy {
+        color: navy;
+    }
+
+    .wysiwyg-color-blue {
+        color: blue;
+    }
+
+    .wysiwyg-color-teal {
+        color: teal;
+    }
+
+    .wysiwyg-color-aqua {
+        color: aqua;
+    }
+
+    .wysiwyg-color-orange {
+        color: orange;
+    }
+</style>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        prepararReCall($('#hiddenObjReCall').val());
+    });
+</script>
+}
+
+<section class="section-gris-claro">
+    <div class="container">
+        <div id="divContenedorObjRecall" class="row">
+        </div>
+    </div>
+</section>
+
+@{
+    string resultado = string.Empty;
+    List<DKbase.web.capaDatos.cRecall> l = DKbase.Util.RecuperarTodaReCall();
+    if (l != null)
+    {
+        int id = DKweb.Codigo.Util.recall_id(Accessor);
+        DKbase.web.capaDatos.cRecall o = l.Where(x => x.rec_id == id).FirstOrDefault();
+        List<DKbase.web.capaDatos.cArchivo> listaArchivo = DKbase.Util.RecuperarTodosArchivos(id, "recallpdf", string.Empty);
+        if (listaArchivo != null)
+        {
+            if (listaArchivo.Count > 0)
+            {
+                o.arc_nombre = listaArchivo[0].arc_nombre;
+            }
+        }
+
+        resultado += "<input type=\"hidden\" id=\"hiddenObjReCall\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(o)) + "\" />";
+    }
+
+    WriteLiteral(resultado);
+}

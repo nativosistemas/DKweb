@@ -810,4 +810,58 @@ public class Util
             }
         }
     }
+    public static void promociones_isNuevoLanzamiento_Set(IHttpContextAccessor pHttpContextAccessor, bool pIsNuevoLanzamiento)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<bool>("promociones_isNuevoLanzamiento", pIsNuevoLanzamiento);
+    }
+    public static bool promociones_isNuevoLanzamiento(IHttpContextAccessor pHttpContextAccessor)
+    {
+        bool result = false;
+        if (pHttpContextAccessor.HttpContext.Session.Get<bool>("promociones_isNuevoLanzamiento") != null)
+        {
+            result = pHttpContextAccessor.HttpContext.Session.Get<bool>("promociones_isNuevoLanzamiento");
+        }
+        return result;
+    }
+    public static string hrefLinkSucursales(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string result = string.Empty;//, string name
+        string strController = pHttpContextAccessor.HttpContext.GetRouteValue("action").ToString().ToLower();
+        if (strController == "index")
+        {
+            result = "#sucursales";
+        }
+        else
+        {
+            result = @"../home/index#sucursales";
+        }
+        return result;
+    }
+    public static void action_id_Set(IHttpContextAccessor pHttpContextAccessor, int pAction_id)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<int>("action_id", pAction_id);
+    }
+    public static int action_id(IHttpContextAccessor pHttpContextAccessor)
+    {
+        int result = 0;
+        if (pHttpContextAccessor.HttpContext.Session.Get<int>("action_id") != null)
+        {
+            result = pHttpContextAccessor.HttpContext.Session.Get<int>("action_id");
+        }
+        return result;
+    }
+
+    public static void recall_id_Set(IHttpContextAccessor pHttpContextAccessor, int pAction_id)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<int>("recall_id", pAction_id);
+    }
+    public static int recall_id(IHttpContextAccessor pHttpContextAccessor)
+    {
+        int result = 0;
+        if (pHttpContextAccessor.HttpContext.Session.Get<int>("recall_id") != null)
+        {
+            result = pHttpContextAccessor.HttpContext.Session.Get<int>("recall_id");
+        }
+        return result;
+    }
 }

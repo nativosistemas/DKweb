@@ -1,0 +1,102 @@
+@inject IHttpContextAccessor Accessor
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts{
+<script src="~/includes/js/libreria.js?n=22" type="text/javascript"></script>
+<script type="text/javascript">
+    var isIngresarPageMethods = false;
+    function onclickIngresar() {
+        if (!isIngresarPageMethods) {
+            isIngresarPageMethods = true;
+            name = document.getElementById('txtBot_name').value;// $('#txtBot_name').val();
+            pass = document.getElementById('txtBot_pass').value;// $('#txtBot_pass').val();
+
+            ajaxLogin(name, pass);
+        }
+        return false;
+    }
+    function ajaxLogin(name, pass) {
+        if (isNotNullEmpty(name) && isNotNullEmpty(pass)) {
+            //.then((response) => {
+            //    return response.json()
+            //})
+            var params = { pAuthenticateRequest: { login: name, pass: pass } };//    var parameter = { login: name, pass: pass }
+            const options = {
+                method: 'POST',
+                body: params// params //,//JSON.stringify(params),
+                /*headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                }*/
+            };
+            const options_1 = {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                },
+                body: JSON.stringify(params)
+            };
+            var url = "../Home/login?";
+            fetch(url + new URLSearchParams({
+                pLogin: name,
+                pPass: pass
+            })).then(function (body) {
+                return body.text(); // <--- THIS PART WAS MISSING
+            }).then((pResult) => {
+                OnCallBackLogin(pResult);
+            })
+                .catch(error => {
+                    isIngresarPageMethods = false;
+                    //  OnFail(error);
+                });
+        }
+    }
+    function OnCallBackLogin(args) {
+        isIngresarPageMethods = false;
+        if (args == 'Ok') {
+            var hidden_action_id = document.getElementById('hidden_action_id');
+            if (hidden_action_id != null) {
+                var hidden_action_id = hidden_action_id.value;
+                if (typeof hidden_action_id == 'undefined') {
+                    hidden_action_id = 0;
+                }
+                location.href = '../config/action?id=' + hidden_action_id;
+            }
+        }
+        else if (args == 'OkPromotor') {
+        }
+        else {
+            alert(args);
+        }
+    }
+</script>
+}
+@{
+    string resultado = string.Empty;
+    int action_id = DKweb.Codigo.Util.action_id(Accessor);
+    if (action_id != 0)
+    {
+        resultado += "<input type=\"hidden\" id=\"hidden_action_id\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(action_id.ToString()) + "\" />";
+    }
+    WriteLiteral(resultado);
+}
+<br />
+<div class="container">
+
+    <div class="form-outline mb-4">
+        <label class="form-label" for="txtBot_name">Usuario</label>
+        <input type="text" id="txtBot_name" class="form-control" />
+
+    </div>
+
+    <div class="form-outline mb-4">
+        <label class="form-label" for="txtBot_pass">Contraseña</label>
+        <input type="password" id="txtBot_pass" class="form-control" />
+
+    </div>
+
+
+    <!-- Submit button -->
+    <button type="button" class="btn btn-primary btn-block mb-4" onclick="onclickIngresar()">Login</button>
+</div>

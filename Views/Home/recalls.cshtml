@@ -1,0 +1,33 @@
+@inject IHttpContextAccessor Accessor
+@{
+    Layout = "_master";
+}
+@section head
+{
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        prepararListaReCall($('#hiddenListaReCall').val());
+    });
+</script>
+}
+
+<section class="section-gris-claro">
+    <div class="container">
+        <div id="divContenedorRecall" class="row">
+
+        </div>
+    </div>
+</section>
+@{
+    string resultado = string.Empty;
+    List<DKbase.web.capaDatos.cRecall> l = DKbase.Util.RecuperarTodaReCall();
+    if (l != null)
+    {
+        l = l.Where(x => x.rec_visible.HasValue && x.rec_visible.Value).OrderByDescending(x => x.rec_FechaNoticia.HasValue ?
+        x.rec_FechaNoticia : x.rec_Fecha).ToList();
+        resultado += "<input type=\"hidden\" id=\"hiddenListaReCall\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(l)) + "\" />";
+    }
+
+    WriteLiteral(resultado);
+}

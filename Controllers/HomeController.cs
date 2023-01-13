@@ -19,15 +19,33 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-         // var os = Environment.OSVersion;
- //DKbase.generales.Log.LogErrorFile("os.Platform",os.Platform.ToString() );
         DKweb.Codigo.Util.first_htmlPublicarRevista(_httpContextAccessor);
         return View();
     }
     [HttpGet]
     public async Task<IActionResult> empresa()
     {
-        // DKweb.Codigo.Util.first_htmlPublicarRevista(_httpContextAccessor);
+        return View();
+    }
+    [HttpGet]
+    public async Task<IActionResult> promociones(int isNuevoLanzamiento = 0)
+    {
+        bool params_isNuevoLanzamiento = false;
+        if (isNuevoLanzamiento == 1)
+        {
+            params_isNuevoLanzamiento = true;
+        }
+        DKweb.Codigo.Util.promociones_isNuevoLanzamiento_Set(_httpContextAccessor, params_isNuevoLanzamiento);
+        return View();
+    }
+    public async Task<IActionResult> recall(int id)
+    {
+         DKweb.Codigo.Util.recall_id_Set(_httpContextAccessor, id);
+        return View();
+    }
+    [HttpGet]
+    public async Task<IActionResult> recalls()
+    {
         return View();
     }
     [HttpPost]
@@ -56,12 +74,14 @@ public class HomeController : Controller
             }
         }
         return View();
-    }
-    [HttpPost]
-    public async Task<string> login(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
+    }//    [HttpGet]
+    public async Task<string> login(string pLogin, string pPass)
     {
-        //pAuthenticateRequest.login = Request.Form["txtUsuario"];
-        //pAuthenticateRequest.pass = Request.Form["txtPassword"];
+        DKbase.Models.AuthenticateRequest pAuthenticateRequest = new DKbase.Models.AuthenticateRequest() { login = pLogin, pass = pPass };
+        return await login_general(pAuthenticateRequest);
+    }
+    private async Task<string> login_general(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
+    {
         if (pAuthenticateRequest != null && !string.IsNullOrEmpty(pAuthenticateRequest.login) && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
         {
             var result_login = DKweb.Codigo.Util.login(_httpContextAccessor, pAuthenticateRequest.login, pAuthenticateRequest.pass);// "romanello ", "alberdi"
@@ -83,6 +103,11 @@ public class HomeController : Controller
             }
         }
         return "!Ok";
+    }
+    [HttpPost]
+    public async Task<string> login(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
+    {
+        return await login_general(pAuthenticateRequest);
     }
     [HttpPost]
     public async Task<string> loginCarrito(string pName, string pPass, int pIdOferta)

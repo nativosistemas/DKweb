@@ -1,0 +1,33 @@
+@inject IHttpContextAccessor Accessor
+@{
+    Layout = "_master";
+}
+<script type="text/javascript" src="../includes/home/js/oferta.js?n=11"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        prepararListaOfertas($('#hiddenListaOfertas').val());
+    });
+</script>
+<section class="section-gris-claro" id="todasOfertas">
+
+
+    <div class="container">
+        <div class="col-xs-12 no-padding"><a class="btn_volver float-left" href="index.aspx"><i
+                    class="fa fa-play"></i>VOLVER</a></div>
+        <div class="clear25"></div>
+    </div>
+    <div id="divContenedorOfertas" class="container">
+    </div>
+</section>
+
+@{
+    string resultado = string.Empty;
+    List<DKbase.web.capaDatos.cOferta> l = DKbase.Util.RecuperarTodasOfertaPublicar(DKweb.Codigo.Util.promociones_isNuevoLanzamiento(Accessor));
+    if (l != null)
+    {
+        resultado += "<input type=\"hidden\" id=\"hiddenListaOfertas\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(l)) + "\" />";
+    }
+
+    WriteLiteral(resultado);
+}
