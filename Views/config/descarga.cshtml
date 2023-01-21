@@ -1,0 +1,50 @@
+@Html.Partial("_nav_descarga")
+
+<div class="row">
+    <!-- col -->
+    <div class="col-xs-12">
+        <table class="footable table sin_b table-stripped" data-empty="No hay informacion disponible" width="100%" align="center" cellspacing="1" cellpadding="5" border="0">
+            <tbody>
+                <!-- fila 1 -->
+                <tr class="wht">
+                    <td class="col-lg-9 col-md-8 col-sm-7 col-xs-6 text-left">TODOS LOS PRODUCTOS</td>
+                    <td class="col-lg-3 col-md-4 col-sm-5 col-xs-6 text-right">
+                        <a class="excel" href="/config/GenerateDocument?id=1" target="_blank" title="EXCEL 2003"><span>EXCEL 2003</span></a>
+                        <a class="file-text" href="/config/GenerateDocument?id=5" target="_blank" title="CSV"><span>CSV</span></a>
+                    </td>
+                </tr>
+                <!-- fin fila 1 -->
+                <!-- fila 2 -->
+                <tr class="grs">
+                    <td class="col-lg-9 col-md-8 col-sm-7 col-xs-6 text-left">PRODUCTOS DE DROGUERIA</td>
+                    <td class="col-lg-3 col-md-4 col-sm-5 col-xs-6 text-right">
+                        <a class="excel" href="/config/GenerateDocument?id=2" target="_blank" title="EXCEL 2003"><span>EXCEL 2003</span></a>
+                        <a class="file-text" href="/config/GenerateDocument?id=6" target="_blank" title="CSV"><span>CSV</span></a>
+                    </td>
+                </tr>
+                <!-- fin fila 2 -->
+                <tr class="wht">
+                    <td class="col-lg-9 col-md-8 col-sm-7 col-xs-6 text-left">PRODUCTOS DE PERFUMERIA</td>
+                    <td class="col-lg-3 col-md-4 col-sm-5 col-xs-6 text-right">
+                        <a class="excel" href="/config/GenerateDocument?id=3" target="_blank" title="EXCEL 2003"><span>EXCEL 2003</span></a>
+                        <a class="file-text" href="/config/GenerateDocument?id=7" target="_blank" title="CSV"><span>CSV</span></a>
+                    </td>
+                </tr>
+                <tr class="grs">
+                    <td class="col-lg-9 col-md-8 col-sm-7 col-xs-6 text-left">PRODUCTOS EN OFERTA</td>
+                    <td class="col-lg-3 col-md-4 col-sm-5 col-xs-6 text-right">
+                        <a class="excel" href="/config/GenerateDocument?id=4" target="_blank" title="EXCEL 2003"><span>EXCEL 2003</span></a>
+                        <a class="file-text" href="/config/GenerateDocument?id=8" target="_blank" title="CSV"><span>CSV</span></a>
+                    </td>
+                </tr>
+                <tr class="wht">
+                    <td class="col-lg-9 col-md-8 col-sm-7 col-xs-6 text-left">MEDICAMENTOS Y ACCESORIOS NO INCLUIDOS EN ALFABETA</td>
+                    <td class="col-lg-3 col-md-4 col-sm-5 col-xs-6 text-right">
+                        @*<a class="excel" href="/config/GenerateDocument?id=4" target="_blank" title="EXCEL 2003"><span>EXCEL 2003</span></a>*@
+                        <a class="file-text" href="/config/GenerateDocument?id=9" target="_blank" title="CSV"><span>CSV</span></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

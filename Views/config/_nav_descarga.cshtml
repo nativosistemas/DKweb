@@ -1,0 +1,27 @@
+@inject IHttpContextAccessor Accessor
+@{
+    string classCatalogo = "";
+    string classDescarga = "";
+    string strController = Accessor.HttpContext.GetRouteValue("action").ToString();
+    switch (strController)
+    {
+        case "catalogo":
+            classCatalogo = " class=\"active\" ";
+            break;
+        case "descarga":
+            classDescarga = " class=\"active\" ";
+            break;
+        default:
+            break;
+    }
+
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="nav_sec">
+            <a href="/config/catalogo" @{ WriteLiteral(classCatalogo);} ><i class="fa fa-file-text-o" title="CATALOGO Y FOLLETOS"></i><span class="hidden-sm hidden-xs">CATALOGO Y FOLLETOS</span></a>
+            <div class="separate"></div>
+            <a href="/config/descarga" @{ WriteLiteral(classDescarga);} ><i class="fa fa-download" title="ARCHIVOS PARA DESCARGAR"></i><span class="hidden-sm hidden-xs">ARCHIVOS PARA DESCARGAR</span></a>
+        </div>
+    </div>
+</div>

@@ -90,19 +90,53 @@ public class configController : Controller
         }
         return resultado;
     }
-    public ActionResult inhabilitado()
+    public async Task<IActionResult> inhabilitado()
     {
         return View();
     }
-    public ActionResult Error()
+    public async Task<IActionResult> Error()
     {
         return View();
     }
-    public ActionResult sinpermiso()
+    public async Task<IActionResult> sinpermiso()
     {
         return View();
     }
-    public ActionResult sinusodll()
+    public async Task<IActionResult> sinusodll()
+    {
+        return View();
+    }
+    public async Task<IActionResult> mediosdepago1()
+    {
+        return View();
+    }
+
+    public async Task<IActionResult> mediosdepago2()
+    {
+        return View();
+    }
+
+    public async Task<IActionResult> mediosdepago3()
+    {
+        return View();
+    }
+
+    public async Task<IActionResult> mediosdepago4()
+    {
+        return View();
+    }
+
+    public async Task<IActionResult> mediosdepago5()
+    {
+        return View();
+    }
+
+    public async Task<IActionResult> catalogo()
+    {
+        return View();
+    }
+
+    public async Task<IActionResult> descarga()
     {
         return View();
     }

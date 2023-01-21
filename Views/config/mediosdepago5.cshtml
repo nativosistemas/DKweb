@@ -1,0 +1,22 @@
+@Html.Partial("_nav_mediosdepago")
+@section Scripts{
+    @Html.Partial("_scriptsMediosdepago")
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="div_cont_pagos">
+            <p class="text-center">Es un sistema de recaudación interbancaria, que incluye a los bancos provinciales del país. Se utiliza una boleta pre-impresa con la cual Ud. puede dirigirse a cualquier banco adherido a la Red Cobinpro y efectuar el pago por ventanilla.</p>
+            <div class="clear10"></div>
+            <div class="div_destacado text-center">Para usar este servicio, por favor solicite las boletas pre-impresas.</div>
+            <div class="clear20"></div>
+            @Html.Partial("_pagos_includes")
+            <p class="color_emp_st"><b>Bancos habilitados para el sistema COBINPRO:</b></p>
+            <div class="col-lg-2 col-sm-3 col-xs-6 text-center"><div class="clear15"></div><b>BANCOS<br />PROVINCIALES</b></div>
+            <div class="col-lg-2 col-sm-3 col-xs-6"><img src="../img/mvc/macro.png" class="img-responsive" /></div>
+            @*<div class="col-lg-2 col-sm-3 col-xs-6"><img src="../img/mvc/patagonia.png" class="img-responsive" /></div>*@
+            <div class="col-lg-2 col-sm-3 col-xs-6"><img src="../img/mvc/supervielle.png" class="img-responsive" /></div>
+            <div class="clear25"></div>
+            <div class="clear0"></div>
+        </div>
+    </div>
+</div>

@@ -808,7 +808,7 @@ public class Util
             {
                 var str_homeIndex_Revista = "<a  class=\"pdf\" target =\"_blank\" href =\"../../" + "servicios/descargarArchivo?t=" + DKbase.generales.Constantes.cTABLA_CATALOGO + "&n=" + oArchivo.arc_nombre + "&inline=yes" + "\" >DESCARGAR</a>";
                 pHttpContextAccessor.HttpContext.Session.SetString("homeIndex_Revista", str_homeIndex_Revista);
-                var str_href_Revista = "href =\"../../" + "servicios/descargarArchivo.aspx?t=" + DKbase.generales.Constantes.cTABLA_CATALOGO + "&n=" + oArchivo.arc_nombre + "&inline=yes" + "\"";
+                var str_href_Revista = "href =\"../../" + "servicios/descargarArchivo?t=" + DKbase.generales.Constantes.cTABLA_CATALOGO + "&n=" + oArchivo.arc_nombre + "&inline=yes" + "\"";
                 pHttpContextAccessor.HttpContext.Session.SetString("href_Revista", str_href_Revista);
 
             }

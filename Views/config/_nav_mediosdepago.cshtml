@@ -1,0 +1,46 @@
+@inject IHttpContextAccessor Accessor
+@{
+    string mediosdepago1 = "";
+    string mediosdepago2 = "";
+    string mediosdepago3 = "";
+    string mediosdepago4 = "";
+    string mediosdepago5 = "";
+    string strController = Accessor.HttpContext.GetRouteValue("action").ToString();
+    switch (strController)
+    {
+        case "mediosdepago1":
+            mediosdepago1 = " class=\"active\" ";
+            break;
+        case "mediosdepago2":
+            mediosdepago2 = " class=\"active\" ";
+            break;
+        case "mediosdepago3":
+            mediosdepago3 = " class=\"active\" ";
+            break;
+        case "mediosdepago4":
+            mediosdepago4 = " class=\"active\" ";
+            break;
+        case "mediosdepago5":
+            mediosdepago5 = " class=\"active\" ";
+            break;
+        default:
+            break;
+    }
+
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="nav_sec">
+            <a href="/config/mediosdepago1" @{ WriteLiteral(mediosdepago1);} ><i class="fa fa-dollar" title="SERVICIO RECAUDATORIO"></i><span>SERVICIO RECAUDATORIO</span></a>
+            <div class="separate"></div>
+            <a href="/config/mediosdepago2" @{ WriteLiteral(mediosdepago2);}><i class="fa fa-credit-card-alt" title="TARJETA DE DEPOSITO"></i><span>TARJETA DE DEPOSITO</span></a>
+            <div class="separate"></div>
+            <a href="/config/mediosdepago3" @{ WriteLiteral(mediosdepago3);}><i class="fa fa-bank" title="DEPÓSITOS Y TRANSFERENCIAS BANCARIAS"></i><span>Depósitos y transferencias bancarias</span></a>
+            <div class="separate"></div>
+            <a href="/config/mediosdepago4" @{ WriteLiteral(mediosdepago4);}><i class="fa fa-credit-card" title="TARJETAS DE CRÉDITO"></i><span>Tarjetas de Crédito</span></a>
+            <div class="separate"></div>
+            <a href="/config/mediosdepago5" @{ WriteLiteral(mediosdepago5);}><i class="fa fa-file-text-o" title="SISTEMA COBINPRO"></i><span>Sistema Cobinpro</span></a>
+            <div class="clear0"></div>
+        </div>
+    </div>
+</div>

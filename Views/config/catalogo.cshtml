@@ -1,0 +1,20 @@
+@Html.Partial("_nav_descarga")
+@section sectionHidden{
+    @{
+        string resultado = string.Empty;
+        List<DKbase.web.capaDatos.cCatalogo> lista = DKbase.Util.getCatalogosParaDescarga();
+        if (lista != null)
+        {
+            resultado += "<input type=\"hidden\" id=\"hiddenListaCatalogo\" value=\"" + System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(lista)) + "\" />";
+        }
+        WriteLiteral(resultado);
+    }
+}
+@section Scripts{
+    @Html.Partial("_scriptsConfig")
+}
+<div class="row">
+
+    <div class="col-xs-12" id="divGridCatalogo">
+    </div>
+</div>
