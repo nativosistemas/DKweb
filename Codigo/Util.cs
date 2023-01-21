@@ -775,6 +775,10 @@ public class Util
         else
             return "bd_home";
     }
+    public static void htmlCssBodySet(IHttpContextAccessor pHttpContextAccessor, string pCss)
+    {
+        pHttpContextAccessor.HttpContext.Session.SetString("homeBodyCss", pCss);
+    }
     public static string hrefLinkSucursalesMobile(IHttpContextAccessor pHttpContextAccessor)
     {
         string result = string.Empty;
@@ -863,5 +867,31 @@ public class Util
             result = pHttpContextAccessor.HttpContext.Session.Get<int>("recall_id");
         }
         return result;
+    }
+    public static string contactocv_result(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string result = null;
+        if (pHttpContextAccessor.HttpContext.Session.Get<string>("contactocv_result") != null)
+        {
+            result = pHttpContextAccessor.HttpContext.Session.Get<string>("contactocv_result");
+        }
+        return result;
+    }
+    public static void contactocv_result_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<string>("contactocv_result", pValue);
+    }
+    public static string registracion_msg(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string result = null;
+        if (pHttpContextAccessor.HttpContext.Session.Get<string>("registracion_msg") != null)
+        {
+            result = pHttpContextAccessor.HttpContext.Session.Get<string>("registracion_msg");
+        }
+        return result;
+    }
+    public static void registracion_msg_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<string>("registracion_msg", pValue);
     }
 }

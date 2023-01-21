@@ -1,0 +1,54 @@
+
+@section head
+{
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<style type="text/css">
+    .fileCv {
+        height: 3em !important
+    }
+</style>
+
+}
+  
+<section class="secction-white">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 no-padding">
+                <div class="iframe_maps_contacto">
+                    <div id="map"></div>
+                    <div class="container hidden-xs">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-5 div_ref_mapa">
+                                <div class="ref_mapa_bg"></div>
+                                <div class="ref_mapa contacto">
+                                    <h1 class="text-left color_white" style="font-size:15px !important">DROGUERIA
+                                        KELLERHOFF S.A.</h1>
+                                    <div class="clear5"></div>
+                                    <div><i class="fa fa-map-marker"></i>Pueyrredón 1149</div>
+                                    <div style="padding-left:15px">S2000QIG • Rosario • Santa Fe • Argentina</div>
+                                    <div><i class="fa fa-phone"></i>0341 4203300 (rotativas) • Fax: 0341 4203377</div>
+                                    <div><i class="fa fa-envelope"></i>info@kellerhoff.com.ar</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+
+    $('.cv_form').click(function () {
+        location.href = 'contactocv';
+        return false;
+    })	
+</script>
+<style type="text/css">
+    #map {
+
+        background-image: url(../../../img/mapaContacto.jpg);
+        background-size: cover;
+        background-position: center;
+    }
+</style>

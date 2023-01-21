@@ -3,16 +3,39 @@ var strMesajeOk_contactoCV = 'Su consulta a sido enviada. Gracias por contactars
 
 function GrabarContacto() {
     if ($('#success').html() == strMesajeOk_contacto) {
-        window.location = "contacto.aspx";
+        window.location = "contacto";
         return false;
     }
     $('#success').html('');
     if ($('#form1')[0].checkValidity()) {
         var g_recaptcha_response = grecaptcha.getResponse();
-        PageMethods.SendContacto($('#txtNombreApellido').val(), $('#r_social').val(), $('#txtEmailContacto').val(), $('#txtAsunto').val(), $('#txtCuerpo').val(), g_recaptcha_response, OnCallBackSendContacto, OnFail);
+        SendContacto(g_recaptcha_response);
         return false;
     }
     return true;
+}
+function SendContacto(g_recaptcha_response) {
+    var txtNombreApellido = $('#txtNombreApellido').val();
+    var r_social = $('#r_social').val();
+    var txtEmailContacto = $('#txtEmailContacto').val();
+    var txtAsunto = $('#txtAsunto').val();
+    var txtCuerpo = $('#txtCuerpo').val();
+    $.ajax({
+        type: "POST",
+        url: "/home/SendContacto",
+        data: { txtNombreApellido: txtNombreApellido, r_social: r_social, txtEmailContacto: txtEmailContacto, txtAsunto: txtAsunto, txtCuerpo: txtCuerpo, g_recaptcha_response: g_recaptcha_response },
+        success:
+            function (response) {
+                OnCallBackSendContacto(response);
+            },
+        failure: function (response) {
+            OnFail(response);
+        },
+        error: function (response) {
+            OnFail(response);
+        }
+    });
+
 }
 function OnCallBackSendContacto(args) {
     if (args == 'Ok') {

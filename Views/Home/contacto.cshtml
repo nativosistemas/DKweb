@@ -1,0 +1,52 @@
+@{
+    Layout = "_master";
+}
+
+<section class="section-gris-claro" id="contacto">
+    <div class="image-container col-md-6 col-sm-12 pull-right clearfix hidden-sm hidden-xs">
+        <div class="background-image-holder-right"><img src="../img/home/img_contacto.jpg" alt=""
+                class=" float-right img-responsive" /></div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 col-md-offset-0 col-sm-12 clearfix">
+                <h2 class="color_emp_nd">CONTACTO</h2>
+                <div class="clear25"></div>
+                <p>Para consultas y más información, complete el formulario.<br />Si desea enviar su curriculum vitae
+                    haga <a class="cv_form" href="#">click aqui</a>.</p>
+
+                <input name="txtNombreApellido" id="txtNombreApellido" class="form-control" type="text"
+                    placeholder="Nombre y Apellido (*)" value="" required="required" />
+                <div class="clear20"></div>
+                <input name="r_social" id="r_social" class="form-control" type="text" placeholder="Empresa" value="" />
+                <div class="clear20"></div>
+                <input name="txtEmailContacto" id="txtEmailContacto" class="form-control" type="email"
+                    placeholder="E-mail (*)" value="" required="required" />
+                <div class="clear20"></div>
+                <input name="txtAsunto" id="txtAsunto" class="form-control" type="text" placeholder="Asunto (*)"
+                    value="" required="required" />
+                <div class="clear20"></div>
+                <textarea name="txtCuerpo" id="txtCuerpo" class="form-control" placeholder="Consulta / Sugerencia (*)"
+                    required="required"></textarea>
+                <div class="clear20"></div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 no-padding">
+                    <div class="g-recaptcha float-left" data-sitekey="6LdTLCMUAAAAABbaNMb2Sv-jxXRM6D35GrcF7WeX">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 no-padding">
+                    <div class="clear20 visible-xs"></div>
+                    <div class="oblig float-right hidden-xs">(*) Campos obligatorios</div>
+                    <div class="oblig float-left visible-xs" style="margin-top:10px">(*) Campos obligatorios</div>
+                    <div class="clear20 hidden-xs"></div>
+                    <button class="btn_emp float-right" type="submit"
+                        onclick="return GrabarContacto(); ">ENVIAR</button>
+                </div>
+
+            </div>
+        </div>
+        <div id="success" class="alert"></div>
+
+    </div>
+</section>
+@Html.Partial("_contacto")
+<script src="../includes/home/js/contacto.js?n=2"></script>

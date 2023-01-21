@@ -184,9 +184,21 @@
             </ul>
         </nav>
     </header>
+    @{
+        string formAction = "";
+        string strController = Accessor.HttpContext.GetRouteValue("action").ToString();
+        switch (strController)
+        {
+            case "contactocv":
+                formAction = " method=\"post\"  action=\"contactocv_Post\" ";
+                break;
+        }
+    }
+    
+    <form id="form1" name="form1" @{ WriteLiteral(formAction);} runat="server" enctype="multipart/form-data">
+        @RenderBody()
 
-    @RenderBody()
-
+    </form>
     <footer id="idFooter" class="footer">
         <div class="container-fluid">
             <div class="row">

@@ -17,10 +17,11 @@ builder.Services.AddSession(options =>
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-.AddCookie(option => {
-option.LoginPath ="/Home/Index";
-option.ExpireTimeSpan = TimeSpan.FromHours(23);
-option.AccessDeniedPath ="/config/sinpermiso";
+.AddCookie(option =>
+{
+    option.LoginPath = "/Home/Index";
+    option.ExpireTimeSpan = TimeSpan.FromHours(23);
+    option.AccessDeniedPath = "/config/sinpermiso";
 });
 
 var app = builder.Build();
@@ -29,12 +30,25 @@ DKbase.Helper.getTipoApp = builder.Configuration.GetSection("appSettings")["getT
 DKbase.Helper.getFolder = builder.Configuration.GetSection("appSettings")["getFolder"];
 DKbase.Helper.getUrl_DKdll = builder.Configuration.GetSection("appSettings")["getUrl_DKdll"];
 DKbase.Helper.getUrl_DKcore = builder.Configuration.GetSection("appSettings")["getUrl_DKcore"];
+DKbase.Helper.getMail_cv = builder.Configuration.GetSection("appSettings")["mail_cv"];
+DKbase.Helper.getMailRegistracion = builder.Configuration.GetSection("appSettings")["mailRegistracion"];
+DKbase.Helper.getMailRegistracionNoCliente = builder.Configuration.GetSection("appSettings")["mailRegistracionNoCliente"];
+DKbase.Helper.getMail_from = builder.Configuration.GetSection("appSettings")["mail_from"];
+DKbase.Helper.getMail_pass = builder.Configuration.GetSection("appSettings")["mail_pass"];
+DKbase.Helper.getMailContacto = builder.Configuration.GetSection("appSettings")["mailContacto"];
 
 DKbase.Helper.getConnectionStringSQL = builder.Configuration.GetConnectionString("ConnectionSQL");
 
 var optionsRewrite = new RewriteOptions()
 .AddRedirect("home/index.aspx", "home/index")
-.AddRedirect("home/empresa.aspx", "home/empresa");
+.AddRedirect("home/empresa.aspx", "home/empresa")
+.AddRedirect("home/contacto.aspx", "home/contacto")
+.AddRedirect("home/contactocv.aspx", "home/contactocv")
+.AddRedirect("home/promociones.aspx", "home/promociones")
+.AddRedirect("home/recall.aspx", "home/recall")
+.AddRedirect("home/recalls.aspx", "home/recalls")
+.AddRedirect("home/registracion.aspx", "home/registracion");
+
 app.UseRewriter(optionsRewrite);
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -57,8 +71,8 @@ if (!app.Environment.IsDevelopment())
              context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerPathFeature>();
          if (exceptionHandlerPathFeature?.Error is Exception)
          {
-         
-             DKbase.generales.Log.grabarLog_generico("Program_cs: Excepción no controlada", exceptionHandlerPathFeature?.Error, DateTime.Now,string.Empty,DKbase.Helper.getTipoApp);
+
+             DKbase.generales.Log.grabarLog_generico("Program_cs: Excepción no controlada", exceptionHandlerPathFeature?.Error, DateTime.Now, string.Empty, DKbase.Helper.getTipoApp);
          }
          if (exceptionHandlerPathFeature?.Error is FileNotFoundException)
          {

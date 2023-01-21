@@ -19,17 +19,20 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
+        DKweb.Codigo.Util.htmlCssBodySet(_httpContextAccessor, "bd_home");
         DKweb.Codigo.Util.first_htmlPublicarRevista(_httpContextAccessor);
         return View();
     }
     [HttpGet]
     public async Task<IActionResult> empresa()
     {
+        DKweb.Codigo.Util.htmlCssBodySet(_httpContextAccessor, "bd_sec");
         return View();
     }
     [HttpGet]
     public async Task<IActionResult> promociones(int isNuevoLanzamiento = 0)
     {
+        DKweb.Codigo.Util.htmlCssBodySet(_httpContextAccessor, "bd_sec");
         bool params_isNuevoLanzamiento = false;
         if (isNuevoLanzamiento == 1)
         {
@@ -40,13 +43,189 @@ public class HomeController : Controller
     }
     public async Task<IActionResult> recall(int id)
     {
-         DKweb.Codigo.Util.recall_id_Set(_httpContextAccessor, id);
+        DKweb.Codigo.Util.htmlCssBodySet(_httpContextAccessor, "bd_sec");
+        DKweb.Codigo.Util.recall_id_Set(_httpContextAccessor, id);
         return View();
     }
     [HttpGet]
     public async Task<IActionResult> recalls()
     {
+        DKweb.Codigo.Util.htmlCssBodySet(_httpContextAccessor, "bd_sec");
         return View();
+    }
+    public async Task<IActionResult> contacto()
+    {
+        DKweb.Codigo.Util.htmlCssBodySet(_httpContextAccessor, "bd_sec");
+        return View();
+    }
+    public async Task<IActionResult> contactocv()
+    {
+        DKweb.Codigo.Util.htmlCssBodySet(_httpContextAccessor, "bd_sec");
+        return View();
+    }
+    [HttpPost]
+    public async Task<IActionResult> contactocv_Post()
+    {
+        //return Content("Hello, " + _httpContextAccessor.HttpContext.Request.Form["nombre_cv"] + ". You are " + _httpContextAccessor.HttpContext.Request.Form["sucursal_cv"] + " years old!");
+        string result = string.Empty;
+        try
+        {
+            if (_httpContextAccessor.HttpContext.Request.Form["nombre_cv"] != "" && _httpContextAccessor.HttpContext.Request.Form["email_cv"] != "" && _httpContextAccessor.HttpContext.Request.Form["dni_cv"] != "" && _httpContextAccessor.HttpContext.Request.Form["cuerpo_cv"] != "" && _httpContextAccessor.HttpContext.Request.Form["file_cv"] != ""
+                && _httpContextAccessor.HttpContext.Request.Form["puesto_cv"] != "" && _httpContextAccessor.HttpContext.Request.Form["sucursal_cv"] != "" && _httpContextAccessor.HttpContext.Request.Form["g-Recaptcha-Response"] != "")//
+            {
+                string g_recaptcha_response = _httpContextAccessor.HttpContext.Request.Form["g-Recaptcha-Response"];
+                if (DKbase.web.generales.ReCaptchaClass.Validate(g_recaptcha_response))//
+                {
+                    //_httpContextAccessor.HttpContext.Request.Form.Files
+                    IFormFileCollection fileCollection = _httpContextAccessor.HttpContext.Request.Form.Files;//["file_cv"];
+                    IFormFile file = fileCollection.FirstOrDefault();
+
+                    if (file != null && file.Length > 0)
+                    {
+                        DateTime fechaPresentacion = DateTime.Now;
+                        int codigoCV = DKbase.Util.InsertarCurriculumVitae(_httpContextAccessor.HttpContext.Request.Form["nombre_cv"], _httpContextAccessor.HttpContext.Request.Form["cuerpo_cv"], _httpContextAccessor.HttpContext.Request.Form["email_cv"], _httpContextAccessor.HttpContext.Request.Form["dni_cv"], _httpContextAccessor.HttpContext.Request.Form["puesto_cv"], _httpContextAccessor.HttpContext.Request.Form["sucursal_cv"], fechaPresentacion);
+                        string fname = Path.GetFileName(file.FileName);
+                        string extencion = DKbase.web.capaDatos.capaRecurso_base.obtenerExtencion(fname);
+                        string pathDestino = Path.Combine(DKbase.Helper.getFolder, "archivos", DKbase.generales.Constantes.cTABLA_CV);
+                        if (!Directory.Exists(pathDestino))
+                            Directory.CreateDirectory(pathDestino);
+                        string nombreArchivo = DKbase.web.capaDatos.capaRecurso_base.nombreArchivoSinRepetir(pathDestino, fname);
+                        string destino = Path.Combine(pathDestino, nombreArchivo); //pathDestino + nombreArchivo;
+                        using (Stream fileStream = new FileStream(destino, FileMode.Create))
+                        {
+                            await file.CopyToAsync(fileStream);//file.SaveAs(destino);
+                        }
+                        DKbase.Util.InsertarActualizarArchivo(0, codigoCV, DKbase.generales.Constantes.cTABLA_CV, extencion, file.ContentType, nombreArchivo, string.Empty, string.Empty, string.Empty, 1);
+                        result = "Ok";
+                        DKweb.Codigo.Util.contactocv_result_Set(_httpContextAccessor, "Ok");//HttpContext.Current.Session["contactocv_result"] = "Ok";
+                        RedirectToAction("contactocv");
+                    }
+                }
+                else
+                    result = "reCAPTCHA invalido, por favor inténtelo de nuevo.";
+            }
+        }
+        catch (Exception ex)
+        {
+            DKbase.generales.Log.LogError(System.Reflection.MethodBase.GetCurrentMethod(), ex, DateTime.Now);
+            result = "No pudo ser realizada, intente nuevamente en unos minutos.";
+        }
+        //HttpContext.Current.Session["contactocv_result"] = result;
+        return RedirectToAction("contactocv");//?id=" + id
+    }
+    public async Task<IActionResult> registracion()
+    {
+        DKweb.Codigo.Util.htmlCssBodySet(_httpContextAccessor, "bd_sec");
+        return View();
+    }
+    [HttpPost]
+    public async Task<IActionResult> SendRegistracion(bool isEs24, bool isCliente, string txtTitularFarmacia, string txtUsuarioWeb, string txtFechaNacimiento, string txtContacto, string txtNombreFarmacia, string txtEmail, string txtTel, string txtDireccion, string txtCodigoPostal, string txtLocalidad, string txtProvincia, string txtPaginaWeb, string g_recaptcha_response)
+    {
+        string result = string.Empty;
+        DKweb.Codigo.Util.registracion_msg_Set(_httpContextAccessor, null);
+        try
+        {
+            if (DKbase.web.generales.ReCaptchaClass.Validate(g_recaptcha_response))
+            {
+                string cuerpo = "<b>Nombre Titular de la Farmacia: </b>" + txtTitularFarmacia + "<br/>";
+                cuerpo += "<b> ¿Es cliente?: </b>" + (isCliente ? "Si" : "No") + "<br/>";
+                cuerpo += "<b>Usuario para ingresar a la web: </b>" + txtUsuarioWeb + "<br />";
+                cuerpo += " <b>Fecha nacimiento: </b>" + txtFechaNacimiento + "<br />";
+                cuerpo += " <b>Nombre de Contacto: </b>" + txtContacto + " <br/>";//<br />
+                cuerpo += " <b>Nombre de la farmacia: </b>" + txtNombreFarmacia + "<br/>";
+                cuerpo += "<b> es 24hs: </b>" + (isEs24 ? "Si" : "No") + "<br/>";
+                cuerpo += "<b>E-mail: </b>" + txtEmail + " <br/>";
+                cuerpo += "<b> Dirección: </b>" + txtDireccion + "<br/>";
+                cuerpo += "<b> Localidad: </b>" + txtLocalidad + " <br/>";
+                cuerpo += "<b> Código Postal: </b>" + txtCodigoPostal + "<br/>";
+                cuerpo += "<b> Provincia: </b>" + txtProvincia + " <br/>";
+                cuerpo += " <b> Teléfono: </b>" + txtTel + "<br/>";
+
+                cuerpo += "<b>Página web: </b>" + txtPaginaWeb + "<br/> ";
+
+                string[] split = null;
+                if (isCliente)
+                    split = DKbase.Helper.getMailRegistracion.Split(new Char[] { ';' });
+                else
+                    split = DKbase.Helper.getMailRegistracionNoCliente.Split(new Char[] { ';' });
+
+                List<string> listaMail = split.ToList();
+
+                String mail_from = DKbase.Helper.getMail_from;
+                String mail_pass = DKbase.Helper.getMail_pass;
+
+
+                System.Net.Mail.MailMessage correo = new System.Net.Mail.MailMessage();
+                string asunto = "Registración";
+                correo.From = new System.Net.Mail.MailAddress(mail_from);
+                foreach (string itemMail in listaMail)
+                {
+                    correo.To.Add(itemMail);
+                }
+                correo.Subject = asunto;
+                correo.Body = cuerpo;
+                correo.IsBodyHtml = true;
+                correo.Priority = System.Net.Mail.MailPriority.Normal;
+                System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("186.153.136.19", 25);
+                smtp.UseDefaultCredentials = false;
+                smtp.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+                smtp.Credentials = new System.Net.NetworkCredential(mail_from, mail_pass);
+                smtp.Send(correo);
+                result = "Ok";
+                DKweb.Codigo.Util.registracion_msg_Set(_httpContextAccessor, "Ok");
+            }
+            else
+                result = "reCAPTCHA invalido, por favor inténtelo de nuevo.";
+        }
+        catch (Exception ex)
+        {
+            DKbase.generales.Log.LogError(System.Reflection.MethodBase.GetCurrentMethod(), ex, DateTime.Now);
+            result = "No pudo ser realizada, intente nuevamente en unos minutos.";
+
+        }
+        return Content(result);
+    }
+    [HttpPost]
+    public async Task<IActionResult> SendContacto(string txtNombreApellido, string r_social, string txtEmailContacto, string txtAsunto, string txtCuerpo, string g_recaptcha_response)
+    {
+        string result = string.Empty;
+        try
+        {
+            if (DKbase.web.generales.ReCaptchaClass.Validate(g_recaptcha_response))
+            {
+                string cuerpo = "<b>Nombre y Apellido:  </b>" + txtNombreApellido + "<br/>";
+                cuerpo += "<b>Empresa: </b>" + r_social + "<br />";
+                cuerpo += " <b>Email: </b>" + txtEmailContacto + "<br />";
+                cuerpo += " <b>Consulta: </b>" + txtCuerpo + " <br/>";//<br />
+                string[] split = DKbase.Helper.getMailContacto.Split(new Char[] { ';' });
+                List<string> listaMail = split.ToList();
+                String mail_from = DKbase.Helper.getMail_from;
+                String mail_pass = DKbase.Helper.getMail_pass;
+                System.Net.Mail.MailMessage correo = new System.Net.Mail.MailMessage();
+                string asunto = "Consulta - " + txtAsunto;
+                correo.From = new System.Net.Mail.MailAddress(mail_from);
+                foreach (string itemMail in listaMail)
+                    correo.To.Add(itemMail);
+                correo.Subject = asunto;
+                correo.Body = cuerpo;
+                correo.IsBodyHtml = true;
+                correo.Priority = System.Net.Mail.MailPriority.Normal;
+                System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("186.153.136.19", 25);
+                smtp.UseDefaultCredentials = false;
+                smtp.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+                smtp.Credentials = new System.Net.NetworkCredential(mail_from, mail_pass);
+                smtp.Send(correo);
+                result = "Ok";
+            }
+            else
+                result = "reCAPTCHA invalido, por favor inténtelo de nuevo.";
+        }
+        catch (Exception ex)
+        {
+            DKbase.generales.Log.LogError(System.Reflection.MethodBase.GetCurrentMethod(), ex, DateTime.Now);
+            result = "No pudo ser realizada, intente nuevamente en unos minutos.";
+        }
+        return Content(result);// result;
     }
     [HttpPost]
     public async Task<IActionResult> Index(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
