@@ -1,0 +1,108 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_ctacte")
+
+@section Scripts{
+    <script type="text/javascript" src="../includes/js/plugins/footable/footable.js"></script>
+    <script src="~/includes/js/documento.js?n=25" type="text/javascript"></script>
+}
+
+@section sectionHidden{
+    @{
+        string clientes_pages_Documento_ID = DKweb.Codigo.Util.clientes_pages_Documento_ID(Accessor);
+        string clientes_pages_Documento_TIPO = DKweb.Codigo.Util.clientes_pages_Documento_TIPO(Accessor);
+        DKbase.web.capaDatos.cClientes oClientes = DKweb.Codigo.Util.getSessionCliente(Accessor);
+        if (clientes_pages_Documento_ID != null && clientes_pages_Documento_TIPO != null && oClientes != null)
+        {
+            //
+            string resultado = string.Empty;
+            object resultadoObj = null;
+            switch (clientes_pages_Documento_TIPO)
+            {
+                case "FAC":
+                    resultadoObj = DKbase.Util.ObtenerFactura(clientes_pages_Documento_ID, oClientes.cli_login);
+                    break;
+                case "PENDINTE":
+                    if (DKweb.Codigo.Util.estadopedidos_ListaPendienteDeFacturar(Accessor) != null)
+                    {
+                        resultadoObj = DKweb.Codigo.Util.estadopedidos_ListaPendienteDeFacturar(Accessor)[Convert.ToInt32(clientes_pages_Documento_ID)];
+                    }
+                    break;
+                case "ENPREPARACION":
+                    if (DKweb.Codigo.Util.estadopedidos_ListaPendienteDeFacturar(Accessor) != null)
+                    {
+                        resultadoObj = DKweb.Codigo.Util.estadopedidos_ListaPendienteDeFacturar(Accessor)[Convert.ToInt32(clientes_pages_Documento_ID)];
+                    }
+                    break;
+                case "NCR":
+                    resultadoObj = DKbase.Util.ObtenerNotaDeCredito(clientes_pages_Documento_ID, oClientes.cli_login);
+                    break;
+                case "NDE":
+                    resultadoObj = DKbase.Util.ObtenerNotaDeDebito(clientes_pages_Documento_ID, oClientes.cli_login);
+                    break;
+                case "RES":
+                    resultadoObj = DKbase.Util.ObtenerResumenCerrado(clientes_pages_Documento_ID, oClientes.cli_login);
+                    break;
+                case "OSC":
+                    resultadoObj = DKbase.Util.ObtenerObraSocialCliente(clientes_pages_Documento_ID, oClientes.cli_login);
+                    break;
+                case "REC":
+                    resultadoObj = DKbase.Util.ObtenerRecibo(clientes_pages_Documento_ID, oClientes.cli_login);
+                    break;
+                default:
+                    break;
+            }
+            if (resultadoObj != null)
+            {
+                //
+                string nombreArchivo = clientes_pages_Documento_TIPO + "_" + clientes_pages_Documento_ID + ".pdf";
+                bool isExistePdf = System.IO.File.Exists(DKbase.Helper.getArchivo_ImpresionesComprobante + nombreArchivo);
+                if (!isExistePdf)
+                {
+                    DKbase.Util.ImprimirComprobante(clientes_pages_Documento_TIPO,clientes_pages_Documento_ID);
+                }
+                if (clientes_pages_Documento_TIPO == "FAC")
+                {
+                    DKbase.dll.cFactura objFactura = (DKbase.dll.cFactura)resultadoObj;
+                    if (objFactura.FacturaTrazable != null && (bool)objFactura.FacturaTrazable)
+                    {
+                        string nombreArchivoTrz = "REM_ANEXTRAZ" + "_" + objFactura.NumeroRemito + ".pdf";
+                        bool isExistePdfTrz = System.IO.File.Exists(DKbase.Helper.getArchivo_ImpresionesComprobante + nombreArchivoTrz);
+                        if (!isExistePdfTrz)
+                        {
+                            DKbase.Util.ImprimirComprobante("TRZ", objFactura.NumeroRemito);
+                        }
+                    }
+                }
+                resultado += "<input type=\"hidden\" id=\"hiddenIsPdfExiste\" value=\"" + isExistePdf.ToString().ToLower() + "\" />";
+                //
+                resultado += "<input type=\"hidden\" id=\"hiddenDocumento\" value=\"" + System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(resultadoObj)) + "\" />";
+            }
+            resultado += "<input type=\"hidden\" id=\"hiddenTipoDocumento\" value=\"" + System.Net.WebUtility.HtmlEncode(clientes_pages_Documento_TIPO) + "\" />";
+            resultado += "<input type=\"hidden\" id=\"hiddenRaiz\" value=\"" + System.Net.WebUtility.HtmlEncode(DKbase.Helper.getFolder) + "\" />";
+            WriteLiteral(resultado);
+        }
+    }
+}
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
+        <a class="btn_volver float-left" href="#" onclick="volver(); return false;"><i class="fa fa-play"></i> VOLVER</a>
+        <div class="clear visible-xs"></div>
+        <div class="pad_7">
+            <div id="divTituloDocumento" class="tit_secund"></div>
+        </div>
+    </div>
+    <div class="clear5 visible-xs"></div>
+    <div id="divContenedorDocumentoDescarga" class="col-lg-6 col-md-6 col-sm-8 col-xs-12 text-right">
+
+    </div>
+    <div class="clear20 hidden-xs"></div>
+    <div class="clear10 visible-xs"></div>
+    <div id="divContenedorDocumentoCabecera" class="col-xs-12">
+
+    </div>
+    <div id="divContenedorDocumento" class="col-xs-12">
+
+    </div>
+
+
+</div>

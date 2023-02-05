@@ -36,7 +36,7 @@ DKbase.Helper.getMailRegistracionNoCliente = builder.Configuration.GetSection("a
 DKbase.Helper.getMail_from = builder.Configuration.GetSection("appSettings")["mail_from"];
 DKbase.Helper.getMail_pass = builder.Configuration.GetSection("appSettings")["mail_pass"];
 DKbase.Helper.getMailContacto = builder.Configuration.GetSection("appSettings")["mailContacto"];
-
+DKbase.Helper.getArchivo_ImpresionesComprobante = builder.Configuration.GetSection("appSettings")["ImpresionesComprobante"];
 DKbase.Helper.getConnectionStringSQL = builder.Configuration.GetConnectionString("ConnectionSQL");
 
 var optionsRewrite = new RewriteOptions()

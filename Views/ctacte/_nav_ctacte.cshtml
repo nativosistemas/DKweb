@@ -1,0 +1,75 @@
+@inject IHttpContextAccessor Accessor
+@{
+    string classFichaDebeHaberSaldo = "";
+    string classDescargaResumenes = "";
+    string classComposicionsaldo = "";
+    string classConsultaDeComprobantes = "";
+    string classObraSocial = "";
+    string classDeudaVencida = "";
+    string strController = Accessor.HttpContext.GetRouteValue("action").ToString();
+    switch (strController)
+    {
+        case "FichaDebeHaberSaldo":
+            classFichaDebeHaberSaldo = " class=\"active\" ";
+            break;
+        case "descargaResumenes":
+        case "descargaResumenesDetalle":
+            classDescargaResumenes = " class=\"active\" ";
+            break;
+        case "composicionsaldo":
+        case "composicionsaldoCtaCte":
+        case "composicionsaldoCtaResumen":
+        case "composicionsaldochequecuenta":
+            classComposicionsaldo = " class=\"active\" ";
+            break;
+        case "ConsultaDeComprobantes":
+        case "RespuestaConsultaDeComprobantes":
+        case "comprobantescompleto":
+            classConsultaDeComprobantes = " class=\"active\" ";
+            break;
+        case "ConsultaDeComprobantesObraSocial":
+        case "ConsultaDeComprobantesObraSocialResultado":
+        case "ConsultaDeComprobantesObraSocialResultadoRango":
+            classObraSocial = " class=\"active\" ";
+            break;
+        case "deudaVencida":
+            classDeudaVencida = " class=\"active\" ";
+            break;
+        default:
+            break;
+    }
+
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="nav_sec">
+            <a href="/ctacte/deudaVencida" @{ WriteLiteral(classDeudaVencida);}><i class="fa fa-calendar-times-o" title="DEUDA VENCIDA"></i><span class="hidden-sm hidden-xs">DEUDA VENCIDA</span></a>
+            <div class="separate"></div>
+            <a href="#" onclick="onclickCreditoDisponible(); return false;"><i class="fa fa-usd" title="CREDITO DISPONIBLE"></i><span class="hidden-sm hidden-xs">CREDITO DISPONIBLE</span></a>
+            <div class="separate"></div>
+            <a href="/ctacte/composicionsaldo" @{ WriteLiteral(classComposicionsaldo);}><i class="fa fa-balance-scale" title="COMPOSICIÓN DE SALDOS"></i><span class="hidden-sm hidden-xs">COMPOSICI&Oacute;N DE SALDOS</span></a>
+            <div class="separate"></div>
+            <a href="/ctacte/FichaDebeHaberSaldo" @{ WriteLiteral(classFichaDebeHaberSaldo);}><i class="fa fa-exchange fa-rotate-90" title="FICHA MOVIMIENTOS"></i><span class="hidden-sm hidden-xs">FICHA MOVIMIENTOS</span></a>
+            <div class="separate"></div>
+            <a href="/ctacte/ConsultaDeComprobantes" @{ WriteLiteral(classConsultaDeComprobantes);}><i class="fa fa-file" title="COMPROBANTES"></i><span class="hidden-sm hidden-xs">COMPROBANTES</span></a>
+            <div class="separate"></div>
+            <a href="/ctacte/ConsultaDeComprobantesObraSocial" @{ WriteLiteral(classObraSocial);}><i class="fa fa-medkit" title="OBRAS SOCIALES"></i><span class="hidden-sm hidden-xs">OBRAS SOCIALES</span></a>
+            <div class="separate"></div>
+            <a href="/ctacte/descargaResumenes" @{ WriteLiteral(classDescargaResumenes);}><i class="fa fa-file-pdf-o" title="RESUMENES"></i><span class="hidden-sm hidden-xs">RESUMENES</span></a>
+            <div class="separate"></div>
+            <a href="#" onclick="onclickObtenerSaldoFinalADiciembrePorCliente(); return false;" class="oferta"><i class="fa fa-usd" title="SALDO AL 31/12"></i><span class="hidden-sm hidden-xs">SALDO AL 31/12</span></a>
+            <div class="separate"></div>
+            <a href="#" onclick="enviarSolicitudSobresRemesa(); return false;"><i class="fa fa-edit" title="SOLICITAR ENVÍO SOBRES/REMESA"></i><span class="hidden-sm hidden-xs">SOLICITAR ENVÍO SOBRES/REMESA</span></a>
+
+            @{
+                if (!DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+                {
+                    <div class="separate"></div>
+                    <a href="#" onclick="onclickConsultasCtaCte(); return false;"><i class="fa fa-envelope" title="CONSULTAS"></i><span class="hidden-sm hidden-xs">CONSULTAS</span></a>
+                }
+            }
+            <div class="clear0"></div>
+        </div>
+    </div>
+</div>
