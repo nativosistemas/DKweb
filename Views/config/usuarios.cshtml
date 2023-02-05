@@ -1,0 +1,26 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_config")
+@section Scripts{
+    @Html.Partial("_scriptsConfig")
+}
+@section sectionHidden{
+    @{
+        var oCliente =DKweb.Codigo.Util.getSessionCliente(Accessor);
+        string resultado = string.Empty;
+        List<DKbase.web.cUsuario> lista = DKbase.web.AccesoGrilla_base.GetUsuariosDeCliente("usu_codigo", oCliente.cli_codigo, null);
+        if (lista != null)
+        {
+            resultado += "<input type=\"hidden\" id=\"hiddenListaUsuarios\" value=\"" + System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(lista)) + "\" />";
+        }
+        WriteLiteral(resultado);
+    }
+}
+<div class="row">
+    <div class="col-lg-2 col-sm-12">
+        <div class="clear15 visible-sm visible-xs"></div> <a class="btn_emp" href="#" onclick="usuarioNuevo(); return false;">NUEVO</a>
+    </div>
+    <div class="col-lg-5 hidden-sm"></div>
+    <div class="clear15"></div>
+    <div id="divGridUsuarios" class="col-xs-12">
+    </div>
+</div>

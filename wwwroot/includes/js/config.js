@@ -332,7 +332,7 @@ function GeneralModalUsuario() {
     strHtml += '<div class="close-modal" data-dismiss="modal"><i class="fa fa-times"></i></div>';
     strHtml += '</div>';
     strHtml += '<div class="modal-body">';
-    strHtml += '<form action="/config/usuario" method="post" onsubmit="return onclickGuardarUsuario();">';
+    //strHtml += '<form action="/config/usuario" method="post" onsubmit="return onclickGuardarUsuario();">';
     strHtml += '<div class="col-xs-6">';
     strHtml += '<input name="txtNombre" id="txtNombre" class="form-control2" type="text" placeholder="Nombre" value="' + nombre + '" required />';
     strHtml += '<div class="clear20"></div>';
@@ -372,11 +372,11 @@ function GeneralModalUsuario() {
     strHtml += '<div class="oblig float-right">(*) Campos obligatorios</div>';
     strHtml += '</div>';
     strHtml += '<div class="clear20"></div>';
-    //strHtml += '<a class="btn_confirmar" href="#" onclick="onclickGuardarUsuario(); return false;">GUARDAR</a>';// onclick=" return false;onclickGuardarUsuario();"
-    strHtml += '<button class="btn_emp float-right" type="submit" style="margin-left: 12px;" >GUARDAR</button>';//onclick="return onclickGuardarUsuario(); "
+    strHtml += '<a class="btn_confirmar" href="#" onclick="onclickGuardarUsuario(); return false;">GUARDAR</a>';// onclick=" return false;onclickGuardarUsuario();"
+    //strHtml += '<button class="btn_emp float-right" type="submit" style="margin-left: 12px;" >GUARDAR</button>';//onclick="return onclickGuardarUsuario(); "
     strHtml += '<a class="btn_vaciar float-left" href="#" data-dismiss="modal">CANCELAR</a>';
     strHtml += '<div class="clear"></div>';
-    strHtml += '</form>';
+   // strHtml += '</form>';
     strHtml += '</div>';
     strHtml += '<div class="clear"></div>';
     strHtml += '</div></div>';
@@ -495,7 +495,7 @@ function CargarCatalogo() {
                 strHtml += '</td>';
                 strHtml += '<td class="col-lg-2 col-md-2 col-sm-3 col-xs-6 text-right">';
                 //strHtml += '<a class="btn_emp pdf" href="..\\..\\archivos\\catalogo\\' + listaCatalogo[i].tbc_descripcion + '" target="_blank" title="DESCARGAR"><span>DESCARGAR</span></a>';
-                strHtml += '<a class="btn_emp pdf" href="..\\..\\servicios\\descargarArchivo.aspx?t=catalogo&n=' + listaCatalogo[i].tbc_descripcion + '" target="_blank" title="DESCARGAR"><span>DESCARGAR</span></a>';
+                strHtml += '<a class="btn_emp pdf" href="..\\..\\servicios\\descargarArchivo?t=catalogo&n=' + listaCatalogo[i].tbc_descripcion + '" target="_blank" title="DESCARGAR"><span>DESCARGAR</span></a>';
 
                 strHtml += '</td>';
                 strHtml += '</tr>';

@@ -215,6 +215,10 @@ public class Util
         }
         return result;
     }
+    public static void isMostrarOferta_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.SetString("isMostrarOferta", pValue);
+    }
     public static List<string> RecuperarSucursalesDelCliente(IHttpContextAccessor pHttpContextAccessor)
     {
         DKbase.web.capaDatos.cClientes oClientes = getSessionCliente(pHttpContextAccessor);
@@ -893,5 +897,70 @@ public class Util
     public static void registracion_msg_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
     {
         pHttpContextAccessor.HttpContext.Session.Set<string>("registracion_msg", pValue);
+    }
+    public static string perfil_CambiarContraseña(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.GetString("perfil_CambiarContraseña") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.GetString("perfil_CambiarContraseña");
+        }
+        return resultado;
+    }
+    public static void perfil_CambiarContraseña_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<string>("perfil_CambiarContraseña", pValue);
+    }
+    public static string perfil_idContraseniaVieja(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.GetString("perfil_idContraseniaVieja") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.GetString("perfil_idContraseniaVieja");
+        }
+        return resultado;
+    }
+    public static void perfil_idContraseniaVieja_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<string>("perfil_idContraseniaVieja", pValue);
+    }
+    public static string perfil_idContraseniaNueva(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.GetString("perfil_idContraseniaNueva") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.GetString("perfil_idContraseniaNueva");
+        }
+        return resultado;
+    }
+    public static void perfil_idContraseniaNueva_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<string>("perfil_idContraseniaNueva", pValue);
+    }
+    public static string clientes_pages_Documento_ID(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.GetString("clientes_pages_Documento_ID") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.GetString("clientes_pages_Documento_ID");
+        }
+        return resultado;
+    }
+    public static void clientes_pages_Documento_ID_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<string>("clientes_pages_Documento_ID", pValue);
+    }
+    public static string clientes_pages_Documento_TIPO(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.GetString("clientes_pages_Documento_TIPO") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.GetString("clientes_pages_Documento_TIPO");
+        }
+        return resultado;
+    }
+    public static void clientes_pages_Documento_TIPO_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<string>("clientes_pages_Documento_TIPO", pValue);
     }
 }

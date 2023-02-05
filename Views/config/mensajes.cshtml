@@ -1,0 +1,28 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_config")
+@section Scripts{
+@Html.Partial("_scriptsConfig")
+}
+@section sectionHidden{
+@{
+string resultado = string.Empty;
+var oCliente =DKweb.Codigo.Util.getSessionCliente(Accessor);
+List<DKbase.web.capaDatos.cMensaje> lista =
+DKbase.Util.RecuperarTodosMensajesPorIdCliente(oCliente.cli_codigo);
+if (lista != null)
+{
+lista = lista.Where(x => !x.tme_importante).ToList();//
+resultado += "<input type=\"hidden\" id=\"hiddenListaMensajes\" value=\"" +
+System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(lista)) + "\" />";
+resultado += "<input type=\"hidden\" id=\"hiddenEstadoLeido\" value=\"" +
+System.Net.WebUtility.HtmlEncode(DKbase.generales.Constantes.cESTADO_LEIDO.ToString()) + "\" />";
+resultado += "<input type=\"hidden\" id=\"hiddenEstadoNoLeido\" value=\"" +
+System.Net.WebUtility.HtmlEncode(DKbase.generales.Constantes.cESTADO_SINLEER.ToString()) + "\" />";
+}
+WriteLiteral(resultado);
+}
+}
+<div class="row">
+    <div id="divGridMensajes" class="col-xs-12">
+    </div>
+</div>

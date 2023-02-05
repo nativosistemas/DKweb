@@ -1,0 +1,39 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_config")
+@section Scripts{
+    @Html.Partial("_scriptsConfig")
+}
+
+@section sectionHidden{
+    @{
+        string resultado = string.Empty;
+
+        if ( DKweb.Codigo.Util.perfil_CambiarContraseña(Accessor) != null)
+        {
+            resultado += "<input type=\"hidden\" id=\"hiddenCambiarContraseña\" value=\"" +  System.Net.WebUtility.HtmlEncode(DKweb.Codigo.Util.perfil_CambiarContraseña(Accessor)) + "\" />";
+           DKweb.Codigo.Util.perfil_CambiarContraseña_Set(Accessor,null) ;
+        }
+
+        WriteLiteral(resultado);
+    }
+}
+<div class="row">
+    <div class="col-md-5 col-md-offset-0 col-sm-12 clearfix">
+        <p>Para cambiar su contraseña, complete el siguiente formulario.</p>
+        @*<form id="" name="" action="">*@
+@using (Html.BeginForm("ActionCambiarContrasenia", "config", FormMethod.Post))
+{
+            <input name="idContraseniaVieja" id="idContraseniaVieja" class="form-control" type="password" placeholder="Contraseña vieja (*)" value="@ViewBag.ContraseniaVieja" required />
+<div class="clear20"></div>
+            <input name="idContraseniaNueva" id="idContraseniaNueva" class="form-control" type="password" placeholder="Contraseña nueva (*)" value="@ViewBag.ContraseniaNueva" required />
+            <div class="clear20"></div>
+            <input name="idContraseniaNuevaRepetir" id="idContraseniaNuevaRepetir" class="form-control" type="password" placeholder="Repetir contraseña (*)" value="@ViewBag.ContraseniaNuevaRepetir" required />
+            <div class="clear20"></div>
+            <div class="oblig float-right">(*) Campos obligatorios</div>
+            <div class="clear10"></div>
+            @*<button class="btn_emp float-right" type="button">GUARDAR</button>*@
+            <button class="btn_emp float-right" type="submit" onclick="return onclickGuardarPerfil();">GUARDAR</button>
+        @*</form>*@
+}
+    </div>
+</div>

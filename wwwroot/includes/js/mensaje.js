@@ -288,7 +288,11 @@ $('#modalModulo').on('show.bs.modal', function (e) {
 });
 $('#modalModulo').on('hidden.bs.modal', function (e) {
     if ($("#divBody").hasClass("modal-open-Celular")) {
-        setTimeout(function () { document.getElementById("txtBuscador").select(); }, 150);
+        setTimeout(function () {
+            if (document.getElementById("txtBuscador") != null){
+             document.getElementById("txtBuscador").select(); 
+            }
+            }, 150);
     }
     $('#divBody').removeClass("modal-open-Celular");
     MostrarMensajeImportanteSiguiente();

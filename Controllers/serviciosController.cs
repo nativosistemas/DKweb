@@ -20,7 +20,7 @@ public class serviciosController : Controller
 
         return View();
     }
-    public IActionResult descargarArchivo(string t, string n, string inline)
+    public async Task<IActionResult>  descargarArchivo(string t, string n, string inline)
     {
         string tipo = t;
         string name = n;
@@ -58,19 +58,19 @@ public class serviciosController : Controller
         }
         return NotFound();
     }
-    public IActionResult thumbnail(string r, string n, string an, string al, string c, string re)
+    public async Task<IActionResult>  thumbnail(string r, string n, string an, string al, string c, string re)
     {
         var os = Environment.OSVersion;
         if (os.Platform == PlatformID.Unix)
         {
-            return thumbnail_unix(r, n, an, al, c, re);
+            return await thumbnail_unix(r, n, an, al, c, re);
         }
         else
         {
-            return thumbnail_original(r, n, an, al, c, re);
+            return await thumbnail_original(r, n, an, al, c, re);
         }
     }
-    public IActionResult thumbnail_original(string r, string n, string an, string al, string c, string re)
+    public async Task<IActionResult>  thumbnail_original(string r, string n, string an, string al, string c, string re)
     {
 
         string ruta = r;//Request.QueryString["r"];
@@ -103,7 +103,7 @@ public class serviciosController : Controller
         }
         return Ok("");
     }
-    public IActionResult thumbnail_unix(string r, string n, string an, string al, string c, string re)
+    public async Task<IActionResult>  thumbnail_unix(string r, string n, string an, string al, string c, string re)
     {
 
         string ruta = r;//Request.QueryString["r"];
