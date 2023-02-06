@@ -729,6 +729,15 @@ public class Util
     {
         pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.dll.cDllPedido>>("estadopedidos_ListaPendienteDeFacturar", pListaDllPedido);
     }
+    public static List<DKbase.dll.cDllPedido> estadopedidos_ListaEnPreparacion(IHttpContextAccessor pHttpContextAccessor)
+    {
+        List<DKbase.dll.cDllPedido> resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<List<DKbase.dll.cDllPedido>>("estadopedidos_ListaEnPreparacion") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<List<DKbase.dll.cDllPedido>>("estadopedidos_ListaEnPreparacion");
+        }
+        return resultado;
+    }
     public static void estadopedidos_ListaEnPreparacion_Set(IHttpContextAccessor pHttpContextAccessor, List<DKbase.dll.cDllPedido> pListaDllPedido)
     {
         pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.dll.cDllPedido>>("estadopedidos_ListaEnPreparacion", pListaDllPedido);
@@ -971,5 +980,5 @@ public class Util
     public static void clientes_pages_Documento_TIPO_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
     {
         pHttpContextAccessor.HttpContext.Session.SetString("clientes_pages_Documento_TIPO", pValue);
-    }        
+    }
 }

@@ -28,9 +28,9 @@
                     }
                     break;
                 case "ENPREPARACION":
-                    if (DKweb.Codigo.Util.estadopedidos_ListaPendienteDeFacturar(Accessor) != null)
+                    if (DKweb.Codigo.Util.estadopedidos_ListaEnPreparacion(Accessor) != null)
                     {
-                        resultadoObj = DKweb.Codigo.Util.estadopedidos_ListaPendienteDeFacturar(Accessor)[Convert.ToInt32(clientes_pages_Documento_ID)];
+                        resultadoObj = DKweb.Codigo.Util.estadopedidos_ListaEnPreparacion(Accessor)[Convert.ToInt32(clientes_pages_Documento_ID)];
                     }
                     break;
                 case "NCR":
