@@ -1,0 +1,81 @@
+@Html.Partial("_nav_ctacte")
+@section Scripts{
+    @Html.Partial("_scriptsCompocisionSaldos")
+    <script type="text/javascript">
+    jQuery(document).ready(function () {
+        CargarHtmlPanelSaldos();
+    });
+
+    </script>
+}
+@section sectionHidden{
+@Html.Partial("_hiddenComposicionSaldo")
+   <input id="hiddenTipoComprobanteSeleccionado" type="hidden" value="0" />
+}
+<div class="row">
+    <div class="col-lg-9 col-md-8 col-sm-7 col-xs-12 padding_l-10">
+        <div class="col-lg-3 col-md-6 col-xs-12 pad_t_3">
+            <div class="radio-checkbox rc_buscador" onclick="onclickVerMovimientos();" >
+                <input type="checkbox" id="checkboxVerTodosMovimientos" value="pen" checked="" class="checkbox" >
+                <label for="checkboxVerTodosMovimientos" >Ver todos los movimientos</label>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-xs-12 pad_t_3">
+            <div class="radio-checkbox rc_buscador" onclick="onclickVerSaldos(); ">
+                <input type="checkbox" id="checkboxVerTodosMovimientosSaldos" value="can" class="checkbox" >
+                <label for="checkboxVerTodosMovimientosSaldos">Ver todos movimientos con saldos</label>
+            </div>
+        </div>
+        <div class="clear15 hidden-lg"></div>
+        <div class="col-lg-1 col-md-1 col-sm-2 col-xs-3 r_to_l-xs"><div class="clear5"></div>Periodo:</div>
+        <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+            <select class="form-control" id="cmbPeriodo" name="cmbPeriodo">      
+                <option value="7">1 semana</option>
+                <option value="14">2 semanas</option>
+                <option value="21">3 semanas</option>
+                <option value="28">4 semanas</option>
+                <option value="35">5 semanas</option>
+                <option value="42">6 semanas</option>
+                <option value="49">7 semanas</option>
+                <option value="56">8 semanas</option>
+
+            </select>
+        </div>
+        <div class="clear15 visible-xs"></div>
+        <div class="col-lg-3 col-sm-5 col-xs-12"><div class="est_ped"><button class="btn_emp" onclick="return onclickCompocisionSaldo();" >CONSULTAR</button></div> </div>
+    </div>
+    <div class="clear15 visible-xs"></div>
+    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+        <div class="div_resumen">
+            <div class="div_resumen_head">
+                <table class="footable table resumen table-stripped" width="100%" align="center" cellspacing="0" cellpadding="0" border="0">
+                    <thead>
+                        <tr>
+                            <th class="col-xs-12 text-left">RESUMEN</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="div_resumen_cont">
+                <table class="footable table resumen table-stripped" data-empty="No hay informacion disponible" width="100%" align="center" cellspacing="0" cellpadding="0" border="0">
+                    <tbody>
+                        <tr class="wht">
+                            <td class="col-lg-8 col-md-8 col-sm-8 col-xs-8 text-left">TOTAL CUENTA CORRIENTE:</td>
+                            <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right" id="idTotalCuentaCorriente"></td>
+                        </tr>
+                        <tr class="grs">
+                            <td class="col-lg-8 col-md-8 col-sm-8 col-xs-8 text-left">TOTAL RESUMEN ABIERTO:</td>
+                            <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right" id="idTotalResumenAbierto"></td>
+                        </tr>
+                        <tr class="wht">
+                            <td class="col-lg-8 col-md-8 col-sm-8 col-xs-8 text-left">TOTAL CHEQUES EN CARTERA:</td>
+                            <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right" id="idTotalChequesCartera"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-xs-12 div_total resumen">TOTAL DEUDA:<span class="pull-right" id="idTotalDeuda"></span></div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+@inject IHttpContextAccessor Accessor
+@{
+    string resultado = string.Empty;
+   DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(Accessor);
+    if (oCliente != null)
+    {
+       DKbase.dll.cDllSaldosComposicion l = DKbase.Util.ObtenerSaldosPresentacionParaComposicion(oCliente.cli_login, DateTime.Now);
+
+        if (l != null)
+        {
+            resultado += "<input type=\"hidden\" id=\"hiddenCompocisionSaldos\" value=\"" + System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(l)) + "\" />";
+        }
+    }
+    WriteLiteral(resultado);
+}

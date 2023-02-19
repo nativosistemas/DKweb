@@ -20,4 +20,44 @@ public class ctacteController : Controller
         DKweb.Codigo.Util.clientes_pages_Documento_TIPO_Set(_httpContextAccessor, t.ToUpper());
         return View();
     }
+    public async Task<IActionResult> composicionsaldo()
+    {
+        return View();
+    }
+    public async Task<IActionResult> composicionsaldoCtaCte(string menu)
+    {
+        DKweb.Codigo.Util.composicionsaldoCtaCte_menu_Set(_httpContextAccessor, menu);
+        return View();
+    }
+    public async Task<IActionResult> composicionsaldoCtaResumen()
+    {
+        return View();
+    }
+    public async Task<IActionResult> composicionsaldochequecuenta()
+    {
+        return View();
+    }
+    public async Task<List<string>> ObtenerRangoFecha(int pDia, int pPendiente, int pCancelado)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente == null)
+            return null;
+        List<string> lista = new List<string>();
+        DateTime fechaActual = DateTime.Now;
+        DateTime fechaDesde = fechaActual.AddDays(pDia * -1);
+        DateTime fechaHasta = fechaActual;
+        lista.Add(fechaDesde.Day.ToString());
+        lista.Add((fechaDesde.Month).ToString());
+        lista.Add((fechaDesde.Year).ToString());
+
+        lista.Add(fechaHasta.Day.ToString());
+        lista.Add((fechaHasta.Month).ToString());
+        lista.Add((fechaHasta.Year).ToString());
+        DKweb.Codigo.Util.CompocisionSaldo_ResultadoMovimientosDeCuentaCorriente_Set(_httpContextAccessor, DKbase.Util.AgregarVariableSessionComposicionSaldo(fechaDesde, fechaHasta, pPendiente, pCancelado, oCliente.cli_login));
+        return lista;
+    }
+    public async Task<IActionResult> deudaVencida()
+    {
+        return View();
+    }
 }

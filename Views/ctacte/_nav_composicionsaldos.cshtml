@@ -1,0 +1,63 @@
+@inject IHttpContextAccessor Accessor
+@{
+    string classComposicionsaldoCtaCte = "";
+    string classComposicionsaldoCtaResumen = "";
+    string classComposicionsaldochequecuenta = "";
+    string strController = Accessor.HttpContext.GetRouteValue("action").ToString();
+    switch (strController)
+    {
+        case "composicionsaldoCtaCte":
+            classComposicionsaldoCtaCte = " active ";
+            break;
+        case "composicionsaldoCtaResumen":
+            classComposicionsaldoCtaResumen = " active ";
+            break;
+        case "composicionsaldochequecuenta":
+            classComposicionsaldochequecuenta = " active ";
+            break;
+        default:
+            break;
+    }
+
+}
+<div class="col-lg-7 col-md-8 col-sm-12 col-xs-12">
+    <a class="btn_volver float-left" href="/ctacte/composicionsaldo"><i class="fa fa-play"></i> VOLVER</a>
+    <div class="clear visible-xs"></div>
+    <div class="pad_7">
+        <a class="btn_a_3n  @{ WriteLiteral(classComposicionsaldoCtaCte);}" href="/ctacte/composicionsaldoCtaCte">CUENTA CORRIENTE</a>
+        <div class="clear5 visible-xs"></div>
+        <a class="btn_a_3n @{ WriteLiteral(classComposicionsaldoCtaResumen);}" href="/ctacte/composicionsaldoCtaResumen">RESUMEN ABIERTO</a>
+        <div class="clear5 visible-xs"></div>
+        <a class="btn_a_3n @{ WriteLiteral(classComposicionsaldochequecuenta);}" href="/ctacte/composicionsaldochequecuenta">CHEQUES EN CARTERA</a>
+    </div>
+</div>
+<div class="col-lg-2 col-md-4 col-sm-12 no-padding hidden-xs">
+    <div class="clear15"></div><div class="div-pt_buscador">Movimientos Vencidos</div><div class="pt_vencido pt_buscador"></div>
+</div>
+<div class="clear15 hidden-lg"></div>
+<div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+    <div class="div_resumen">
+        <div class="div_resumen_cont">
+            <table class="footable table resumen table-stripped" data-empty="No hay informacion disponible" width="100%" align="center" cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                    <tr class="wht">
+                        <td class="col-lg-8 col-md-8 col-sm-8 col-xs-8 text-left">TOTAL CUENTA CORRIENTE:</td>
+                        <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right" id="id_nav_TotalCuentaCorriente" ></td>
+                    </tr>
+                    <tr class="grs">
+                        <td class="col-lg-8 col-md-8 col-sm-8 col-xs-8 text-left">TOTAL RESUMEN ABIERTO:</td>
+                        <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right" id="id_nav_TotalResumenAbierto" ></td>
+                    </tr>
+                    <tr class="wht">
+                        <td class="col-lg-8 col-md-8 col-sm-8 col-xs-8 text-left">TOTAL CHEQUES EN CARTERA:</td>
+                        <td class="col-lg-4 col-md-4 col-sm-4 col-xs-4 text-right"id="id_nav_TotalChequesCartera"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="clear"></div>
+    </div>
+</div>
+<div class="col-xs-12 no-padding visible-xs">
+    <div class="div-pt_buscador">Movimientos Vencidos</div><div class="pt_vencido pt_buscador"></div><div class="clear15"></div>
+</div>

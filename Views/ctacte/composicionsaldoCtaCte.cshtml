@@ -1,0 +1,43 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_ctacte")
+@section Scripts{
+    @Html.Partial("_scriptsCompocisionSaldos")
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            CargarHtmlPanel_nav_composicionsaldos();
+            CargarHtmlCompocisionSaldo_CtaCte();
+        });
+
+    </script>
+}
+@section sectionHidden{
+    @Html.Partial("_hiddenComposicionSaldo")
+    @{
+        string resultado_sub = string.Empty;
+        if (DKweb.Codigo.Util.composicionsaldoCtaCte_menu(Accessor) == null) // si viene desde el menu interno
+        {
+            List<DKbase.dll.cCtaCteMovimiento> resultadoAUX =
+            DKweb.Codigo.Util.CompocisionSaldo_ResultadoMovimientosDeCuentaCorriente(Accessor);
+            if (resultadoAUX != null)
+            {
+                resultado_sub += "<input type=\"hidden\" id=\"hiddenListaCompocisionSaldo\" value=\"" +
+                System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(resultadoAUX)) + "\" />";
+                decimal? limiteSaldo = DKbase.Util.RecuperarLimiteSaldo();
+                if (limiteSaldo != null)
+                {
+                    resultado_sub += "<input type=\"hidden\" id=\"hiddenLimiteSaldo\" value=\"" +
+                    System.Net.WebUtility.HtmlEncode(limiteSaldo.ToString()) + "\" />";
+                }
+            }
+        }
+        WriteLiteral(resultado_sub);
+    }
+}
+
+
+
+<div class="row">
+    @Html.Partial("_nav_composicionsaldos")
+    <div id="divResultadoCompocisionSaldo" class="col-xs-12">
+    </div>
+</div>

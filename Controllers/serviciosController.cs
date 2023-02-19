@@ -15,12 +15,42 @@ public class serviciosController : Controller
         _httpContextAccessor = httpContextAccessor;
         _logger = logger;
     }
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
+        var uriBuilder = new UriBuilder(Request.Scheme, Request.Host.Host, Request.Host.Port ?? -1);
+        if (uriBuilder.Uri.IsDefaultPort)
+        {
+            uriBuilder.Port = -1;
+        }
 
+        var baseUri = uriBuilder.Uri.AbsoluteUri;
         return View();
     }
-    public async Task<IActionResult>  descargarArchivo(string t, string n, string inline)
+    public async Task<IActionResult> generar_archivo(string factura)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        string pathNameFile = DKbase.Util.generar_archivo(oCliente, factura);
+        if (!string.IsNullOrEmpty(pathNameFile))
+        {
+            try
+            {
+                string contentType;
+                new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider().TryGetContentType(pathNameFile, out contentType);
+                contentType = contentType ?? "application/octet-stream";
+                string Content_Disposition = "attachment; filename=" + factura + ".txt";
+                byte[] bites = System.IO.File.ReadAllBytes(pathNameFile);
+                Response.Headers.Add("Content-Disposition", Content_Disposition);
+                return File(bites, contentType);
+            }
+            catch (Exception ex)
+            {
+                DKbase.generales.Log.LogError(System.Reflection.MethodBase.GetCurrentMethod(), ex, DateTime.Now);
+                return BadRequest();
+            }
+        }
+        return NotFound();
+    }
+    public async Task<IActionResult> descargarArchivo(string t, string n, string inline)
     {
         string tipo = t;
         string name = n;
@@ -58,7 +88,7 @@ public class serviciosController : Controller
         }
         return NotFound();
     }
-    public async Task<IActionResult>  thumbnail(string r, string n, string an, string al, string c, string re)
+    public async Task<IActionResult> thumbnail(string r, string n, string an, string al, string c, string re)
     {
         var os = Environment.OSVersion;
         if (os.Platform == PlatformID.Unix)
@@ -70,7 +100,7 @@ public class serviciosController : Controller
             return await thumbnail_original(r, n, an, al, c, re);
         }
     }
-    public async Task<IActionResult>  thumbnail_original(string r, string n, string an, string al, string c, string re)
+    public async Task<IActionResult> thumbnail_original(string r, string n, string an, string al, string c, string re)
     {
 
         string ruta = r;//Request.QueryString["r"];
@@ -103,7 +133,7 @@ public class serviciosController : Controller
         }
         return Ok("");
     }
-    public async Task<IActionResult>  thumbnail_unix(string r, string n, string an, string al, string c, string re)
+    public async Task<IActionResult> thumbnail_unix(string r, string n, string an, string al, string c, string re)
     {
 
         string ruta = r;//Request.QueryString["r"];
@@ -182,4 +212,73 @@ public class serviciosController : Controller
         return ms.ToArray();
     }
 
+    public async Task<IActionResult> generarCSV(string t)
+    {
+        string tipo = t;
+        string nombreTXT = null;
+        if (tipo != null)
+        {
+            DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+            switch (tipo)
+            {
+                case "deudaVencida":
+                    List<DKbase.dll.cCtaCteMovimiento> l_1 = DKweb.Codigo.Util.deudaVencida(_httpContextAccessor);
+                    if (l_1 != null)
+                    {
+                        nombreTXT = DKbase.Util.getDeudaVencidaCSV(oCliente, l_1, DKbase.generales.Constantes.cDeudaVencida);
+                    }
+                    break;
+                case "saldoSinImputar":
+                    List<DKbase.dll.cCtaCteMovimiento> l_2 = DKweb.Codigo.Util.saldoSinImputar(_httpContextAccessor);
+                    if (l_2 != null)
+                    {
+                        nombreTXT = DKbase.Util.getDeudaVencidaCSV(oCliente, l_2, DKbase.generales.Constantes.cSaldoSinImputar);
+                    }
+                    break;
+                case "ObraSocialEntreFechas":
+                    List<DKbase.dll.cConsObraSocial> l_3 = DKweb.Codigo.Util.ObrasSociales_EntreFechas(_httpContextAccessor);
+                    if (l_3 != null)
+                    {
+                        nombreTXT = DKbase.Util.getObraSocialEntreFechasCSV(oCliente, l_3);
+                    }
+                    break;
+                case "ConsultaDeComprobantesEntreFecha":
+                    List<DKbase.dll.cComprobanteDiscriminado> l_4 = DKweb.Codigo.Util.ConsultaDeComprobantes_ComprobantesEntreFecha(_httpContextAccessor);
+                    if (l_4 != null)
+                    {
+                        nombreTXT = DKbase.Util.getConsultaDeComprobantesEntreFechaCSV(oCliente, l_4);
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            if (nombreTXT != string.Empty)
+            {
+                /*   String path = Constantes.cRaizArchivos + @"/archivos/csv/" + nombreTXT;
+
+                   System.IO.FileInfo toDownload = new System.IO.FileInfo(path);
+
+                   if (toDownload.Exists)
+                   {
+                       Response.Clear();
+                       Response.AddHeader("Content-Disposition", "attachment; filename=" + toDownload.Name);
+                       Response.AddHeader("Content-Length", toDownload.Length.ToString());
+                       Response.ContentType = "application/octet-stream";
+                       Response.WriteFile(Constantes.cRaizArchivos + @"/archivos/csv/" + nombreTXT);
+                       Response.End();
+                   }*/
+                //string nombreArchivo = name;
+                String path = System.IO.Path.Combine(DKbase.Helper.getFolder, "archivos", "csv", nombreTXT);
+                string contentType;
+                new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider().TryGetContentType(path, out contentType);
+                contentType = contentType ?? "application/octet-stream";
+                string Content_Disposition = "attachment; filename=" + nombreTXT;
+                byte[] bites = System.IO.File.ReadAllBytes(path);
+                Response.Headers.Add("Content-Disposition", Content_Disposition);
+                return File(bites, contentType);
+            }
+        }
+        return NotFound();
+    }
 }

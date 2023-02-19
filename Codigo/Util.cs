@@ -981,4 +981,92 @@ public class Util
     {
         pHttpContextAccessor.HttpContext.Session.SetString("clientes_pages_Documento_TIPO", pValue);
     }
+    public static string getAbsoluteUri(HttpRequest pHttpRequest)
+    {
+        var uriBuilder = new UriBuilder(pHttpRequest.Scheme, pHttpRequest.Host.Host, pHttpRequest.Host.Port ?? -1);
+        if (uriBuilder.Uri.IsDefaultPort)
+        {
+            uriBuilder.Port = -1;
+        }
+        var baseUri = uriBuilder.Uri.AbsoluteUri;
+        return baseUri;
+    }
+    public static List<DKbase.dll.cCtaCteMovimiento> CompocisionSaldo_ResultadoMovimientosDeCuentaCorriente(IHttpContextAccessor pHttpContextAccessor)
+    {
+        List<DKbase.dll.cCtaCteMovimiento> resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<List<DKbase.dll.cCtaCteMovimiento>>("CompocisionSaldo_ResultadoMovimientosDeCuentaCorriente") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<List<DKbase.dll.cCtaCteMovimiento>>("CompocisionSaldo_ResultadoMovimientosDeCuentaCorriente");
+        }
+        return resultado;
+    }
+    public static void CompocisionSaldo_ResultadoMovimientosDeCuentaCorriente_Set(IHttpContextAccessor pHttpContextAccessor, List<DKbase.dll.cCtaCteMovimiento> pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.dll.cCtaCteMovimiento>>("CompocisionSaldo_ResultadoMovimientosDeCuentaCorriente", pValue);
+    }
+    public static String composicionsaldoCtaCte_menu(IHttpContextAccessor pHttpContextAccessor)
+    {
+        String resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<String>("composicionsaldoCtaCte_menu") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<String>("composicionsaldoCtaCte_menu");
+        }
+        return resultado;
+    }
+    public static void composicionsaldoCtaCte_menu_Set(IHttpContextAccessor pHttpContextAccessor, String pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<String>("composicionsaldoCtaCte_menu", pValue);
+    }
+    public static List<DKbase.dll.cCtaCteMovimiento> deudaVencida(IHttpContextAccessor pHttpContextAccessor)
+    {
+        List<DKbase.dll.cCtaCteMovimiento> resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<List<DKbase.dll.cCtaCteMovimiento>>("deudaVencida") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<List<DKbase.dll.cCtaCteMovimiento>>("deudaVencida");
+        }
+        return resultado;
+    }
+    public static void deudaVencida_Set(IHttpContextAccessor pHttpContextAccessor, List<DKbase.dll.cCtaCteMovimiento> pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.dll.cCtaCteMovimiento>>("deudaVencida", pValue);
+    }
+    public static List<DKbase.dll.cCtaCteMovimiento> saldoSinImputar(IHttpContextAccessor pHttpContextAccessor)
+    {
+        List<DKbase.dll.cCtaCteMovimiento> resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<List<DKbase.dll.cCtaCteMovimiento>>("saldoSinImputar") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<List<DKbase.dll.cCtaCteMovimiento>>("saldoSinImputar");
+        }
+        return resultado;
+    }
+    public static void saldoSinImputar_Set(IHttpContextAccessor pHttpContextAccessor, List<DKbase.dll.cCtaCteMovimiento> pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.dll.cCtaCteMovimiento>>("saldoSinImputar", pValue);
+    }
+    public static List<DKbase.dll.cConsObraSocial> ObrasSociales_EntreFechas(IHttpContextAccessor pHttpContextAccessor)
+    {
+        List<DKbase.dll.cConsObraSocial> resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<List<DKbase.dll.cConsObraSocial>>("ObrasSociales_EntreFechas") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<List<DKbase.dll.cConsObraSocial>>("ObrasSociales_EntreFechas");
+        }
+        return resultado;
+    }
+    public static void ObrasSociales_EntreFechas_Set(IHttpContextAccessor pHttpContextAccessor, List<DKbase.dll.cConsObraSocial> pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.dll.cConsObraSocial>>("ObrasSociales_EntreFechas", pValue);
+    }
+    public static List<DKbase.dll.cComprobanteDiscriminado> ConsultaDeComprobantes_ComprobantesEntreFecha(IHttpContextAccessor pHttpContextAccessor)
+    {
+        List<DKbase.dll.cComprobanteDiscriminado> resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<List<DKbase.dll.cComprobanteDiscriminado>>("ConsultaDeComprobantes_ComprobantesEntreFecha") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<List<DKbase.dll.cComprobanteDiscriminado>>("ConsultaDeComprobantes_ComprobantesEntreFecha");
+        }
+        return resultado;
+    }
+    public static void ConsultaDeComprobantes_ComprobantesEntreFecha_Set(IHttpContextAccessor pHttpContextAccessor, List<DKbase.dll.cComprobanteDiscriminado> pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.dll.cComprobanteDiscriminado>>("ConsultaDeComprobantes_ComprobantesEntreFecha", pValue);
+    }
 }

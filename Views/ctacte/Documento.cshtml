@@ -78,7 +78,8 @@
                 resultado += "<input type=\"hidden\" id=\"hiddenDocumento\" value=\"" + System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(resultadoObj)) + "\" />";
             }
             resultado += "<input type=\"hidden\" id=\"hiddenTipoDocumento\" value=\"" + System.Net.WebUtility.HtmlEncode(clientes_pages_Documento_TIPO) + "\" />";
-            resultado += "<input type=\"hidden\" id=\"hiddenRaiz\" value=\"" + System.Net.WebUtility.HtmlEncode(DKbase.Helper.getFolder) + "\" />";
+            resultado += "<input type=\"hidden\" id=\"hiddenRaiz\" value=\"" + System.Net.WebUtility.HtmlEncode(DKweb.Codigo.Util.getAbsoluteUri(Accessor.HttpContext.Request)) + "\" />";
+       // var f =    DKweb.Codigo.Util.getAbsoluteUri(Accessor.HttpContext.Request);
             WriteLiteral(resultado);
         }
     }

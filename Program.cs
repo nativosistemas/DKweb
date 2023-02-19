@@ -47,7 +47,9 @@ var optionsRewrite = new RewriteOptions()
 .AddRedirect("home/promociones.aspx", "home/promociones")
 .AddRedirect("home/recall.aspx", "home/recall")
 .AddRedirect("home/recalls.aspx", "home/recalls")
-.AddRedirect("home/registracion.aspx", "home/registracion");
+.AddRedirect("home/registracion.aspx", "home/registracion")
+.AddRedirect("servicios/generar_archivo.aspx", "servicios/generar_archivo")
+.AddRedirect("servicios/generarCSV.aspx", "servicios/generarCSV");
 
 app.UseRewriter(optionsRewrite);
 // Configure the HTTP request pipeline.
