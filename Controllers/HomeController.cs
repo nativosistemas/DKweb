@@ -313,7 +313,8 @@ public class HomeController : Controller
     [HttpPost]
     public async Task<IActionResult> SignOff()
     {
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);  //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        _httpContextAccessor.HttpContext.Session.Clear();
         return Content("Ok");//RedirectToAction("Index", "Home");
     }
     public static string RecuperarTodasOfertas(List<DKbase.web.capaDatos.cOfertaHome> pResultado, bool isNuevoLanzamiento = false)

@@ -1,0 +1,36 @@
+@Html.Partial("_nav_ctacte")
+
+@section Scripts{
+    @Html.Partial("_scriptsCtacte")
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        CambiarSemanaFichaDebeHaber();
+    });
+
+</script>
+
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="col-lg-6 col-md-8 col-sm-12 text-left">
+            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-3 no-padding"><div class="clear5"></div>Periodos:</div>
+            <div class="col-lg-5 col-md-4 col-sm-5 col-xs-9">
+                <select class="form-control" id="cmbSemana" name="cmbSemana" onchange="CambiarSemanaFichaDebeHaber();">
+                    <option value="1">1 semana</option>
+                    <option value="2">2 semanas</option>
+                    <option value="3">3 semanas</option>
+                    <option value="4">4 semanas</option>
+                    <option value="5">5 semanas</option>
+                    <option value="6">6 semanas</option>
+                    <option value="7">7 semanas</option>
+                    <option value="8">8 semanas</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="clear20"></div>
+    <div id="divResultadoFicha" class="col-xs-12">
+
+    </div>
+</div>

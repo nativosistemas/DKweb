@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-  <PackageReference Include="NativoSistemas.DKbase" Version="1.0.48" />
+  <PackageReference Include="NativoSistemas.DKbase" Version="1.0.50" />
   </ItemGroup>
 
 </Project>

@@ -60,4 +60,26 @@ public class ctacteController : Controller
     {
         return View();
     }
+    public async Task<string> ObtenerCreditoDisponible(string pCli_login)
+    {
+        DKbase.web.ResultCreditoDisponible o = DKbase.Util.ObtenerCreditoDisponible(pCli_login);
+        return DKbase.generales.Serializador_base.SerializarAJson(o);
+    }
+    public async Task<IActionResult> FichaDebeHaberSaldo()
+    {
+        return View();
+    }
+    public async Task<string> ObtenerMovimientosDeFicha(int pSemana)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente == null)
+            return null;
+        //Session["FichaDebeHaberSaldo_NroSemana"] = pSemana;
+        DateTime FechaDesde = DateTime.Now.AddDays(-(pSemana * 7));
+        DateTime FechaHasta = DateTime.Now.AddDays(1);
+        List<DKbase.dll.cFichaCtaCte> listaFicha = DKbase.Util.ObtenerMovimientosDeFichaCtaCte(oCliente.cli_login, FechaDesde, FechaHasta);
+        if (listaFicha != null)
+            return DKbase.generales.Serializador_base.SerializarAJson(listaFicha);
+        return null;
+    }
 }
