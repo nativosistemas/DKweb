@@ -1,0 +1,45 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_ctacte")
+@section Scripts{
+    @Html.Partial("_scriptsCtacte")
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            CargarComprobantesAImprimirEnBaseAResumen();
+        });
+
+    </script>
+}
+@section sectionHidden{
+    @{
+        string resultado = string.Empty;
+        List<DKbase.dll.cCbteParaImprimir> obj =
+        DKweb.Codigo.Util.clientes_pages_descargaResumenes_listaComprobantesAImprimir(Accessor);
+        if (obj != null)
+        {
+            resultado += "<input type=\"hidden\" id=\"hiddenListaComprobantesAImprimirEnBaseAResumen\" value=\"" +
+            System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(obj)) + "\" />";
+        }
+
+        resultado += "<input type=\"hidden\" id=\"hiddenRaiz\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.Helper.getFolder) + "\" />";
+        WriteLiteral(resultado);
+
+    }
+}
+<div class="row">
+    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+        <a class="btn_volver float-left" href="/ctacte/descargaResumenes"><i class="fa fa-play"></i> VOLVER</a>
+        <div class="clear visible-xs"></div>
+        <div class="pad_7">
+            <div class="tit_secund">Comprobantes a imprimir en base a resumenes</div>
+        </div>
+    </div>
+    <div class="clear5 visible-xs"></div>
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 text-right"><a class="btn_download float-right" href="#"
+            onclick="funDescargarTodos(); return false;">DESCARGAR TODOS</a></div>
+    <div class="clear20 hidden-xs"></div>
+    <div class="clear10 visible-xs"></div>
+    <div id="divContenedorDocumento" class="col-xs-12">
+
+    </div>
+</div>

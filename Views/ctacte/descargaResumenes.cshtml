@@ -1,0 +1,33 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_ctacte")
+@section Scripts{
+    @Html.Partial("_scriptsCtacte")
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            CargarUltimosResumenes();
+        });
+
+    </script>
+}
+
+@section sectionHidden{
+    @{
+        string resultado = string.Empty;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(Accessor);
+        if (oCliente != null)
+        {
+            List<DKbase.dll.cResumen> objResumen = DKbase.Util.ObtenerUltimos10ResumenesDePuntoDeVenta(oCliente.cli_login);
+            if (objResumen != null)
+            {
+                resultado += "<input type=\"hidden\" id=\"hiddenListaUltimosResumenes\" value=\"" +
+                System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(objResumen)) + "\" />";
+            }
+        }
+        WriteLiteral(resultado);
+
+    }
+}
+<div class="row">
+    <div id="divContenedorDocumento" class="col-xs-12">
+    </div>
+</div>

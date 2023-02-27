@@ -1,0 +1,98 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_ctacte")
+
+@section Scripts{
+    @Html.Partial("_scriptsCtacte")
+    <script type="text/javascript">
+
+        jQuery(document).ready(function () {
+            CargarHtmlObraSocial();
+        });
+
+
+    </script>
+
+}
+@{
+
+    string nombrePlan = string.Empty;
+    int? anio = null;
+    int? mes = null;
+    int? quincena = null;
+    int? semana = null;
+    List<DKbase.dll.cPlanillaObSoc> lista = null;
+    DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(Accessor);
+    if (oCliente != null)
+    {
+        try
+        {
+            if (Accessor.HttpContext.Request.Query.TryGetValue("nombrePlan", out var value_nombrePlan))
+            {
+                nombrePlan = value_nombrePlan;
+            }
+            
+            if (Accessor.HttpContext.Request.Query.TryGetValue("anio", out var value_anio))
+            {
+                anio = Convert.ToInt32(value_anio);
+            }
+            if (Accessor.HttpContext.Request.Query.TryGetValue("mes", out var value_mes))
+            {
+                mes = Convert.ToInt32(value_mes);
+            }
+            if (Accessor.HttpContext.Request.Query.TryGetValue("quincena", out var value_quincena))
+            {
+                quincena = Convert.ToInt32(value_quincena);
+                if (quincena.Value == 0)
+                {
+                    quincena = null;
+                }
+            }
+            if (Accessor.HttpContext.Request.Query.TryGetValue("semana", out var value_semana))
+            {
+                semana = Convert.ToInt32(value_semana);
+            }
+            string loginWeb = oCliente.cli_login;
+            if (!string.IsNullOrEmpty(nombrePlan) && anio != null && mes != null && quincena == null)
+            {
+                lista = DKbase.Util.ObtenerPlanillasObraSocialClientesDeObraSocialPorAnioMes(nombrePlan, loginWeb, anio.Value,
+                mes.Value);
+            }
+            else if (!string.IsNullOrEmpty(nombrePlan) && anio != null && mes != null && quincena != null)
+            {
+                lista = DKbase.Util.ObtenerPlanillasObraSocialClientesDeObraSocialPorAnioMesQuincena(nombrePlan, loginWeb, anio.Value,
+                mes.Value, quincena.Value);
+            }
+            else if (!string.IsNullOrEmpty(nombrePlan) && anio != null && semana != null)
+            {
+                lista = DKbase.Util.ObtenerPlanillasObraSocialClientesDeObraSocialPorAnioSemana(nombrePlan, loginWeb, anio.Value,
+                semana.Value);
+            }
+        }
+        catch (Exception ex)
+        {
+            //throw;
+        }
+    }
+    if (lista != null)
+    {
+        WriteLiteral("<input type=\"hidden\" id=\"hiddenListaPlanillasObraSocial\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(lista)) + "\" />");
+    }
+
+
+}
+
+<div class="row">
+    <div class="col-lg-7 col-md-8 col-sm-12 col-xs-12">
+        <a class="btn_volver float-left" href="/ctacte/ConsultaDeComprobantesObraSocial"><i class="fa fa-play"></i>
+            VOLVER</a>
+        <div class="clear visible-xs"></div>
+        <div class="pad_7">
+            <div class="tit_secund">Resultados</div>
+        </div>
+    </div>
+    <div class="clear20 hidden-xs"></div>
+    <div id="divResultadoObraSocial" class="col-xs-12">
+
+    </div>
+</div>

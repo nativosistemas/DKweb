@@ -1,0 +1,97 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_ctacte")
+@section Scripts{
+    @Html.Partial("_scriptsCtacteDaterangepicker")
+    @Html.Partial("_scriptsCtacte")
+    @Html.Partial("_scriptsComprobantes")
+    <script type="text/javascript">
+
+        jQuery(document).ready(function () {
+            funDaterangepicker('ComprobanteFecha', 'funSetarFechaComprobante');
+        });
+        $('input:radio').change(
+            function () {
+                if ($("input:checked").val() == 'nro') {
+                    $('#hiddenBotonVolver').val('1');
+                    document.getElementById('divPanelNroComprobante').style.display = 'block';
+                    document.getElementById('divPanelFecha').style.display = 'none';
+                } else {
+                    $('#hiddenBotonVolver').val('2');
+                    document.getElementById('divPanelNroComprobante').style.display = 'none';
+                    document.getElementById('divPanelFecha').style.display = 'block';
+                }
+            }
+        );
+
+    </script>
+}
+@section sectionHidden{
+    @Html.Partial("_hiddenComposicionSaldo")
+}
+<div class="row">
+    <div class="col-xs-12 padding_l-10">
+        <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6 pad_t_3">
+            <div class="radio radio-info radio-inline">
+                <input type="radio" id="radioNro" name="group1" value="nro" checked="checked">
+                <label for="radioNro">N&uacute;mero</label>
+            </div>
+        </div>
+        <div class="col-lg-1 col-md-2 col-sm-3 col-xs-6 pad_t_3">
+            <div class="radio radio-inline">
+                <input type="radio" id="radioFecha" value="fecha" name="group1">
+                <label for="radioFecha">Fecha</label>
+            </div>
+        </div>
+        <div class="clear15"></div>
+        <div id="divPanelNroComprobante">
+            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6">
+                <select id="cmbTipoComprobante" class="form-control" onchange="onchangeTipoComprobanteElejido(1)">
+                    @{
+                        List<string> l_ConsultaDeComprobantes_tipoComprobante = DKweb.Codigo.Util.ConsultaDeComprobantes_tipoComprobante(Accessor);
+                        if (l_ConsultaDeComprobantes_tipoComprobante != null)
+                        {
+                            string strTipoComprobante_option = string.Empty;
+                            int cont = 0;
+                            foreach (string item in l_ConsultaDeComprobantes_tipoComprobante)
+                            {
+                                strTipoComprobante_option += "<option value=\"" + item.Substring(0, 3) + cont.ToString() + "\">" +
+                                item + "</option>";
+                                cont++;
+                            }
+                            WriteLiteral(strTipoComprobante_option);
+
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                <input id="txtNroComprobante" type="text" class="form-control" />
+            </div>
+            <div class="clear15 visible-xs"></div>
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <div class="est_ped"><button class="btn_emp"
+                        onclick="return onclickComprobanteNro();">CONSULTAR</button></div>
+            </div>
+        </div>
+        <div id="divPanelFecha" style="display:none">
+            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-8">
+                <select id="cmbTipoComprobanteFecha" class="form-control" onchange="onchangeTipoComprobanteElejido(2)">
+                    <option value="TODOS">TODOS</option>
+                    <option value="FAC">FAC</option>
+                    <option value="NCR">NCR</option>
+                    <option value="NDE">NDE</option>
+                </select>
+            </div>
+            <div class="clear15 visible-xs"></div>
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                <input type="text" id="ComprobanteFecha" class="form-control" name="daterange" value="" />
+            </div>
+            <div class="clear15 visible-xs"></div>
+            <div class="col-lg-3 col-sm-5 col-xs-12">
+                <div class="est_ped"><button class="btn_emp" onclick="return onclickConsultar();">CONSULTAR</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

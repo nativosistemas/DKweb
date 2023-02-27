@@ -1069,4 +1069,43 @@ public class Util
     {
         pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.dll.cComprobanteDiscriminado>>("ConsultaDeComprobantes_ComprobantesEntreFecha", pValue);
     }
+    public static List<string> ConsultaDeComprobantes_tipoComprobante(IHttpContextAccessor pHttpContextAccessor)
+    {
+        List<string> resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<List<string>>("ConsultaDeComprobantes_tipoComprobante") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<List<string>>("ConsultaDeComprobantes_tipoComprobante");
+        }
+        return resultado;
+    }
+    public static void ConsultaDeComprobantes_tipoComprobante_Set(IHttpContextAccessor pHttpContextAccessor, List<string> pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<List<string>>("ConsultaDeComprobantes_tipoComprobante", pValue);
+    }
+    public static string clientes_pages_descargaResumenes_NumeroResumen(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<string>("clientes_pages_descargaResumenes_NumeroResumen") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<string>("clientes_pages_descargaResumenes_NumeroResumen");
+        }
+        return resultado;
+    }
+    public static void clientes_pages_descargaResumenes_NumeroResumen_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<string>("clientes_pages_descargaResumenes_NumeroResumen", pValue);
+    }
+    public static List<DKbase.dll.cCbteParaImprimir> clientes_pages_descargaResumenes_listaComprobantesAImprimir(IHttpContextAccessor pHttpContextAccessor)
+    {
+        List<DKbase.dll.cCbteParaImprimir> resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<List<DKbase.dll.cCbteParaImprimir>>("clientes_pages_descargaResumenes_listaComprobantesAImprimir") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<List<DKbase.dll.cCbteParaImprimir>>("clientes_pages_descargaResumenes_listaComprobantesAImprimir");
+        }
+        return resultado;
+    }
+    public static void clientes_pages_descargaResumenes_listaComprobantesAImprimir_Set(IHttpContextAccessor pHttpContextAccessor, List<DKbase.dll.cCbteParaImprimir> pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.dll.cCbteParaImprimir>>("clientes_pages_descargaResumenes_listaComprobantesAImprimir", pValue);
+    }
 }

@@ -1,9 +1,10 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using DKweb.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DKweb.Controllers;
-
+[Authorize]
 public class ctacteController : Controller
 {
 
@@ -81,5 +82,42 @@ public class ctacteController : Controller
         if (listaFicha != null)
             return DKbase.generales.Serializador_base.SerializarAJson(listaFicha);
         return null;
+    }
+    public async Task<IActionResult> ConsultaDeComprobantes()
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente != null)
+        {
+            List<string> lista = new List<string>();
+            lista = DKbase.Util.ObtenerTiposDeComprobantesAMostrar(oCliente.cli_login);
+            DKweb.Codigo.Util.ConsultaDeComprobantes_tipoComprobante_Set(_httpContextAccessor, lista);//Session["ConsultaDeComprobantes_tipoComprobante"] = lista;            
+        }
+        return View();
+    }
+    public async Task<IActionResult> ConsultaDeComprobantesObraSocial()
+    {
+        return View();
+    }
+    public async Task<IActionResult> descargaResumenes()
+    {
+        return View();
+    }
+    public async Task<IActionResult> descargaResumenesDetalle(string id)
+    {
+        if (id != null)
+        {
+            DKweb.Codigo.Util.clientes_pages_descargaResumenes_NumeroResumen_Set(_httpContextAccessor, id);
+        }
+        string clientes_pages_descargaResumenes_NumeroResumen = DKweb.Codigo.Util.clientes_pages_descargaResumenes_NumeroResumen(_httpContextAccessor);
+        if (clientes_pages_descargaResumenes_NumeroResumen != null)
+        {
+            List<DKbase.dll.cCbteParaImprimir> obj = DKbase.Util.ObtenerComprobantesAImprimirEnBaseAResumen(clientes_pages_descargaResumenes_NumeroResumen);
+            DKweb.Codigo.Util.clientes_pages_descargaResumenes_listaComprobantesAImprimir_Set(_httpContextAccessor, obj);
+        }
+        return View();
+    }
+    public async Task<IActionResult> ConsultaDeComprobantesObraSocialResultado()
+    {
+        return View();
     }
 }

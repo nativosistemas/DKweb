@@ -1,0 +1,46 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_ctacte")
+@section Scripts{
+    @Html.Partial("_scriptsCtacte")
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            CargarHtmlObraSocial_EntreFechas();
+        });
+    </script>
+}
+@{
+    List<DKbase.dll.cConsObraSocial> lista = DKweb.Codigo.Util.ObrasSociales_EntreFechas(Accessor);
+    if (lista != null)
+    {
+        WriteLiteral("<input type=\"hidden\" id=\"hiddenListaConsObraSocial\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(lista)) + "\" />");
+    }
+}
+<div id="ObraSocialEntreFechasPrint" class="row">
+    <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12 noImprimir">
+        <a class="btn_volver float-left" href="/ctacte/ConsultaDeComprobantesObraSocial?t=rango"><i
+                class="fa fa-play"></i> VOLVER</a>
+        <div class="pad_7">
+            <div class="tit_secund">Resultados</div>
+        </div>
+
+
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 text-left">
+        <div class="clear15"></div>
+        <div class="div-pt_buscador">Débitos</div>
+        <div class="pt_debitos pt_buscador"></div>
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-4 col-xs-6 text-right">
+        <a class="btn_download float-right noImprimir" href="../../servicios/generarCSV.aspx?t=ObraSocialEntreFechas"
+            data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Descargar en Excel">EXCEL</a>
+    </div>
+    <div class="clear20"></div>
+    <div id="divResultadoObraSocialEntreFechas" class="col-xs-12">
+    </div>
+    <div class="col-xs-12 text-right">
+        <a class="btn_print float-right noImprimir" href="#"
+            onclick="printDiv('ObraSocialEntreFechasPrint'); return false;" data-toggle="tooltip"
+            data-placement="bottom" title="">IMPRIMIR</a>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+@Html.Partial("_nav_ctacte")
+@section Scripts{
+    @Html.Partial("_scriptsCtacteDaterangepicker")
+    @Html.Partial("_scriptsCtacte")
+
+    <script type="text/javascript">
+
+        jQuery(document).ready(function () {
+            //CargarUltimosResumenes();
+          var tipo =   getUrlParameter('t');
+          if (tipo == 'rango')
+          {
+              $('#radioFecha').prop("checked", true);
+          }
+          onChangeGroupObraSocial();
+            funDaterangepicker('ObraSocialFecha', 'funSetarFechaObraSocial');
+            onchangePlanesDeObrasSociales();
+        });
+
+
+    </script>
+    
+}
+
+<div class="row">
+    <div class="col-xs-12 padding_l-10">
+        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6 pad_t_3">
+            <div class="radio radio-info radio-inline">
+                <input type="radio" id="radioNro" name="groupObraSocial" value="nro" checked="checked">
+                <label for="radioNro">Plan y periodo</label>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-6 pad_t_3">
+            <div class="radio radio-inline">
+                <input type="radio" id="radioFecha" value="fecha" name="groupObraSocial">
+                <label for="radioFecha">Rango de fechas</label>
+            </div>
+        </div>
+        <div class="clear15"></div>
+        <div id="divPanelNroComprobante">
+            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6">
+                @{
+                    List<DKbase.dll.cPlan> listaPlan = DKbase.Util.ObtenerPlanesDeObrasSociales();
+                    string strPlanObraSocial = "<select id=\"cmbPlanObraSocial\" name=\"cmbPlanObraSocial\" class=\"form-control\" onchange =\"onchangePlanesDeObrasSociales()\" > ";
+                    strPlanObraSocial += "<option value=\"" + "TODOS" + "\" data-PideSemana=\"" + false + "\" class=\"optionObraSocialTodos\" > " + "TODOS" + "</option>";
+                    if (listaPlan != null){
+                    for (int i = 0; i < listaPlan.Count; i++)
+                    {
+                        strPlanObraSocial += "<option value=\"" + listaPlan[i].Nombre + "\" data-PideSemana=\"" + listaPlan[i].PideSemana + "\" > " + listaPlan[i].Nombre + "</option>";
+                    }
+                    }
+                    strPlanObraSocial += "</select>";
+                    WriteLiteral(strPlanObraSocial);
+                }
+
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 PideSemana_false">
+                @{
+                    WriteLiteral("<input id=\"cmbFalseAño\" name=\"cmbFalseAño\" type=\"number\" class=\"form-control\" placeholder=\"A&ntilde;o\" value=\"" + DateTime.Now.Year.ToString() + "\" /> ");
+                }
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 PideSemana_false">
+                @{
+                    string strNroSemana = "<select id=\"cmbFalseNroSemana\" name=\"cmbFalseNroSemana\"  class=\"form-control\" > ";
+                    for (int i = 1; i <= 53; i++)
+                    {
+                        strNroSemana += "<option value=\"" + i + "\"  > " + i.ToString("00") + "</option>";
+                    }
+                    strNroSemana += "</select>";
+                    WriteLiteral(strNroSemana);
+                }
+            </div>
+            <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6 PideSemana_true">
+                @{
+                    string strMes = "<select id=\"cmbTrueMes\" name=\"cmbTrueMes\" class=\"form-control\" >";
+                    for (int i = 1; i <= 12; i++)
+                    {
+                        strMes += "<option value=\"" + i + "\"  > " + DKbase.web.FuncionesPersonalizadas_base.obtenerNombreMes(i) + "</option>";
+                    }
+                    strMes += "</select>";
+                    WriteLiteral(strMes);
+                }
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-6 PideSemana_true">
+                @{
+                    WriteLiteral("<input id=\"cmbTrueAño\" name=\"cmbTrueAño\" type=\"number\" class=\"form-control\" placeholder=\"A&ntilde;o\" value=\"" + DateTime.Now.Year.ToString() + "\" /> ");
+                }
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-3 col-xs-6 PideSemana_true">
+                @{
+                    string strQuincena = "<select id=\"cmbTrueQuincena\" name=\"cmbTrueQuincena\" class=\"form-control\" >";
+                    strQuincena += "<option value=\"" + 0 + "\"  > " + "" + "</option>";
+                    for (int i = 1; i <= 2; i++)
+                    {
+                        strQuincena += "<option value=\"" + i + "\"  > " + i.ToString() + "</option>";
+                    }
+                    strQuincena += "</select>";
+                    WriteLiteral(strQuincena);
+                }
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 RangoFechaObraSocial">
+                <input type="text" id="ObraSocialFecha" class="form-control" name="daterange" value="" />
+            </div>
+            <div class="clear15 visible-xs"></div>
+            <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12"><div class="est_ped"><button class="btn_emp" onclick="return onclickConsultarObraSocial();">CONSULTAR</button></div></div>
+        </div>
+    </div>
+</div>	 

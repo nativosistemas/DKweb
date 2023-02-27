@@ -1,9 +1,10 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using DKweb.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DKweb.Controllers;
-
+[Authorize]
 public class configController : Controller
 {
     private readonly ILogger<configController> _logger;
@@ -18,10 +19,12 @@ public class configController : Controller
     {
         return View();
     }
+    [AllowAnonymous]
     public async Task<IActionResult> loginbot()
     {
         return View();
     }
+    [AllowAnonymous]
     public async Task<IActionResult> action(int id)
     {
         DKweb.Codigo.Util.action_id_Set(_httpContextAccessor, id);
@@ -90,14 +93,17 @@ public class configController : Controller
         }
         return resultado;
     }
+    [AllowAnonymous]
     public async Task<IActionResult> inhabilitado()
     {
         return View();
     }
+    [AllowAnonymous]
     public async Task<IActionResult> Error()
     {
         return View();
     }
+    [AllowAnonymous]
     public async Task<IActionResult> sinpermiso()
     {
         return View();
@@ -130,7 +136,6 @@ public class configController : Controller
     {
         return View();
     }
-
     public async Task<IActionResult> catalogo()
     {
         return View();
