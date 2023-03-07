@@ -281,4 +281,34 @@ public class serviciosController : Controller
         }
         return NotFound();
     }
+    public async Task<IActionResult> generar_archivoPdf(string tipo, string nro)
+    {
+        string Content_Disposition = string.Empty;
+        string nombrePDF = tipo + "_" + nro + ".pdf";
+        String path = System.IO.Path.Combine(DKbase.Helper.getArchivo_ImpresionesComprobante, nombrePDF);
+        try
+        {
+            System.IO.FileInfo toDownload = new System.IO.FileInfo(path);
+            if (!toDownload.Exists)
+            {
+                DKbase.Util.ImprimirComprobante(tipo, nro);
+            }
+            string contentType;
+            new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider().TryGetContentType(path, out contentType);
+            contentType = contentType ?? "application/octet-stream";
+            if (string.IsNullOrWhiteSpace(Content_Disposition))
+            {
+                Content_Disposition = "attachment; filename=" + nombrePDF;
+            }
+            byte[] bites = System.IO.File.ReadAllBytes(path);
+            Response.Headers.Add("Content-Disposition", Content_Disposition);
+            return File(bites, contentType);
+        }
+        catch (Exception ex)
+        {
+            DKbase.generales.Log.LogError(System.Reflection.MethodBase.GetCurrentMethod(), ex, DateTime.Now);
+            return BadRequest();
+        }
+        return NotFound();
+    }
 }

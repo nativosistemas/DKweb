@@ -120,4 +120,78 @@ public class ctacteController : Controller
     {
         return View();
     }
+    public async Task<string> ObtenerComprobantesObrasSocialesDePuntoDeVentaEntreFechas(string pLoginWeb, string pPlan, int diaDesde, int mesDesde, int añoDesde, int diaHasta, int mesHasta, int añoHasta)
+    {
+        DateTime fechaDesde = new DateTime(añoDesde, mesDesde, diaDesde);
+        DateTime fechaHasta = new DateTime(añoHasta, mesHasta, diaHasta);
+        List<DKbase.dll.cConsObraSocial> l = DKbase.Util.ObtenerComprobantesObrasSocialesDePuntoDeVentaEntreFechas(pLoginWeb, pPlan, fechaDesde, fechaHasta);
+        DKweb.Codigo.Util.ObrasSociales_EntreFechas_Set(_httpContextAccessor, l);
+        return "Ok";
+    }
+    public async Task<IActionResult> ConsultaDeComprobantesObraSocialResultadoRango()
+    {
+        return View();
+    }
+    public async Task<string> IsExistenciaComprobanteResumenes(string pNombreArchivo, int pIndex, int pContadorAUX)
+    {
+        DKbase.web.cPdfComprobante resultado = new DKbase.web.cPdfComprobante();
+        string nombreArchivo = pNombreArchivo + ".pdf";
+        resultado.isOk = System.IO.File.Exists(System.IO.Path.Combine(DKbase.Helper.getArchivo_ImpresionesComprobante, nombreArchivo));
+        List<DKbase.dll.cCbteParaImprimir> obj = DKweb.Codigo.Util.clientes_pages_descargaResumenes_listaComprobantesAImprimir(_httpContextAccessor);
+        if (!resultado.isOk && obj != null && pContadorAUX == 0)
+        {
+            DKbase.Util.ImprimirComprobante(obj[pIndex].TipoComprobante, obj[pIndex].NumeroComprobante);
+        }
+        resultado.nombreArchivo = pNombreArchivo;
+        resultado.index = pIndex;
+        if (resultado != null)
+            return DKbase.generales.Serializador_base.SerializarAJson(resultado);
+        return null;
+    }
+    public async Task<string> IsExistenciaComprobanteResumenes_todos(string pNombreArchivo, int pContadorAUX)
+    {
+        DKbase.web.cPdfComprobante resultado = new DKbase.web.cPdfComprobante();
+        string nombreArchivo = pNombreArchivo + ".pdf";
+        resultado.isOk = System.IO.File.Exists(System.IO.Path.Combine(DKbase.Helper.getArchivo_ImpresionesComprobante, nombreArchivo));
+        string NumeroComprobante = DKweb.Codigo.Util.clientes_pages_descargaResumenes_NumeroResumen(_httpContextAccessor); ;
+        if (!resultado.isOk && NumeroComprobante != null && pContadorAUX == 0)
+        {
+            DKbase.Util.ImprimirComprobante("RCO", NumeroComprobante);
+        }
+        resultado.nombreArchivo = pNombreArchivo;
+        if (resultado != null)
+            return DKbase.generales.Serializador_base.SerializarAJson(resultado);
+        return null;
+    }
+    public async Task<bool> IsExistenciaComprobante(string pNombreArchivo)
+    {
+        bool resultado = false;
+        string nombreArchivo = pNombreArchivo + ".pdf";
+        resultado = System.IO.File.Exists(System.IO.Path.Combine(DKbase.Helper.getArchivo_ImpresionesComprobante, nombreArchivo));
+        return resultado;
+    }
+    public async Task ObtenerComprobantesDiscriminadosDePuntoDeVentaEntreFechas(int diaDesde, int mesDesde, int añoDesde, int diaHasta, int mesHasta, int añoHasta)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente == null)
+        {
+            DateTime fechaDesde = new DateTime(añoDesde, mesDesde, diaDesde);//, 0, 0, 0
+            DateTime fechaHasta = new DateTime(añoHasta, mesHasta, diaHasta);//, 23, 59, 59
+            List<DKbase.dll.cComprobantesDiscriminadosDePuntoDeVenta> resultadoObj = DKbase.Util.ObtenerComprobantesDiscriminadosDePuntoDeVentaEntreFechas(oCliente.cli_login, fechaDesde, fechaHasta);
+            if (resultadoObj != null)
+            {
+                DKweb.Codigo.Util.comprobantescompleto_Lista_Set(_httpContextAccessor, resultadoObj);
+            }
+            DKweb.Codigo.Util.comprobantescompleto_FechaDesde_Set(_httpContextAccessor, fechaDesde);
+            DKweb.Codigo.Util.comprobantescompleto_FechaHasta_Set(_httpContextAccessor, fechaHasta);
+        }
+        else
+        {
+            DKweb.Codigo.Util.comprobantescompleto_Lista_Set(_httpContextAccessor, null);
+        }
+    }
+    public async Task<IActionResult> comprobantescompleto()
+    {
+        return View();
+    }
 }

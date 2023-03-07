@@ -1108,4 +1108,43 @@ public class Util
     {
         pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.dll.cCbteParaImprimir>>("clientes_pages_descargaResumenes_listaComprobantesAImprimir", pValue);
     }
+    public static List<DKbase.dll.cComprobantesDiscriminadosDePuntoDeVenta> comprobantescompleto_Lista(IHttpContextAccessor pHttpContextAccessor)
+    {
+        List<DKbase.dll.cComprobantesDiscriminadosDePuntoDeVenta> resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<List<DKbase.dll.cComprobantesDiscriminadosDePuntoDeVenta>>("comprobantescompleto_Lista") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<List<DKbase.dll.cComprobantesDiscriminadosDePuntoDeVenta>>("comprobantescompleto_Lista");
+        }
+        return resultado;
+    }
+    public static void comprobantescompleto_Lista_Set(IHttpContextAccessor pHttpContextAccessor, List<DKbase.dll.cComprobantesDiscriminadosDePuntoDeVenta> pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<List<DKbase.dll.cComprobantesDiscriminadosDePuntoDeVenta>>("comprobantescompleto_Lista", pValue);
+    }
+    public static DateTime? comprobantescompleto_FechaDesde(IHttpContextAccessor pHttpContextAccessor)
+    {
+        DateTime? resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<DateTime>("comprobantescompleto_FechaDesde") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<DateTime>("comprobantescompleto_FechaDesde");
+        }
+        return resultado;
+    }
+    public static void comprobantescompleto_FechaDesde_Set(IHttpContextAccessor pHttpContextAccessor, DateTime pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<DateTime>("comprobantescompleto_FechaDesde", pValue);
+    }
+    public static DateTime? comprobantescompleto_FechaHasta(IHttpContextAccessor pHttpContextAccessor)
+    {
+        DateTime? resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<DateTime>("comprobantescompleto_FechaHasta") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<DateTime>("comprobantescompleto_FechaHasta");
+        }
+        return resultado;
+    }
+    public static void comprobantescompleto_FechaHasta_Set(IHttpContextAccessor pHttpContextAccessor, DateTime pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<DateTime>("comprobantescompleto_FechaHasta", pValue);
+    }
 }

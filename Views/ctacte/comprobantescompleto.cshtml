@@ -1,0 +1,46 @@
+@inject IHttpContextAccessor Accessor
+@Html.Partial("_nav_ctacte")
+@section Scripts{
+    @Html.Partial("_scriptsCtacte")
+@Html.Partial("_scriptsComprobantes")
+    <script type="text/javascript">
+    jQuery(document).ready(function () {
+        if (objListaComprobante == null) {
+            objListaComprobante = eval('(' + $('#hiddenListaComprobanteCompleto').val() + ')');
+            if (typeof objListaComprobante == 'undefined') {
+                objListaComprobante = null;
+            }
+        }
+        CargarListaComprobanteCompleto();
+    });
+
+    </script>
+}
+@section sectionHidden{
+
+    @{
+        string resultado = string.Empty;
+        List<DKbase.dll.cComprobantesDiscriminadosDePuntoDeVenta> l =  DKweb.Codigo.Util.comprobantescompleto_Lista(Accessor);
+        if (l != null)
+        {
+            resultado += "<input type=\"hidden\" id=\"hiddenListaComprobanteCompleto\" value=\"" + System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(l)) + "\" />";
+        }
+        WriteLiteral(resultado);
+    }
+}
+<div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
+        <a class="btn_volver float-left"  href="/ctacte/ConsultaDeComprobantes" ><i class="fa fa-play"></i> VOLVER</a>
+        <div class="clear visible-xs"></div>
+        <div class="pad_7">
+            <div id="divTituloDocumento" class="tit_secund">Comprobantes discriminados</div>
+        </div>
+    </div>
+    <div class="clear5 visible-xs"></div>
+    <div id="divContenedorDescarga" class="col-lg-6 col-md-6 col-sm-8 col-xs-12 text-right">
+
+    </div>
+    <div class="clear20 hidden-xs"></div>
+    <div  id="divResultadoComprobanteCompleto"  class="col-xs-12">
+    </div>
+</div>
