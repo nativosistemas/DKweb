@@ -194,4 +194,13 @@ public class ctacteController : Controller
     {
         return View();
     }
+    public async Task<double?> ObtenerSaldoFinalADiciembrePorCliente(string pCli_login)
+    {
+        return DKbase.Util.ObtenerSaldoFinalADiciembrePorCliente(pCli_login);
+    }
+    public async Task<int> enviarSolicitudSobresRemesa()
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        return DKbase.Util.enviarSolicitudSobresRemesa(oCliente);
+    }
 }

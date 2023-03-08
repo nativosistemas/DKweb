@@ -35,6 +35,8 @@ DKbase.Helper.getMailRegistracion = builder.Configuration.GetSection("appSetting
 DKbase.Helper.getMailRegistracionNoCliente = builder.Configuration.GetSection("appSettings")["mailRegistracionNoCliente"];
 DKbase.Helper.getMail_from = builder.Configuration.GetSection("appSettings")["mail_from"];
 DKbase.Helper.getMail_pass = builder.Configuration.GetSection("appSettings")["mail_pass"];
+DKbase.Helper.getMail_solicitudSobresRemesa = builder.Configuration.GetSection("appSettings")["mail_solicitudSobresRemesa"];
+DKbase.Helper.getMail_ctacte = builder.Configuration.GetSection("appSettings")["mail_ctacte"];
 DKbase.Helper.getMailContacto = builder.Configuration.GetSection("appSettings")["mailContacto"];
 DKbase.Helper.getArchivo_ImpresionesComprobante = builder.Configuration.GetSection("appSettings")["ImpresionesComprobante"];
 DKbase.Helper.getConnectionStringSQL = builder.Configuration.GetConnectionString("ConnectionSQL");
@@ -47,6 +49,7 @@ var optionsRewrite = new RewriteOptions()
 .AddRedirect("home/promociones.aspx", "home/promociones")
 .AddRedirect("home/recall.aspx", "home/recall")
 .AddRedirect("home/recalls.aspx", "home/recalls")
+.AddRedirect("home/contactoCtaCte.aspx", "home/contactoCtaCte")
 .AddRedirect("home/registracion.aspx", "home/registracion")
 .AddRedirect("servicios/generar_archivo.aspx", "servicios/generar_archivo")
 .AddRedirect("servicios/generarCSV.aspx", "servicios/generarCSV")
