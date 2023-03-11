@@ -173,7 +173,7 @@ public class ctacteController : Controller
     public async Task ObtenerComprobantesDiscriminadosDePuntoDeVentaEntreFechas(int diaDesde, int mesDesde, int añoDesde, int diaHasta, int mesHasta, int añoHasta)
     {
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
-        if (oCliente == null)
+        if (oCliente != null)
         {
             DateTime fechaDesde = new DateTime(añoDesde, mesDesde, diaDesde);//, 0, 0, 0
             DateTime fechaHasta = new DateTime(añoHasta, mesHasta, diaHasta);//, 23, 59, 59
