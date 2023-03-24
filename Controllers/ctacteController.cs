@@ -203,4 +203,14 @@ public class ctacteController : Controller
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         return DKbase.Util.enviarSolicitudSobresRemesa(oCliente);
     }
+    public async Task<string> ObtenerVencimientosResumenPorFecha(string pNumeroResumen, DateTime pFechaVencimiento)
+    {
+        string resultado = string.Empty;
+        List<DKbase.dll.cVencimientoResumen> resultadoObj = DKbase.Util.ObtenerVencimientosResumenPorFecha(pNumeroResumen, pFechaVencimiento);
+        if (resultadoObj != null)
+        {
+            resultado = DKbase.generales.Serializador_base.SerializarAJson(resultadoObj);
+        }
+        return resultado;
+    }
 }

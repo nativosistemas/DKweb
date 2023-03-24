@@ -50,7 +50,7 @@ public class configController : Controller
                 case 6:
                     return RedirectToAction("NuevaDevolucion", "devoluciones");// Devolución por Reclamo https://www.kellerhoff.com.ar/devoluciones/NuevaDevolucion
                 case 7:
-                    return RedirectToAction("DevolucionesFacturadoNoEnviado", "devoluciones");//Facturado No Enviado	https://www.kellerhoff.com.ar/devoluciones/DevolucionesFacturadoNoEnviado
+                    return RedirectToAction("ReclamoFacturadoNoEnviado", "devoluciones");//Facturado No Enviado	https://www.kellerhoff.com.ar/devoluciones/DevolucionesFacturadoNoEnviado
                 default:
                     break;
             }

@@ -1147,4 +1147,72 @@ public class Util
     {
         pHttpContextAccessor.HttpContext.Session.Set<DateTime>("comprobantescompleto_FechaHasta", pValue);
     }
+    public static string GrabarComprobantesDiscriminadoCSV(IHttpContextAccessor pHttpContextAccessor, string pRuta)
+    {
+        string resultado = string.Empty;
+        List<DKbase.dll.cComprobantesDiscriminadosDePuntoDeVenta> resultadoObjLista = comprobantescompleto_Lista(pHttpContextAccessor);
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(pHttpContextAccessor);
+        DateTime? fechaDesde = comprobantescompleto_FechaDesde(pHttpContextAccessor);
+        DateTime? fechaHasta = comprobantescompleto_FechaHasta(pHttpContextAccessor);
+
+        if (resultadoObjLista != null && fechaDesde != null && fechaHasta != null && oCliente != null)
+        {
+            string nombreArchivoCSV = string.Empty;
+            string fechaArchivoCSV = fechaDesde.Value.Year.ToString().Substring(2, 2) + fechaDesde.Value.Month.ToString("00") + fechaDesde.Value.Day.ToString("00") + "A" + fechaHasta.Value.Year.ToString().Substring(2, 2) + fechaHasta.Value.Month.ToString("00") + fechaHasta.Value.Day.ToString("00");
+            nombreArchivoCSV = oCliente.cli_login + "-Comprobantes" + fechaArchivoCSV + ".csv";
+            resultado = nombreArchivoCSV;
+            System.IO.StreamWriter FAC_txt = new System.IO.StreamWriter(System.IO.Path.Combine(pRuta, nombreArchivoCSV), false, System.Text.Encoding.UTF8);
+
+            string strCabeceraCSV = string.Empty;
+
+            strCabeceraCSV += "Fecha";
+            strCabeceraCSV += ";";
+            strCabeceraCSV += "Comprobante";
+            strCabeceraCSV += ";";
+            strCabeceraCSV += "Número Comprobante";
+            strCabeceraCSV += ";";
+            strCabeceraCSV += "Monto Exento";
+            strCabeceraCSV += ";";
+            strCabeceraCSV += "Monto Gravado";
+            strCabeceraCSV += ";";
+            strCabeceraCSV += "Monto Iva Inscripto";
+            strCabeceraCSV += ";";
+            strCabeceraCSV += "Monto Iva No Inscripto";
+            strCabeceraCSV += ";";
+            strCabeceraCSV += "Monto Percepciones DGR";
+            strCabeceraCSV += ";";
+            strCabeceraCSV += "Monto Percepciones Municipal";
+            strCabeceraCSV += ";";
+            strCabeceraCSV += "Monto Total";
+            FAC_txt.WriteLine(strCabeceraCSV);
+            for (int i = 0; i < resultadoObjLista.Count; i++)
+            {
+                string detalleCSV = string.Empty;
+                detalleCSV += resultadoObjLista[i].FechaToString;
+                detalleCSV += ";";
+                detalleCSV += resultadoObjLista[i].Comprobante;
+                detalleCSV += ";";
+                detalleCSV += resultadoObjLista[i].NumeroComprobante;
+                detalleCSV += ";";
+                detalleCSV += DKbase.generales.Numerica.FormatoNumeroPuntoMilesComaDecimal(resultadoObjLista[i].MontoExento);
+                detalleCSV += ";";
+                detalleCSV += DKbase.generales.Numerica.FormatoNumeroPuntoMilesComaDecimal(resultadoObjLista[i].MontoGravado);
+                detalleCSV += ";";
+                detalleCSV += DKbase.generales.Numerica.FormatoNumeroPuntoMilesComaDecimal(resultadoObjLista[i].MontoIvaInscripto);
+                detalleCSV += ";";
+                detalleCSV += DKbase.generales.Numerica.FormatoNumeroPuntoMilesComaDecimal(resultadoObjLista[i].MontoIvaNoInscripto);
+                detalleCSV += ";";
+                detalleCSV += DKbase.generales.Numerica.FormatoNumeroPuntoMilesComaDecimal(resultadoObjLista[i].MontoPercepcionesDGR);
+                detalleCSV += ";";
+                detalleCSV += DKbase.generales.Numerica.FormatoNumeroPuntoMilesComaDecimal(resultadoObjLista[i].MontoPercepcionesMunicipal);
+                detalleCSV += ";";
+                detalleCSV += DKbase.generales.Numerica.FormatoNumeroPuntoMilesComaDecimal(resultadoObjLista[i].MontoTotal);
+                FAC_txt.WriteLine(detalleCSV);
+            }
+            FAC_txt.Close();
+
+        }
+
+        return resultado;
+    }
 }

@@ -311,4 +311,42 @@ public class serviciosController : Controller
         }
         return NotFound();
     }
+
+    public async Task<IActionResult> generar_comprobantes_discriminado()
+    {
+        string rutaTemporal = System.IO.Path.Combine(DKbase.Helper.getFolder, "archivos", "comprobantes");
+        string Content_Disposition = string.Empty;
+        DirectoryInfo DIR = new DirectoryInfo(rutaTemporal);
+        if (!DIR.Exists)
+        {
+            DIR.Create();
+        }
+        string nombreTXT = DKweb.Codigo.Util.GrabarComprobantesDiscriminadoCSV(_httpContextAccessor, rutaTemporal);
+        if (!string.IsNullOrEmpty(nombreTXT))
+        {
+            try
+            {
+                string pathAndFile = System.IO.Path.Combine(rutaTemporal, nombreTXT);
+                string contentType;
+                new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider().TryGetContentType(pathAndFile, out contentType);
+                contentType = contentType ?? "application/octet-stream";
+                if (string.IsNullOrWhiteSpace(Content_Disposition))
+                {
+                    Content_Disposition = "attachment; filename=" + nombreTXT;
+                }
+                byte[] bites = System.IO.File.ReadAllBytes(pathAndFile);
+                Response.Headers.Add("Content-Disposition", Content_Disposition);
+                return File(bites, contentType);
+            }
+            catch (Exception ex)
+            {
+                DKbase.generales.Log.LogError(System.Reflection.MethodBase.GetCurrentMethod(), ex, DateTime.Now);
+                return BadRequest();
+            }
+        }
+        return NotFound();
+    }
+
+
+
 }

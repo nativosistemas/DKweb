@@ -296,7 +296,7 @@ public class HomeController : Controller
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         if (resultado == "Ok" && oCliente != null)
         {
-            // DKbase.Util.InsertarOfertaRating(pIdOferta, oCliente.cli_codigo, true);
+            DKbase.Util.InsertarOfertaRating(pIdOferta, oCliente.cli_codigo, true);
             DKbase.web.capaDatos.cOferta o = DKbase.Util.RecuperarOfertaPorId(pIdOferta);
             if (o != null)
             {
