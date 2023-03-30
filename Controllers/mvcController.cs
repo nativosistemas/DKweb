@@ -510,7 +510,7 @@ public class mvcController : Controller
         DKweb.Codigo.Util.estadopedidos_Resultado_Set(_httpContextAccessor, o.resultadoObj);
         return lista;
     }
-    [Authorize(Roles = DKbase.generales.Constantes.cROL_const_ADMINISTRADORCLIENTE)]
+   // [Authorize(Roles = DKbase.generales.Constantes.cROL_const_ADMINISTRADORCLIENTE)]
     public async Task<IActionResult> estadopedidos()
     {
         return View();
@@ -519,7 +519,7 @@ public class mvcController : Controller
     {
         return View();
     }
-    [Authorize(Roles = DKbase.generales.Constantes.cROL_const_OPERADORCLIENTE)]
+    //[Authorize(Roles = DKbase.generales.Constantes.cROL_const_OPERADORCLIENTE)]
     public async Task<IActionResult> recuperador(string t)
     {
         int tipo = 0;
