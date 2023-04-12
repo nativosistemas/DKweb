@@ -685,6 +685,7 @@ function CargarHtmlCabecera_Generico(objDocumento) {
     }
     strHtmlDescarga += '<a class="btn_download float-right" href="' + httpRaiz + 'servicios/generar_archivoPdf.aspx?tipo=' + objTipoDocumento + '&nro=' + objDocumento.Numero + '"  onclick="return funImprimirComprobantePdf(' + '\'' + objDocumento.Numero + '\'' + ');"  data-toggle="tooltip" data-placement="bottom" title="Descargar en pdf" data-original-title="Descargar en pdf">PDF</a>';
     if (objTipoDocumento == 'FAC') {
+        strHtmlDescarga += '<div class="load_gif" id="btn_to_hide-' + '2' + '-img"></div><a id="btn_to_hide-' + '2' + '"  class="btn_download float-right" href="' + httpRaiz + 'servicios/generar_factura_csv?factura=' + objDocumento.Numero + '" data-toggle="tooltip" data-placement="bottom" title="Descargar en csv" data-original-title="Descargar en csv">CSV</a>';
         strHtmlDescarga += '<div class="load_gif" id="btn_to_hide-' + '0' + '-img"></div><a id="btn_to_hide-' + '0' + '"  class="btn_download float-right" href="' + httpRaiz + 'servicios/generar_archivo.aspx?factura=' + objDocumento.Numero + '" data-toggle="tooltip" data-placement="bottom" title="Descargar en txt" data-original-title="Descargar en txt">TXT</a>';
         strHtmlDescarga += '<a class="btn_download float-right" href="../../archivos/Diseño TXT Factura.pdf" target="_blank" data-toggle="tooltip" data-placement="bottom" title="Descargar en formato txt" data-original-title="Descargar en formato txt">FORMATO TXT</a>';
     }

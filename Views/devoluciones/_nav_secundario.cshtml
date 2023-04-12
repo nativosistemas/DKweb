@@ -1,0 +1,86 @@
+@inject IHttpContextAccessor Accessor
+@{
+    string classDevoluciones = "";
+    string classNuevaDevolucion = "";
+    string classNuevaDevolucionFacturaCompleta = "";
+    string classNuevaDevolucionVencidos = "";
+    string strController = Accessor.HttpContext.GetRouteValue("action").ToString();
+    switch (strController)
+    {
+        case "Devoluciones":
+            classDevoluciones = " class=\"active\" ";
+            break;
+        case "NuevaDevolucion":
+            classNuevaDevolucion = " class=\"active\" ";
+            break;
+        case "NuevaDevolucionFacturaCompleta":
+            classNuevaDevolucionFacturaCompleta = " class=\"active\" ";
+            break;
+        case "NuevaDevolucionVencidos":
+            classNuevaDevolucionVencidos = " class=\"active\" ";
+            break;
+        default:
+            break;
+    }
+
+}
+<style>
+    .btn:focus,
+    .btn:active {
+        outline: thin;
+        outline-color: cornsilk;
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="nav_sec">
+            <a href="/devoluciones/Devoluciones" @{
+                WriteLiteral(classDevoluciones);
+            }><i class="fa fa-file-text"
+                    title="DEVOLUCIONES"></i><span class="hidden-sm hidden-xs">HISTORIAL DE DEVOLUCIONES</span></a>
+            @{
+                if (!DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+                {
+                    <div class="separate"></div>
+                    <a href="/devoluciones/NuevaDevolucion" @{
+                        WriteLiteral(classNuevaDevolucion);
+                    }><i class="fa fa-reply"
+                            title="DEVOLUCIÓN NORMAL"></i><span class="hidden-sm hidden-xs">DEVOLUCIÓN POR RECLAMO</span></a>
+                    <div class="separate"></div>
+                    <a href="/devoluciones/NuevaDevolucionVencidos" @{
+                        WriteLiteral(classNuevaDevolucionVencidos);
+                    }><i
+                            class="fa fa-calendar-minus-o" title="DEVOLUCIÓN DE VENCIDOS"></i><span
+                            class="hidden-sm hidden-xs">DEVOLUCIÓN DE VENCIDOS</span></a>
+                    <!--<div class="separate"></div>
+                                    <a href="/devoluciones/NuevaDevolucionFacturaCompleta" @{
+                        WriteLiteral(classNuevaDevolucionFacturaCompleta);
+                    }><i class="fa fa-file-o" title="DEVOLUCIÓN FACTURA COMPLETA"></i><span class="hidden-sm hidden-xs">DEVOLUCIÓN FACTURA COMPLETA</span></a>-->
+                }
+            }
+            <div class="separate"></div>
+            <a href="/devoluciones/DevolucionesFacturadoNoEnviado" class="nuevo-sublink" data-fecha="2021-06-01"><i
+                    class="fa fa-book" title="DEVOLUCIONES FACTURADO NO ENVIADO"></i><span
+                    class="hidden-sm hidden-xs">FACTURADO NO ENVIADO</span></a>
+
+        </div>
+    </div>
+</div>
+
+@{
+    DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(Accessor);
+    string IdSucursalCliente = oCliente.cli_codsuc;
+    //if ( IdSucursalCliente == "SN" )
+    //{
+    // IdSucursalCliente = "CC";
+    //}
+    <input type="hidden" value="@{
+        WriteLiteral(IdSucursalCliente);
+     }" id="txtIdSucursalCliente" />
+    <input type="hidden" value="DEV" id="txtTipoDev" />
+}
+
+
+

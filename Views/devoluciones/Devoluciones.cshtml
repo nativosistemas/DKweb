@@ -1,0 +1,108 @@
+@{
+    ViewBag.Title = "Devoluciones";
+}
+
+@Html.Partial("_nav_secundario")
+
+@Html.Partial("_scriptsDevoluciones")
+
+
+<p class="tit_secund">Historial de Devoluciones</p>
+
+<div id="global-search">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2">
+            <label>Entre fechas<input type="checkbox" name="chkFechas" id="chkFechas" value="" class="chk-filtros"
+                    checked="checked" /></label>
+            <input type="text" id="dtpEntreFechas" class="form-control" name="datefilter" value="" />
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2">
+            <label>Estado<input type="checkbox" name="chkEstados" id="chkEstados" value=""
+                    class="chk-filtros" /></label>
+            <select id="cmbEstados" class="form-control">
+                <option value="TODAS">TODAS</option>
+                <option value="PA">PENDIENTES</option>
+                <option value="EP">EN PROCESO</option>
+                <option value="RE">RESUELTAS</option>
+            </select>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2">
+            <label>Rechazos<input type="checkbox" name="chkRechazos" id="chkRechazos" value=""
+                    class="chk-filtros" /></label>
+            <select id="cmbRechazos" class="form-control">
+                <option value="TODAS">TODAS</option>
+                <option value="SI">CON RECHAZOS</option>
+                <option value="NO">SIN RECHAZOS</option>
+            </select>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-2">
+            <label>Por Número de Devolución<input type="checkbox" name="chkNroDev" id="chkNroDev" value=""
+                    class="chk-filtros" /></label>
+            <input type="text" id="txtNroDev" class="form-control" />
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2">
+            <label class="col-xs-12" style="color: #ededed !important;">Boton</label>
+            <button type="button" class="btn_emp" id="btn-consultar">CONSULTAR</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="clear15"></div>
+        <div class="col-xs-12 padding_l-10 table-responsive" id="divPanelDevoluciones">
+            <table class="table table-striped tablaDevoluciones">
+                <thead>
+                    <tr>
+                        <th onclick="ordenarPor(0)">Numero de Devolución &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i
+                                class="fa fa-sort" id="OrdSol"></i></th>
+                        <th onclick="ordenarPor(1)">Fecha &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-sort"
+                                id="OrdFecha"></i></th>
+                        <th width="100">Devueltas</th>
+                        <th width="100">Recibidas</th>
+                        <th width="100">Rechazadas</th>
+                        <th onclick="ordenarPor(5)" width="200">Estado &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i
+                                class="fa fa-sort" id="OrdEst"></i></th>
+                        <th width="100"></th>
+                    </tr>
+                </thead>
+                <tbody id="tblDevoluciones"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var optionsDates = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    }
+    var dateNow = new Date();
+    var now = new Intl.DateTimeFormat('es', optionsDates).format(dateNow);
+    var dateLast = new Date(dateNow.getFullYear(), dateNow.getMonth(), 1);
+    var last = new Intl.DateTimeFormat('es', optionsDates).format(dateLast);
+    $('#dtpEntreFechas').daterangepicker({
+        "startDate": last,
+        "endDate": now,
+        "locale": {
+            "format": "DD/MM/YYYY",
+            "separator": " - ",
+            "applyLabel": "Aceptar",
+            "cancelLabel": "Cancelar",
+            "fromLabel": "Desde",
+            "toLabel": "Hasta",
+            "customRangeLabel": "Personalizado",
+            "daysOfWeek": ['Dom', 'Lun', 'Mar', 'Mié', 'Juv', 'Vie', 'Sáb'],
+            "monthNames": ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            "firstDay": 1
+        }
+    }, function (start, end, label) {
+        eval(funSetarFechaComprobante + '(' + start + ',' + end + ')');
+        // console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    });
+    $('#dtpEntreFechas').on('apply.daterangepicker', function (ev, picker) {
+        //do something, like clearing an input
+        $("#chkFechas").prop("checked", true);
+        $("#chkNroDev:checked").prop("checked", false);
+        $("#txtNroDev").val("");
+        //$("#btn-consultar").click();
+    });
+</script>

@@ -50,6 +50,30 @@ public class serviciosController : Controller
         }
         return NotFound();
     }
+    public async Task<IActionResult> generar_factura_csv(string factura)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        string pathNameFile = DKbase.Util.generar_factura_csv(oCliente, factura);
+        if (!string.IsNullOrEmpty(pathNameFile))
+        {
+            try
+            {
+                string contentType;
+                new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider().TryGetContentType(pathNameFile, out contentType);
+                contentType = contentType ?? "application/octet-stream";
+                string Content_Disposition = "attachment; filename=" + factura + ".csv";
+                byte[] bites = System.IO.File.ReadAllBytes(pathNameFile);
+                Response.Headers.Add("Content-Disposition", Content_Disposition);
+                return File(bites, contentType);
+            }
+            catch (Exception ex)
+            {
+                DKbase.generales.Log.LogError(System.Reflection.MethodBase.GetCurrentMethod(), ex, DateTime.Now);
+                return BadRequest();
+            }
+        }
+        return NotFound();
+    }
     public async Task<IActionResult> descargarArchivo(string t, string n, string inline)
     {
         string tipo = t;
