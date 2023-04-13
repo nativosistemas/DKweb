@@ -1,0 +1,93 @@
+
+@inject IHttpContextAccessor Accessor
+@{
+    ViewBag.Title = "Nueva Devolución de Vencidos";
+}
+
+@Html.Partial("_nav_secundario")
+@Html.Partial("_scriptsDevoluciones")
+<p class="tit_secund">Devolución de Vencidos</p>
+<p>Por favor, complete los datos del formulario para poder realizar una nueva DEVOLUCIÓN.</p>
+<p class="color_red">Recuerde que solo se aceptarán <b>DEVOLUCIONES POR VENCIDOS</b> de los productos cuyo vencimiento sea en el mes en curso o en el mes anterior.</p>
+<div class="row">
+    <div class="col-xs-12 padding_l-10">
+        <div class="clear15"></div>
+        <div id="divPanelNroComprobante">
+            @{
+                          DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(Accessor);
+                int nroCliente = oCliente.cli_codigo;
+
+                <input type="hidden" name="txtNroCliente" id="txtNroCliente" value="@{ WriteLiteral(nroCliente); }" />
+            }
+            <div class="col-md-6 col-xs-12" id="DEVDevolverVencidos">
+                <label for="txtNombreProductoDevVencidos" class="col-xs-12 no-padding">Producto a Devolver</label>
+                <div class="col-xs-10 col-sm-9 col-md-10 no-padding">
+                    <input type="text" id="txtNombreProductoDevVencidos" name="txtNombreProductoDevVencidos" class="form-control" placeholder="Nombre/EAN" autocomplete="off">
+                </div>
+                <div class="col-xs-2 col-sm-3 col-md-2 text-center">
+                    <a class="refresh-input text-center" data-id="txtNombreProductoDevVencidos"> <i class="fa fa-refresh fa-lg"></i> </a>
+                </div>
+            </div>
+            <div class="col-sm-3 col-lg-2 col-xs-4 hidden" id="DEVCantVencidos">
+                <label for="txtCantDevolverVencidos" class="col-xs-12 no-padding">Cantidad</label>
+                <div class="col-xs-10 col-sm-9 no-padding">
+                    <input type="text" id="txtCantDevolverVencidos" name="txtCantDevolverVencidos" class="form-control" autocomplete="off">
+                </div>
+                <div class="col-xs-2 col-sm-3 text-center">
+                    <a class="refresh-input text-center" data-id="txtCantDevolverVencidos"> <i class="fa fa-refresh fa-lg"></i> </a>
+                </div>
+            </div>
+            <div class="col-sm-3 col-xs-4 hidden" id="DEVLoteVencidos">
+                <label for="txtNumeroLoteVencidos" class="col-xs-12 no-padding">Nro. Lote</label>
+                <div class="col-xs-10 col-sm-9 no-padding">
+                    <input type="text" id="txtNumeroLoteVencidos" name="txtNumeroLoteVencidos" class="form-control" autocomplete="off">
+                </div>
+                <div class="col-xs-2 col-sm-3 text-center">
+                    <a class="refresh-input text-center" data-id="txtNumeroLoteVencidos"> <i class="fa fa-refresh fa-lg"></i> </a>
+                </div>
+            </div>
+            <div class="col-sm-3 col-lg-1 col-xs-4 hidden" id="DEVLoteVencVencidos" style="text-align:right;">
+                <label for="txtNumeroLoteVencidos" class="col-xs-12 no-padding">Vencimiento</label>
+                <input type="text" id="txtNumeroLoteVencVencidos" name="txtNumeroLoteVencVencidos" class="form-control" style="text-align:right;" autocomplete="off">
+            </div>
+            <div class="col-sm-2 col-xs-4 pull-right text-right hidden" id="DEVAgregarVencidos">
+                <label style="color:#ededed;">Boton</label>
+                <button class="btn btn-primary btn-block btnAgregarDevVencidos" id="btnAgregarDevVencidos" disabled>
+                    AGREGAR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-caret-right"></i>
+                </button>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 padding_l-10 table-responsive">
+        <p class="tit_secund">Devoluciones Precargadas</p>
+        <table class="table table-striped tablaDevoluciones">
+            <thead>
+                <tr>
+                    <th>Producto devuelto</th>
+                    <th class="text-center">Cantidad</th>
+                    <th>Lote</th>
+                    <th>Vencimiento</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tblDevolucionVencidos"></tbody>
+
+        </table>
+    </div>
+    <div class="col-xs-12 padding_l-10">
+        <div class="col-xs-6 botonera_dev">
+            <button type="button" class="btn btn-danger btnLimpiarPrecarga" id="btnLimpiarPrecargaVencidos">
+                <i class="fa fa-close"></i> &nbsp;&nbsp; VACIAR
+            </button>
+        </div>
+        <div class="col-xs-6 botonera_dev">
+            <button type="button" class="btn btn-primary pull-right btnProcesarPrecarga" id="btnProcesarPrecargaVencidos">
+                <i class="fa fa-check"></i> &nbsp;&nbsp; CONFIRMAR
+            </button>
+        </div>
+    </div>
+</div>

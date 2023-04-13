@@ -1,0 +1,70 @@
+@inject IHttpContextAccessor Accessor
+@{
+    string classDevolucionesFNE = "";
+    string classReclamo = "";
+    string strController =
+    Accessor.HttpContext.GetRouteValue("action").ToString();//HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString();
+    switch (strController)
+    {
+        case "DevolucionesFacturadoNoEnviado":
+            classDevolucionesFNE = " class=\"active\" ";
+            break;
+        case "ReclamoFacturadoNoEnviado":
+            classReclamo = " class=\"active\" ";
+            break;
+        default:
+            break;
+    }
+
+}
+<style>
+    .btn:focus,
+    .btn:active {
+        outline: thin solid;
+        outline-color: cornsilk;
+    }
+</style>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="nav_sec">
+            <a href="/devoluciones/Devoluciones"><i class="fa fa-reply" title="DEVOLUCIONES"></i><span
+                    class="hidden-sm hidden-xs">DEVOLUCIONES</span></a>
+            <div class="separate"></div>
+            <a href="/devoluciones/DevolucionesFacturadoNoEnviado" @{
+                WriteLiteral(classDevolucionesFNE);
+            }><i
+                    class="fa fa-file-text" title="DEVOLUCIONES FACTURADO NO ENVIADO"></i><span
+                    class="hidden-sm hidden-xs">HISTORIAL FACTURADO NO ENVIADO</span></a>
+            @{
+                if (!DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+                {
+                    <div class="separate"></div>
+                    <a href="/devoluciones/ReclamoFacturadoNoEnviado" @{
+                        WriteLiteral(classReclamo);
+                    }><i class="fa fa-file-o"
+                            title="DEVOLUCIÓN NORMAL"></i><span class="hidden-sm hidden-xs">RECLAMAR FACTURADO NO
+                            ENVIADO</span></a>
+                }
+            }
+
+
+        </div>
+    </div>
+</div>
+
+@{
+              DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(Accessor);
+    string IdSucursalCliente = oCliente.cli_codsuc;
+    //if ( IdSucursalCliente == "SN" )
+    //{
+    // IdSucursalCliente = "CC";
+    //}
+    <input type="hidden" value="@{
+        WriteLiteral(IdSucursalCliente);
+ }" id="txtIdSucursalCliente" />
+    <input type="hidden" value="FNE" id="txtTipoDev" />
+}
+
+
+

@@ -40,6 +40,7 @@ DKbase.Helper.getMail_ctacte = builder.Configuration.GetSection("appSettings")["
 DKbase.Helper.getMailContacto = builder.Configuration.GetSection("appSettings")["mailContacto"];
 DKbase.Helper.getArchivo_ImpresionesComprobante = builder.Configuration.GetSection("appSettings")["ImpresionesComprobante"];
 DKbase.Helper.getConnectionStringSQL = builder.Configuration.GetConnectionString("ConnectionSQL");
+DKbase.Helper.getMail_reclamos =builder.Configuration.GetSection("appSettings")["mail_reclamos"];// System.Configuration.ConfigurationManager.AppSettings["mail_reclamos"].ToString();
 
 var optionsRewrite = new RewriteOptions()
 .AddRedirect("home/index.aspx", "home/index")

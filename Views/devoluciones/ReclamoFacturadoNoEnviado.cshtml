@@ -1,0 +1,96 @@
+
+@inject IHttpContextAccessor Accessor
+@{
+    ViewBag.Title = "Reclamo de Facturado No Enviado";
+}
+
+@{
+    if (DKweb.Codigo.Util.IsUsuariosDK(Accessor))
+    {
+      Accessor.HttpContext.Response.Redirect("/config/sinpermiso");
+    }
+}
+
+@Html.Partial("_nav_secundario_fne")
+@Html.Partial("_scriptsDevoluciones")
+<p class="tit_secund">Reclamo de Facturado No Enviado</p>
+<p>Por favor, complete los datos del formulario para poder realizar el RECLAMO.</p>
+<div class="row">
+    <div class="col-xs-12 padding_l-10">
+        <div class="clear15"></div>
+        <div id="divPanelNroComprobante">
+            @{
+                         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(Accessor);
+                int nroCliente =oCliente.cli_codigo;
+
+                <input type="hidden" name="txtNroCliente" id="txtNroCliente" value="@{ WriteLiteral(nroCliente); }" />
+            }
+            <div class="col-md-3 col-sm-4 col-xs-7" id="DEVNroComprobanteFNE">
+                <label for="txtNroComprobanteFNE" class="col-xs-12 no-padding">Factura (mínimo últimos tres dígitos)</label>
+                <div class="col-xs-10 col-sm-9 no-padding">
+                    <input id="txtNroComprobanteFNE" type="text" class="form-control" autocomplete="off"/>
+                </div>
+                <div class="col-xs-2 col-sm-3 text-center">
+                    <a class="refresh-input text-center" data-id="txtNroComprobanteFNE"> <i class="fa fa-refresh fa-lg"></i> </a>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="col-md-6 col-sm-5 col-xs-12 hidden" id="DEVFacturaFNE">
+                <label for="cmbNombreProductoFNE" class="col-xs-12 no-padding">Producto Facturado</label>
+                <div class="col-xs-10 col-sm-9 col-md-10 no-padding">
+                    <input type="text" name="cmbNombreProductoFNE" id="cmbNombreProductoFNE" class="form-control" list="NombreProductoValuesFNE" placeholder="Nombre/EAN" autocomplete="off"/>
+                    <datalist id="NombreProductoValuesFNE"></datalist>
+                </div>
+                <div class="col-xs-2 col-sm-3 col-md-2 text-center">
+                    <a class="refresh-input text-center" data-id="cmbNombreProductoFNE"> <i class="fa fa-refresh fa-lg"></i> </a>
+                </div>
+            </div>
+            <div class="col-sm-3 col-lg-2 col-xs-4 hidden" id="DEVCantFNE">
+                <label for="txtCantDevolverFNE" class="col-xs-12 no-padding">Cantidad</label>
+                <div class="col-xs-10 col-sm-9 no-padding">
+                    <input type="text" id="txtCantDevolverFNE" name="txtCantDevolverFNE" class="form-control" autocomplete="off">
+                </div>
+                <div class="col-xs-2 col-sm-3 text-center">
+                    <a class="refresh-input text-center" data-id="txtCantDevolverFNE"> <i class="fa fa-refresh fa-lg"></i> </a>
+                </div>
+            </div>
+            <div class="col-sm-3 col-xs-4 pull-right text-right hidden" id="DEVAgregarFNE">
+                <label style="color:#ededed;">Boton</label>
+                <button class="btn btn-primary btn-block btnAgregarDevFNE" id="btnAgregarDevFNE" disabled>
+                    AGREGAR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <i class="fa fa-caret-right"></i>
+                </button>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 padding_l-10 table-responsive">
+        <p class="tit_secund">Reclamos Precargados</p>
+        <table class="table table-striped tablaDevoluciones">
+            <thead>
+                <tr>
+                    <th style="width: 250px;">Factura</th>
+                    <th>Producto</th>
+                    <th class="text-center" style="width: 150px;">Cantidad</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tblReclamoFNE"></tbody>
+
+        </table>
+    </div>
+    <div class="col-xs-12 padding_l-10">
+        <div class="col-xs-6 botonera_dev">
+            <button type="button" class="btn btn-danger btnLimpiarPrecargaFNE" id="btnLimpiarPrecargaFNE">
+                <i class="fa fa-close"></i> &nbsp;&nbsp; Vaciar
+            </button>
+        </div>
+        <div class="col-xs-6 botonera_dev">
+            <button type="button" class="btn btn-primary pull-right btnProcesarPrecargaFNE" id="btnProcesarPrecargaFNE">
+                <i class="fa fa-check"></i> &nbsp;&nbsp; CONFIRMAR
+            </button>
+        </div>
+    </div>
+</div>
