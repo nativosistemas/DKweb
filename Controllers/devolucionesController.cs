@@ -146,6 +146,113 @@ public class devolucionesController : Controller
 
         return resultado;
     }
+    public async Task<double?> ObtenerCantidadSolicitadaDevolucionPorProductoFacturaYCliente(string NombreProducto, string NumeroFactura)
+    {
+        double? resultado = null;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente != null)
+        {
+            resultado = DKbase.Util.ObtenerCantidadSolicitadaDevolucionPorProductoFacturaYCliente(NombreProducto, NumeroFactura, oCliente.cli_login);
+        }
+
+        return resultado;
+    }
+    public async Task<bool> EsFacturaConDevolucionesEnProceso(string pNroFactura)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente != null)
+        {
+            return DKbase.Util.EsFacturaConDevolucionesEnProceso(pNroFactura, oCliente.cli_login);
+        }
+
+        return false;
+    }
+    public async Task<string> ObtenerFacturasPorUltimosNumeros(string Cbte)
+    {
+        object resultadoObj = null;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente != null)
+        {
+            resultadoObj = DKbase.Util.ObtenerFacturasPorUltimosNumeros(Cbte, oCliente.cli_login);
+        }
+        if (resultadoObj != null)
+            return DKbase.generales.Serializador_base.SerializarAJson(resultadoObj);
+        else
+            return null;
+    }
+    public async Task<string> AgregarReclamoFacturadoNoEnviadoCliente(List<DKbase.dll.cDevolucionItemPrecarga> Item)
+    {
+        string resultado = null;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente != null)
+        {
+            resultado = DKbase.Util.AgregarReclamoFacturadoNoEnviadoCliente(Item, oCliente.cli_login);
+        }
+        return resultado;
+    }
+    public async Task<string> AgregarSolicitudDevolucionCliente(List<DKbase.dll.cDevolucionItemPrecarga> Item)
+    {
+        string resultado = null;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente != null)
+        {
+            resultado = DKbase.Util.AgregarSolicitudDevolucionCliente(Item, oCliente.cli_login);
+        }
+        return resultado;
+    }
+    public async Task<bool> EliminarDevolucionItemPrecarga(int NumeroItem)
+    {
+        bool resultadoObj = false;
+        resultadoObj = DKbase.Util.EliminarDevolucionItemPrecarga(NumeroItem);
+        return resultadoObj;
+    }
+
+    public async Task<bool> ElimminarItemReclamoFNEPrecarga(int NumeroItem)
+    {
+        bool resultadoObj = false;
+        resultadoObj = DKbase.Util.ElimminarItemReclamoFNEPrecarga(NumeroItem);
+        return resultadoObj;
+    }
+    public async Task<bool> EliminarPrecargaDevolucionPorCliente(int NumeroCliente)
+    {
+        bool resultadoObj = false;
+        resultadoObj = DKbase.Util.EliminarPrecargaDevolucionPorCliente(NumeroCliente);
+        return resultadoObj;
+    }
+
+    public async Task<bool> EliminarPrecargaDevolucionVencidosPorCliente(int NumeroCliente)
+    {
+        bool resultadoObj = false;
+        resultadoObj = DKbase.Util.EliminarPrecargaDevolucionVencidosPorCliente(NumeroCliente);
+        return resultadoObj;
+    }
+
+    public async Task<bool> EliminarPrecargaDevolucionFacturaCompletaPorCliente(int NumeroCliente)
+    {
+        bool resultadoObj = false;
+        resultadoObj = DKbase.Util.EliminarPrecargaDevolucionFacturaCompletaPorCliente(NumeroCliente);
+        return resultadoObj;
+    }
+
+    public async Task<bool> EliminarPrecargaReclamoFNEPorCliente(int NumeroCliente)
+    {
+        bool resultadoObj = false;
+        resultadoObj = DKbase.Util.EliminarPrecargaReclamoFNEPorCliente(NumeroCliente);
+        return resultadoObj;
+    }
+    public async Task<bool> AgregarDevolucionItemPrecarga(DKbase.dll.cDevolucionItemPrecarga Item)
+    {
+        bool resultadoObj = false;
+        resultadoObj = DKbase.Util.AgregarDevolucionItemPrecarga(Item);
+        return resultadoObj;
+    }
+
+    public async Task<bool> AgregarReclamoFacturadoNoEnviadoItemPrecarga(DKbase.dll.cDevolucionItemPrecarga Item)
+    {
+        bool resultadoObj = false;
+        resultadoObj = DKbase.Util.AgregarReclamoFacturadoNoEnviadoItemPrecarga(Item);
+        return resultadoObj;
+    }
     public async Task<IActionResult> NuevaDevolucionVencidos()
     {
         /*  if (Session["clientesDefault_Cliente"] == null)
