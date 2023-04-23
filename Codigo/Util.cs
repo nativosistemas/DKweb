@@ -1215,5 +1215,31 @@ public class Util
 
         return resultado;
     }
-
+    public static string Cliente_NumeroDevolucion(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.GetString("Cliente_NumeroDevolucion") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.GetString("Cliente_NumeroDevolucion");
+        }
+        return resultado;
+    }
+    public static void Cliente_NumeroDevolucion_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.SetString("Cliente_NumeroDevolucion", pValue);
+    }
+    //
+    public static string Cliente_CartelImprimir(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.GetString("Cliente_CartelImprimir") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.GetString("Cliente_CartelImprimir");
+        }
+        return resultado;
+    }
+    public static void Cliente_CartelImprimir_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.SetString("Cliente_CartelImprimir", pValue);
+    }
 }

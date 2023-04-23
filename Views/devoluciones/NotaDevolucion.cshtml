@@ -1,0 +1,72 @@
+@inject IHttpContextAccessor Accessor
+<head>
+    <title>
+        Nota de Devolución
+    </title>
+</head>
+@{
+    ViewBag.Title = "Nueva Devolución de Vencidos";
+
+}
+
+@Html.Partial("_nav_secundario")
+
+
+@Html.Partial("_scriptsDevoluciones")
+
+<style>
+    .printbreak {
+        page-break-before: always;
+    }
+</style>
+
+@{
+   string Cliente_NumeroDevolucion = DKweb.Codigo.Util.Cliente_NumeroDevolucion(Accessor);
+    if (Cliente_NumeroDevolucion != null)
+    {
+       string Cliente_CartelImprimir = DKweb.Codigo.Util.Cliente_CartelImprimir(Accessor);
+        if (Cliente_CartelImprimir == "1")
+        {
+            <a class='btn_volver pull-left' href="/devoluciones/Devoluciones"> <i class='fa fa-play'></i> VOLVER </a>
+        }
+        else
+        {
+            <a class='btn_volver pull-left' onclick="window.history.back()"> <i class='fa fa-play'></i> VOLVER </a>
+        }
+        <p class="tit_secund">
+            Nota de Devolucion @{ WriteLiteral(Cliente_NumeroDevolucion); }
+            <button type="button" id="btnImprimirND" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Imprimir</button>
+        </p>
+        @*<a href="javascript:void(processPrint());" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Imprimir</a>*@
+        <input type="hidden" value="@{ WriteLiteral(Cliente_NumeroDevolucion); }" id="txtNroDev" />
+        <input type="hidden" value="@{ WriteLiteral(Cliente_CartelImprimir); }" id="txtImprimir" />
+    }
+}
+<div class="row">
+    <div class="clear15"></div>
+    <div class="col-xs-12 padding_l-10 table-responsive" id="divPanelDevoluciones">
+
+    </div>
+</div>
+<script>
+    var NroDev
+    $(document).ready(function () {
+        NroDev = $("#txtNroDev").val().trim();
+        var ImpriDirecto = $("#txtImprimir").val().trim();
+        if (ImpriDirecto == 1) {
+            var ImpCartel = '';
+            ImpCartel += "<h5 style='text-align:center;line-height:1.5em;font-weight:300;font-size:16px;'>Imprima el comprobante generado.<br>";
+            ImpCartel += "<b>COPIA PARA LA FARMACIA</b>: Debe ser firmada por el transportista.<br><span style='color: steelblue !important;'><b>( EXCLUYENTE )</b></span><br><b>COPIA PARA LA DROGUERÍA</b>: Debe ser entregada junto con la mercadería <b>dentro del empaque</b>.<span style='color: steelblue !important;'><b>( EXCLUYENTE )</b></span></h5 > "
+            mensaje("<span style='color: steelblue !important;'><i class='fa fa-exclamation-triangle fa-2x'></i> Importante</span>", ImpCartel);
+        }
+        $(document).attr("title", 'Nota de Devolución N° ' + NroDev.slice(0, 5) + ' - ' + NroDev.slice(5));
+        CodBarra = "<br><img height='35' alt='Barcode Generator TEC-IT' src='https://barcode.tec-it.com/barcode.ashx?data=" + NroDev.slice(1) + "&code=Code25IL&multiplebarcodes=false&translate-esc=false&unit=Fit&dpi=96&imagetype=Gif&rotation=0&color=%23000000&bgcolor=%23ffffff&qunit=Mm&quiet=0' />";
+        $('#modalModulo').on('hidden.bs.modal', function (e) {
+            if (ImpriDirecto == 1) {
+                console.log('entro');
+                Imprimir();
+            }
+        });
+        ObtenerItemsDevolucionPorNumero(NroDev);
+    });
+</script>

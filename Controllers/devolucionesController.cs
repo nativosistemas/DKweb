@@ -35,6 +35,19 @@ public class devolucionesController : Controller
         else
             return null;
     }
+    public async Task<string> RecuperarDevolucionesPorClientePorNumero(string NumeroDevolucion)
+    {
+        object resultadoObj = null;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente != null)
+        {
+            resultadoObj = DKbase.Util.RecuperarDevolucionesPorClientePorNumero(NumeroDevolucion, oCliente.cli_login);
+        }
+        if (resultadoObj != null)
+            return DKbase.generales.Serializador_base.SerializarAJson(resultadoObj);
+        else
+            return null;
+    }
     public async Task<IActionResult> NuevaDevolucion()
     {
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
@@ -277,4 +290,75 @@ public class devolucionesController : Controller
         }*/
         return View();
     }
+    public async Task<IActionResult> NuevaDevolucionFacturaCompleta()
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente != null)
+        {
+            List<string> lista = new List<string>();
+            lista = DKbase.Util.ObtenerTiposDeComprobantesAMostrar(oCliente.cli_login);
+            DKweb.Codigo.Util.ConsultaDeComprobantes_tipoComprobante_Set(_httpContextAccessor, lista);
+        }
+        else
+        {
+            Response.Redirect("~/home/index.aspx");
+        }
+        return View();
+    }
+    public async Task<IActionResult> NotaDevolucion(string nrodev, string imprimir)
+    {
+
+        if (nrodev != null)
+        {
+            DKweb.Codigo.Util.Cliente_NumeroDevolucion_Set(_httpContextAccessor, nrodev);
+        }
+        if (imprimir != null)
+        {
+            DKweb.Codigo.Util.Cliente_CartelImprimir_Set(_httpContextAccessor, "1");
+        }
+        else
+        {
+            DKweb.Codigo.Util.Cliente_CartelImprimir_Set(_httpContextAccessor, "0");
+        }
+        return View();
+    }
+    public async Task<string> ObtenerFacturaCliente(string pNroFactura)
+    {
+        object resultadoObj = null;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente != null)
+        {
+            resultadoObj = DKbase.Util.ObtenerFactura(pNroFactura, oCliente.cli_login);
+        }
+        if (resultadoObj != null)
+            return DKbase.generales.Serializador_base.SerializarAJson(resultadoObj);
+        else
+            return null;
+    }
+    public async Task<string> ObtenerNumerosLoteDeProductoDeFacturaProveedorLogLotesConCadena(string pNombreProducto, string pNumeroLote)
+    {
+        object resultadoObj = null;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente != null)
+        {
+            resultadoObj = DKbase.Util.ObtenerNumerosLoteDeProductoDeFacturaProveedorLogLotesConCadena(pNombreProducto, pNumeroLote, oCliente.cli_login);
+        }
+        if (resultadoObj != null)
+            return DKbase.generales.Serializador_base.SerializarAJson(resultadoObj);
+        else
+            return null;
+    }
+            public async Task<string>  ObtenerReclamosFacturadoNoEnviadoPorClientePorNumero(string NumeroDevolucion)
+        {
+            object resultadoObj = null;
+         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente != null)
+        {
+                resultadoObj = DKbase.Util.ObtenerReclamosFacturadoNoEnviadoPorClientePorNumero(NumeroDevolucion, oCliente.cli_login);
+            }
+            if (resultadoObj != null)
+                return DKbase.generales.Serializador_base.SerializarAJson(resultadoObj);
+            else
+                return null;
+        }
 }
