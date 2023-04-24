@@ -348,17 +348,17 @@ public class devolucionesController : Controller
         else
             return null;
     }
-            public async Task<string>  ObtenerReclamosFacturadoNoEnviadoPorClientePorNumero(string NumeroDevolucion)
-        {
-            object resultadoObj = null;
-         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+    public async Task<string> ObtenerReclamosFacturadoNoEnviadoPorClientePorNumero(string NumeroDevolucion)
+    {
+        object resultadoObj = null;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         if (oCliente != null)
         {
-                resultadoObj = DKbase.Util.ObtenerReclamosFacturadoNoEnviadoPorClientePorNumero(NumeroDevolucion, oCliente.cli_login);
-            }
-            if (resultadoObj != null)
-                return DKbase.generales.Serializador_base.SerializarAJson(resultadoObj);
-            else
-                return null;
+            resultadoObj = DKbase.Util.ObtenerReclamosFacturadoNoEnviadoPorClientePorNumero(NumeroDevolucion, oCliente.cli_login);
         }
+        if (resultadoObj != null)
+            return DKbase.generales.Serializador_base.SerializarAJson(resultadoObj);
+        else
+            return null;
+    }
 }
