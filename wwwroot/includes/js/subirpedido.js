@@ -47,6 +47,24 @@ jQuery(document).ready(function () {
 
 });
 
+$(document).ready(function () {
+    $("#btn_MuestraExcel").click(function (e) {
+        e.preventDefault();
+
+        if ($("#divMuestraExcel").is(":visible")) {
+            $("#divMuestraExcel").hide();
+        } else {
+            $("#divMuestraExcel").show();
+            $("#divMuestraOtroSistemas").hide();
+        }
+    });
+
+    $('#btn_MuestraOtroSistemas').click(function () {
+        $("#divMuestraOtroSistemas").toggle();
+        $("#divMuestraExcel").hide();
+        return false;
+    });
+});
 $('#btn_MuestraOtroSistemas').click(function () {
     $("#divMuestraOtroSistemas").toggle();
     return false;
