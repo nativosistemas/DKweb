@@ -42,7 +42,7 @@ function ItemDev() {
     this.dev_idsucursal = $("#txtIdSucursalCliente").val().trim();
 }
 
-function oProd(Nombre,Cant,Orden) {
+function oProd(Nombre, Cant, Orden) {
     this.Producto = Nombre;
     this.Cant = Cant;
     this.Orden = Orden;
@@ -90,7 +90,7 @@ $(document).ready(function () {
         var IdCampo = $(this).attr("data-id");
         $("#" + IdCampo).removeAttr("disabled");
 
-        if (IdCampo == "cmbNombreProducto"){
+        if (IdCampo == "cmbNombreProducto") {
             $("#cmbNombreProducto").removeAttr("disabled");
             $("#txtNombreProductoDev").removeAttr("disabled");
             objItemFac = "";
@@ -111,7 +111,7 @@ $(document).ready(function () {
                 $("#txtNombreProductoDev").val("");
                 $("#cmbNombreProducto").focus();
             }, 100);
-        } else{
+        } else {
             setTimeout(function () {
                 $("#" + IdCampo).val("");
                 $("#" + IdCampo).focus();
@@ -120,7 +120,7 @@ $(document).ready(function () {
     });
 
     //$("#dtpEntreFechas").daterangepicker();
-    
+
     $("#cmbMotivo").focus(function () {
         $("#cmbMotivo").val("");
         $('#DEVTipoComprobante').addClass("hidden");
@@ -289,7 +289,7 @@ $(document).ready(function () {
             objItemFac = objFactura.lista[NroItem];
             //console.log(objItemFac);
             var existe = ItemsPrecargados.find(oItem => oItem.dev_nombreproductofactura === objItemFac.Descripcion && oItem.dev_numerofactura === objItemFac.NumeroFactura);
-            if ( existe ) {
+            if (existe) {
                 mensaje("<span style='color: steelblue !important;'><i class='fa fa-exclamation-triangle fa-2x'></i> INFORMACIÓN</span>", "<h5 style='text-align:center;line-height:1.5em;font-weight:300;font-size:16px;'>El producto " + existe.dev_nombreproductofactura + " de la factura N° " + existe.dev_numerofactura + " ya posee una solicitud cargada con un motivo diferente, para ingresar un nuevo motivo, genere una nueva nota de devolución.</h5>");
                 return;
             }
@@ -332,7 +332,7 @@ $(document).ready(function () {
             $.ajax({
                 type: "POST",
                 url: "/mvc/RecuperarProductosVariasColumnas",
-                data: { pTxtBuscador: seleccion, pListaColumna: arrayListaColumna, pIsBuscarConOferta: false, pIsBuscarConTransfer: false},
+                data: { pTxtBuscador: seleccion, pListaColumna: arrayListaColumna, pIsBuscarConOferta: false, pIsBuscarConTransfer: false },
                 success: function (response) {
                     listaPRD = eval('(' + response + ')');
                     //console.log(listaPRD);
@@ -464,7 +464,7 @@ $(document).ready(function () {
                 } else {
                     ItemDevolucion.dev_cantidad = CantADev;
                     $("#txtCantDevolver").attr("disabled", "disabled");
-                    if (objPRDDev.pro_codtpopro != 'M' && !objPRDDev.pro_ProductoRequiereLote ) {
+                    if (objPRDDev.pro_codtpopro != 'M' && !objPRDDev.pro_ProductoRequiereLote) {
                         $("#DEVAgregar").removeClass("hidden");
                         $("#btnAgregarDev").removeAttr("disabled", "disabled");
                         $("#btnAgregarDev").focus();
@@ -478,7 +478,7 @@ $(document).ready(function () {
                 mensaje("<span style='color: red !important;'><i class='fa fa-times-circle fa-2x'></i> ERROR</span>", "<h5 style='text-align:center;line-height:1.5em;font-weight:300;font-size:16px;'>La cantidad debe ser un número entero.</h5>");
                 // $(".fa.fa-times").hide();
             }
-        } 
+        }
     });
 
     $("#txtNumeroLote").change(function () {
@@ -534,7 +534,7 @@ $(document).ready(function () {
                             }
                         } else {
                             var html = "<li class='headerlotesList' data-idlote=" + i + ">Nro Lote<span class='fven'>Vencimiento</span></li>";
-                            
+
                             for (var i = 0; i < colLotes.length; i++) {
                                 var DatosFecha = colLotes[i].FechaVencimientoToString.split("/");
                                 var FechaVenc = DatosFecha[1] + "/" + DatosFecha[2];
@@ -554,12 +554,12 @@ $(document).ready(function () {
                                 // ahora = new Date('2020-10-15');
 
                                 var fechaMin = new Date(ahora.getFullYear(), (ahora.getMonth() + 1), 0);
-                                var fechaMaxVtoCorto = new Date( ahora.getFullYear(), (ahora.getMonth() + 7),0 );
+                                var fechaMaxVtoCorto = new Date(ahora.getFullYear(), (ahora.getMonth() + 7), 0);
                                 if (fechaLote < fechaMin) {
                                     mensaje("<span style='color: red !important;'><i class='fa fa-times-circle fa-2x'></i> ERROR</span>", "<h5 style='text-align:center;line-height:1.5em;font-weight:300;font-size:16px;'>Solo se evaluarán <b>DEVOLUCIONES</b> de los productos cuya fecha de vencimiento sea posterior al mes en curso. Caso contrario debe pasarlas por <b>DEVOLUCIONES DE VENCIDOS</b>.</h5>");
                                     $("#modalModulo").bind("click");
                                     return false;
-                                } else if ( NroMotivo == 5 && fechaLote > fechaMaxVtoCorto ) {
+                                } else if (NroMotivo == 5 && fechaLote > fechaMaxVtoCorto) {
                                     mensaje("<span style='color: red !important;'><i class='fa fa-times-circle fa-2x'></i> ERROR</span>", "<h5 style='text-align:center;line-height:1.5em;font-weight:300;font-size:16px;'>La <b>Fecha de Vencimiento del Lote</b> del producto para realizar una devolución por <em>Corto Vencimiento</em> debe estar dentro de los <b>seis (6) meses</b> posteriores al mes en curso.</h5>");
                                     $("#modalModulo").bind("click");
                                     return false;
@@ -876,7 +876,15 @@ $(document).ready(function () {
         var data = {};
         data.Item = ItemDevolucion;
         var json = JSON.stringify(data);
-        $.ajax({
+        fetch('/devoluciones/AgregarDevolucionItemPrecarga', {
+            method: "POST",
+            body: json,
+            headers: { "Content-type": "application/json; charset=UTF-8" }
+        })
+            .then(response => { RecuperarItemsDevolucionPrecargaVencidosPorCliente(); })
+            //.then(json => console.log(json))
+            .catch(err => console.log(err));
+        /*$.ajax({
             type: "POST",
             url: "/devoluciones/AgregarDevolucionItemPrecarga",
             data: json,
@@ -884,7 +892,7 @@ $(document).ready(function () {
             success: function (response) {
                 RecuperarItemsDevolucionPrecargaVencidosPorCliente();
             }
-        });
+        });*/
     });
 
     $("#btnProcesarPrecargaVencidos").click(function () {
@@ -920,7 +928,7 @@ $(document).ready(function () {
                 }
             });
         } else {
-            
+
             mensaje("<span style='color: red !important;'><i class='fa fa-info-circle fa-2x'></i> INFORMACIÓN</span>", "<h5 style='text-align:center;line-height:1.5em;font-weight:300;font-size:16px;'>No hay productos precargados, por favor realice una precarga antes de confirmar la devolución.</h5>");
         }
     });
@@ -990,7 +998,7 @@ $(document).ready(function () {
             $("#DEVCantFNE").removeClass("hidden");
             campoActual = "txtCantDevolverFNE";
             $("#txtCantDevolverFNE").focus();
-            
+
         } else if ($.isNumeric(seleccion)) {
             var arrayListaColumna = new Array();
             arrayListaColumna.push("pro_codigobarra");
@@ -1129,7 +1137,7 @@ $(document).ready(function () {
                         return false;
                     }
                     LimpiarPrecargaReclamoFNE();
-                    mensaje("<span style='color: green !important;'><i class='fa fa-thumbs-up fa-2x'></i> ÉXITO</span>", "<h5 style='text-align:center;line-height:1.5em;font-weight:300;font-size:16px;'>" + response.replace(/X0001/g,'<br>X0001') + "</h5><button type='button' class='btn btn-primary pull-right' style='margin-top:1em;' id='btnGeneradaOkFNE'>ACEPTAR</button>");
+                    mensaje("<span style='color: green !important;'><i class='fa fa-thumbs-up fa-2x'></i> ÉXITO</span>", "<h5 style='text-align:center;line-height:1.5em;font-weight:300;font-size:16px;'>" + response.replace(/X0001/g, '<br>X0001') + "</h5><button type='button' class='btn btn-primary pull-right' style='margin-top:1em;' id='btnGeneradaOkFNE'>ACEPTAR</button>");
                     // $(".fa.fa-times").hide();
                     $("#btnGeneradaOkFNE").click(function () {
                         setTimeout(function () {
@@ -1363,7 +1371,7 @@ function OnCallBackIsBanderaUsarDll_ComprobanteNro(args) {
     args = true;
     if (args) {
         showCargandoBuscador();
-        
+
         if (campoActual == "txtNroComprobanteFNE") {
             var nro = $('#txtNroComprobanteFNE').val().trim();
         } else {
@@ -1433,7 +1441,7 @@ function OnCallBackIsBanderaUsarDll_ComprobanteNro(args) {
             hideCargandoBuscador();
             return false;
         }
-    } 
+    }
 };
 
 function OnCallBackIsBanderaUsarDll_ComprobanteNroFacturaCompleta(args) {
@@ -1488,7 +1496,7 @@ function OnCallBackIsBanderaUsarDll_ComprobanteNroFacturaCompleta(args) {
             hideCargandoBuscador();
             return false;
         }
-    } 
+    }
 }
 
 function ObtenerFacturaCliente(pNroFactura) {
@@ -1563,7 +1571,7 @@ function ObtenerFacturaCliente(pNroFactura) {
                             break;
                     }
 
-                    if (ItemDevolucion.dev_idsucursal == "CC" && IdSucCli != "CC" ) {
+                    if (ItemDevolucion.dev_idsucursal == "CC" && IdSucCli != "CC") {
                         switch (dia) {
                             case 1:
                                 if (diff <= 10) {
@@ -1623,9 +1631,9 @@ function ObtenerFacturaCliente(pNroFactura) {
                             break;
                     }
                 }
-                 //DESARROLLO -> dejo pasar cualquier factura por fechas
-                 //fechaOK = true;
-                 //DESARROLLO
+                //DESARROLLO -> dejo pasar cualquier factura por fechas
+                //fechaOK = true;
+                //DESARROLLO
 
                 if (fechaOK) {
                     var html = "";
@@ -1666,7 +1674,7 @@ function ObtenerFacturaCliente(pNroFactura) {
                             $("#cmbNombreProducto").focus();
                         }
                     } else {
-                        
+
                         $("#txtNroComprobanteFNE").attr("disabled", "disabled");
                         $("#NombreProductoValuesFNE").html(html);
                         $("#DEVFacturaFNE").removeClass("hidden");
@@ -1724,9 +1732,9 @@ function ObtenerFacturaClienteFacturaCompleta(pNroFactura) {
                             }
 
                             //valores para DESARROLLO
-                                //ahora = new Date('2019/10/15').getTime();
-                                //dia = new Date('2019/10/15').getDay();
-                                //FechaFactura = new Date('2019/10/14').getTime();
+                            //ahora = new Date('2019/10/15').getTime();
+                            //dia = new Date('2019/10/15').getDay();
+                            //FechaFactura = new Date('2019/10/14').getTime();
                             // FIN para DESARROLLO
 
                             var diff = parseInt((ahora - FechaFactura) / (1000 * 60 * 60 * 24));
@@ -1761,7 +1769,7 @@ function ObtenerFacturaClienteFacturaCompleta(pNroFactura) {
                                         arrayListaColumna.push("pro_nombre");
                                         var ProdFac = new oProd(objFactura.lista[j].Descripcion, objFactura.lista[j].Cantidad, objFactura.lista[j].NumeroItem);
                                         ProdFacturaCompleta.push(ProdFac);
-                            
+
                                         $.ajax({
                                             type: "POST",
                                             url: "/mvc/RecuperarProductosVariasColumnas",
@@ -1951,7 +1959,7 @@ function RecuperarProductosParaDevoluciones(pTxtBuscador, pListaColumna, pIsBusc
                     } else {
                         mensaje("<span style='color: steelblue !important;'><i class='fa fa-exclamation-triangle fa-2x'></i> Información</span>", "<h5 style='text-align:center;line-height:1.5em;font-weight:300;font-size:16px;'>No se encontraron productos en esta búsqueda.</h5>");
                         // $(".fa.fa-times").hide();
-                        
+
                     }
                 } else if (campoActual == "txtNombreProductoDevVencidos") {
                     if (listaPRD.listaProductos.length > 0) {
@@ -2106,10 +2114,10 @@ function RecuperarItemsDevolucionPrecargaPorCliente() {
     $.ajax({
         type: "POST",
         url: "/devoluciones/RecuperarItemsDevolucionPrecargaPorCliente",
-        data: {  },
+        data: {},
         success: function (response) {
             hideCargandoBuscador();
-            
+
             var html = "";
             $("#tblDevolucion").html("");
             ItemsPrecargados = eval('(' + response + ')');
@@ -2135,13 +2143,13 @@ function RecuperarItemsDevolucionPrecargaPorCliente() {
 
 
                     html = "<tr>";
-                        html += "<td>"+ItemsPrecargados[i].dev_numerofactura+"</td>";
-                        html += "<td>" + PRD + "</td>";
-                        html += "<td>" + ItemsPrecargados[i].dev_nombreproductodevolucion + "</td>";
-                        html += "<td>" + colMotivos[parseInt(ItemsPrecargados[i].dev_motivo)] + "</td>";
-                        html += "<td class='text-center'>" + ItemsPrecargados[i].dev_cantidad + "</td>";
-                        html += "<td>" + NLote + "</td>";
-                        html += "<td>" + FechaVto + "</td>";
+                    html += "<td>" + ItemsPrecargados[i].dev_numerofactura + "</td>";
+                    html += "<td>" + PRD + "</td>";
+                    html += "<td>" + ItemsPrecargados[i].dev_nombreproductodevolucion + "</td>";
+                    html += "<td>" + colMotivos[parseInt(ItemsPrecargados[i].dev_motivo)] + "</td>";
+                    html += "<td class='text-center'>" + ItemsPrecargados[i].dev_cantidad + "</td>";
+                    html += "<td>" + NLote + "</td>";
+                    html += "<td>" + FechaVto + "</td>";
                     html += "<td class=' text-center'><button onclick='EliminarItemsDevolucionPrecargado(" + ItemsPrecargados[i].dev_numeroitem + ")' type='button' class='btn btn-danger btnBorrarItem' data-id='" + ItemsPrecargados[i].dev_numeroitem + "' ><i class='fa fa-trash'></i></button ></td > ";
                     html += "</tr>";
                     $("#tblDevolucion").append(html);
@@ -2190,7 +2198,7 @@ function RecuperarItemsDevolucionPrecargaVencidosPorCliente() {
                     } else {
                         var NLote = "";
                     }
-                    
+
                     html = "<tr>";
                     html += "<td>" + ItemsPrecargadosVencidos[i].dev_nombreproductodevolucion + "</td>";
                     html += "<td class='text-center'>" + ItemsPrecargadosVencidos[i].dev_cantidad + "</td>";
@@ -2236,7 +2244,7 @@ function RecuperarItemsDevolucionPrecargaFacturaCompletaPorCliente() {
             if (ItemsPrecargadosFC.length > 0) {
                 $("#DetalleDev").html("<br><br>FAC: " + ItemsPrecargadosFC[0].dev_numerofactura + " - Motivo: " + colMotivos[ItemsPrecargadosFC[0].dev_motivo]);
                 for (i = 0; i < ItemsPrecargadosFC.length; i++) {
-                    
+
                     html = "<tr>";
                     html += "<td>" + ItemsPrecargadosFC[i].dev_nombreproductodevolucion + "</td>";
                     html += "<td class=' text-center'  width='200'>" + ItemsPrecargadosFC[i].dev_cantidad + "</td>";
@@ -2254,7 +2262,7 @@ function RecuperarItemsDevolucionPrecargaFacturaCompletaPorCliente() {
                 $("#DEVAgregarFC").addClass("hidden");
                 $("#btnAgregarDevFC").attr("disabled", "disabled");
                 $("#cmbMotivoFC").attr("disabled", "disabled");
-                
+
             } else {
                 $("#DetalleDev").html("");
                 html = "<tr>";
@@ -2370,7 +2378,7 @@ function RecuperarDevolucionesPorCliente() {
             Devoluciones = eval('(' + response + ')');
             //console.log(Devoluciones.sort(Devoluciones.dev_estado, -1));
             //desplegarDevoluciones(Devoluciones);
-            
+
             if ($("#btn-consultar").length > 0) {
                 reiniciarOrden();
             }
@@ -2648,7 +2656,7 @@ function filtrarPor() {
         });
     }
 
-    if ( chkEstados && estado != "TODAS" ) {
+    if (chkEstados && estado != "TODAS") {
         dev = dev.filter(devo => {
             if (devo.dev_estado === estado) {
                 return devo;
@@ -2656,7 +2664,7 @@ function filtrarPor() {
         });
     }
 
-    if ( chkRechazos && rechazos != "TODAS" ) {
+    if (chkRechazos && rechazos != "TODAS") {
         dev = dev.filter(devo => {
             if (rechazos === "SI") {
                 if (devo.dev_cantidadrechazada > 0) {
@@ -2719,7 +2727,7 @@ function ObtenerItemsDevolucionPorNumero(NumeroDevolucion) {
 
             if (ItemsDev.length > 0) {
                 //html = "<a href='/devoluciones/Devoluciones' class='btn_volver'> <i class='fa fa-play'></i> VOLVER </a>";
-                
+
                 var FC = false;
 
                 html += "<div class='clear15'></div>"
@@ -2879,7 +2887,7 @@ function ObtenerItemsDevolucionPorNumero(NumeroDevolucion) {
                 }
                 html += '</tbody>';
                 html += '</table>';
-                
+
                 $("#divPanelDevoluciones").html(html);
 
             } else {
@@ -3028,12 +3036,12 @@ function ObtenerCantidadPendiente(NombreProducto, NumeroFactura, CantFact, CantA
                         msj += "No se generará Nota de Crédito puesto que la cantidad restante es 0";
                     }
 
-                    mensaje("<span style='color: steelblue !important;'><i class='fa fa-exclamation-triangle fa-2x'></i> INFORMACIÓN</span>", msj );
+                    mensaje("<span style='color: steelblue !important;'><i class='fa fa-exclamation-triangle fa-2x'></i> INFORMACIÓN</span>", msj);
                     //$(".fa.fa-times").click();
                     //return false;
                 } else if (parseInt(response) > 0 || parseInt(CantPrecargada) > 0 || parseInt(CantPrecargadaFNE)) {
                     var CantRestante = (CantFact - response - CantPrecargada - CantPrecargadaFNE);
-                    var uResp = " unidad ",uDev = " unidad ",uFNE = " unidad ", texto = "" ;
+                    var uResp = " unidad ", uDev = " unidad ", uFNE = " unidad ", texto = "";
                     msjCantMax = "El máximo de unidades que resta devolver / reclamar es de " + CantRestante;
                     if (CantRestante < 0) {
                         CantRestante = 0;
@@ -3431,7 +3439,7 @@ function Imprimir() {
         var IdSuc = $("#txtIdSucursalCliente").val().trim(),
             SucNombre = "";
 
-        switch (IdSuc){
+        switch (IdSuc) {
             case 'CC':
                 SucNombre = 'CASA CENTRAL';
                 break;
@@ -3506,8 +3514,8 @@ function Imprimir() {
     setTimeout(function () {
         window.print();
         document.body.innerHTML = originalContents;
-       $("#btnImprimirND").click(function () {
-           Imprimir();
+        $("#btnImprimirND").click(function () {
+            Imprimir();
         });
     }, 2000);
 
@@ -3684,7 +3692,7 @@ function ObtenerUnidadesEnSolicitudesNCFactNoEnvNoAnuladasDeFacturayObjetoComerc
         success: function (response) {
             console.log(response);
 
-            if ( response > 0 ) {
+            if (response > 0) {
                 var msj = "<h5 style='text-align: center; line - height: 1.5em; font - weight: 300; font - size: 16px;'>El Producto " + NombreProducto + " de la factura " + NumeroFactura + " ya posee " + response;
                 if (response == 1) {
                     msj += " unidad en Solicitud de Facturado No Enviado";
