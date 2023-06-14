@@ -597,10 +597,13 @@ $(document).ready(function () {
     $("#btnAgregarDev").click(function () {
         //console.log(ItemDevolucion);
         ControlarSesion();
+        var data = {};
+        data.Item = ItemDevolucion;
+        var json = JSON.stringify(data);
         $.ajax({
             type: "POST",
             url: "/devoluciones/AgregarDevolucionItemPrecarga",
-            data: '{Item: ' + JSON.stringify(ItemDevolucion) + '}',
+            data: json,
             contentType: "application/json; charset=utf-8",
             success: function (response) {
                 //console.log(response);
@@ -614,10 +617,13 @@ $(document).ready(function () {
         if (ItemsPrecargados.length > 0) {
             showCargandoBuscador();
             $("#btnProcesarPrecarga").attr('disabled', 'disabled');
+            var data = {};
+            data.Item = ItemsPrecargados;
+            var json = JSON.stringify(data);
             $.ajax({
                 type: "POST",
                 url: "/devoluciones/AgregarSolicitudDevolucionCliente",
-                data: '{Item: ' + JSON.stringify(ItemsPrecargados) + '}',
+                data: json,
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
                     if (response == "") {
@@ -867,10 +873,13 @@ $(document).ready(function () {
 
     $("#btnAgregarDevVencidos").click(function () {
         ControlarSesion();
+        var data = {};
+        data.Item = ItemDevolucion;
+        var json = JSON.stringify(data);
         $.ajax({
             type: "POST",
             url: "/devoluciones/AgregarDevolucionItemPrecarga",
-            data: '{Item: ' + JSON.stringify(ItemDevolucion) + '}',
+            data: json,
             contentType: "application/json; charset=utf-8",
             success: function (response) {
                 RecuperarItemsDevolucionPrecargaVencidosPorCliente();
@@ -884,10 +893,13 @@ $(document).ready(function () {
         if (ItemsPrecargadosVencidos.length > 0) {
             $("#btnProcesarPrecargaVencidos").attr('disabled', 'disabled');
             showCargandoBuscador();
+            var data = {};
+            data.Item = ItemsPrecargadosVencidos;
+            var json = JSON.stringify(data);
             $.ajax({
                 type: "POST",
                 url: "/devoluciones/AgregarSolicitudDevolucionCliente",
-                data: '{Item: ' + JSON.stringify(ItemsPrecargadosVencidos) + '}',
+                data: json,
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
                     //console.log(response);
@@ -1081,10 +1093,13 @@ $(document).ready(function () {
     $("#btnAgregarDevFNE").click(function () {
         //console.log(ItemDevolucion);
         ControlarSesion();
+        var data = {};
+        data.Item = ItemDevolucion;
+        var json = JSON.stringify(data);
         $.ajax({
             type: "POST",
             url: "/devoluciones/AgregarReclamoFacturadoNoEnviadoItemPrecarga",
-            data: '{Item: ' + JSON.stringify(ItemDevolucion) + '}',
+            data: json,
             contentType: "application/json; charset=utf-8",
             success: function (response) {
                 //console.log(response);
@@ -1098,10 +1113,13 @@ $(document).ready(function () {
         if (ItemsPrecargadosFNE.length > 0) {
             showCargandoBuscador();
             $("#btnProcesarPrecargaFNE").attr('disabled', 'disabled');
+            var data = {};
+            data.Item = ItemsPrecargadosFNE;
+            var json = JSON.stringify(data);
             $.ajax({
                 type: "POST",
                 url: "/devoluciones/AgregarReclamoFacturadoNoEnviadoCliente",
-                data: '{Item: ' + JSON.stringify(ItemsPrecargadosFNE) + '}',
+                data: json,
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
                     if (response == "") {
@@ -1203,10 +1221,13 @@ $(document).ready(function () {
             ItemDevolucion.dev_nombreproductodevolucion = value.Producto;
             ItemDevolucion.dev_cantidad = value.Cant;
             ItemDevolucion.dev_numeroitemfactura = value.Orden;
+            var data = {};
+            data.Item = ItemDevolucion;
+            var json = JSON.stringify(data);
             $.ajax({
                 type: "POST",
                 url: "/devoluciones/AgregarDevolucionItemPrecarga",
-                data: '{Item: ' + JSON.stringify(ItemDevolucion) + '}',
+                data: json,
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
                     //console.log(response);
@@ -1223,10 +1244,13 @@ $(document).ready(function () {
     $("#btnProcesarPrecargaFC").click(function () {
         //alert("Listo a procesar");
         ControlarSesion();
+        var data = {};
+        data.Item = ItemsPrecargadosFC;
+        var json = JSON.stringify(data);
         $.ajax({
             type: "POST",
             url: "/devoluciones/AgregarSolicitudDevolucionCliente",
-            data: '{Item: ' + JSON.stringify(ItemsPrecargadosFC) + '}',
+            data: json,
             contentType: "application/json; charset=utf-8",
             success: function (response) {
                 LimpiarPrecargaFacturaCompleta();
