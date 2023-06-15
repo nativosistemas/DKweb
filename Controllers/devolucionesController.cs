@@ -253,14 +253,15 @@ public class devolucionesController : Controller
         resultadoObj = DKbase.Util.EliminarPrecargaReclamoFNEPorCliente(NumeroCliente);
         return resultadoObj;
     }
-    public async Task<bool> AgregarDevolucionItemPrecarga([FromBody]DKbase.dll.cDevolucionItemPrecarga_java Item)
+    [HttpPost]
+    public async Task<bool> AgregarDevolucionItemPrecarga([FromBody] DKbase.dll.cDevolucionItemPrecarga_java Item)
     {
         bool resultadoObj = false;
         resultadoObj = DKbase.Util.AgregarDevolucionItemPrecarga(Item);
         return resultadoObj;
     }
-
-    public async Task<bool> AgregarReclamoFacturadoNoEnviadoItemPrecarga([FromBody]DKbase.dll.cDevolucionItemPrecarga_java Item)
+    [HttpPost]
+    public async Task<bool> AgregarReclamoFacturadoNoEnviadoItemPrecarga([FromBody] DKbase.dll.cDevolucionItemPrecarga_java Item)
     {
         bool resultadoObj = false;
         resultadoObj = DKbase.Util.AgregarReclamoFacturadoNoEnviadoItemPrecarga(Item);

@@ -597,9 +597,7 @@ $(document).ready(function () {
     $("#btnAgregarDev").click(function () {
         //console.log(ItemDevolucion);
         ControlarSesion();
-        var data = {};
-        data.Item = ItemDevolucion;
-        var json = JSON.stringify(data);
+        var json = JSON.stringify(ItemDevolucion);
         $.ajax({
             type: "POST",
             url: "/devoluciones/AgregarDevolucionItemPrecarga",
@@ -873,18 +871,8 @@ $(document).ready(function () {
 
     $("#btnAgregarDevVencidos").click(function () {
         ControlarSesion();
-        var data = {};
-        data.Item = ItemDevolucion;
-        var json = JSON.stringify(data);
-        fetch('/devoluciones/AgregarDevolucionItemPrecarga', {
-            method: "POST",
-            body: json,
-            headers: { "Content-type": "application/json; charset=UTF-8" }
-        })
-            .then(response => { RecuperarItemsDevolucionPrecargaVencidosPorCliente(); })
-            //.then(json => console.log(json))
-            .catch(err => console.log(err));
-        /*$.ajax({
+        var json = JSON.stringify(ItemDevolucion);
+        $.ajax({
             type: "POST",
             url: "/devoluciones/AgregarDevolucionItemPrecarga",
             data: json,
@@ -892,7 +880,7 @@ $(document).ready(function () {
             success: function (response) {
                 RecuperarItemsDevolucionPrecargaVencidosPorCliente();
             }
-        });*/
+        });
     });
 
     $("#btnProcesarPrecargaVencidos").click(function () {
@@ -1101,9 +1089,7 @@ $(document).ready(function () {
     $("#btnAgregarDevFNE").click(function () {
         //console.log(ItemDevolucion);
         ControlarSesion();
-        var data = {};
-        data.Item = ItemDevolucion;
-        var json = JSON.stringify(data);
+        var json = JSON.stringify(ItemDevolucion);
         $.ajax({
             type: "POST",
             url: "/devoluciones/AgregarReclamoFacturadoNoEnviadoItemPrecarga",
@@ -1229,9 +1215,7 @@ $(document).ready(function () {
             ItemDevolucion.dev_nombreproductodevolucion = value.Producto;
             ItemDevolucion.dev_cantidad = value.Cant;
             ItemDevolucion.dev_numeroitemfactura = value.Orden;
-            var data = {};
-            data.Item = ItemDevolucion;
-            var json = JSON.stringify(data);
+            var json = JSON.stringify(ItemDevolucion);
             $.ajax({
                 type: "POST",
                 url: "/devoluciones/AgregarDevolucionItemPrecarga",
