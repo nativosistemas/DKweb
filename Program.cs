@@ -25,9 +25,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 });
 
 var app = builder.Build();
+DKweb.Helper.app = builder.Configuration.GetSection("appSettings")["getTipoApp"];
+DKweb.Helper.folder = builder.Configuration.GetSection("appSettings")["getFolder"];
 
-DKbase.Helper.getTipoApp = builder.Configuration.GetSection("appSettings")["getTipoApp"];
-DKbase.Helper.getFolder = builder.Configuration.GetSection("appSettings")["getFolder"];
+DKbase.Helper.getTipoApp = DKweb.Helper.app;
+DKbase.Helper.getFolder = DKweb.Helper.folder;
 DKbase.Helper.getUrl_DKdll = builder.Configuration.GetSection("appSettings")["getUrl_DKdll"];
 DKbase.Helper.getUrl_DKcore = builder.Configuration.GetSection("appSettings")["getUrl_DKcore"];
 DKbase.Helper.getMail_cv = builder.Configuration.GetSection("appSettings")["mail_cv"];
