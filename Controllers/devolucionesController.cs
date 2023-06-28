@@ -193,7 +193,8 @@ public class devolucionesController : Controller
         else
             return null;
     }
-    public async Task<string> AgregarReclamoFacturadoNoEnviadoCliente(List<DKbase.dll.cDevolucionItemPrecarga_java> Item)
+    [HttpPost]
+    public async Task<string> AgregarReclamoFacturadoNoEnviadoCliente([FromBody] List<DKbase.dll.cDevolucionItemPrecarga_java> Item)
     {
         string resultado = null;
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
@@ -203,7 +204,8 @@ public class devolucionesController : Controller
         }
         return resultado;
     }
-    public async Task<string> AgregarSolicitudDevolucionCliente(List<DKbase.dll.cDevolucionItemPrecarga_java> Item)
+    [HttpPost]
+    public async Task<string> AgregarSolicitudDevolucionCliente([FromBody] List<DKbase.dll.cDevolucionItemPrecarga_java> Item)
     {
         string resultado = null;
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
