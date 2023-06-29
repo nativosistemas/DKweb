@@ -24,7 +24,7 @@ public class devolucionesController : Controller
     }
     public async Task<string> RecuperarDevolucionesPorCliente()
     {
-        List<DKbase.dll.cDevolucionItemPrecarga> resultadoObj = null;
+        List<DKbase.dll.cDevolucionItemPrecarga_java> resultadoObj = null;
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         if (oCliente != null)
         {
