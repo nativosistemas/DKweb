@@ -41,7 +41,7 @@ public class devolucionesController : Controller
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         if (oCliente != null)
         {
-            resultadoObj = DKbase.Util.RecuperarDevolucionesPorClientePorNumero(NumeroDevolucion, oCliente.cli_login);
+            resultadoObj = DKbase.Util.ObtenerSolicitudesDevolucionClientePorNumero(NumeroDevolucion, oCliente.cli_login);
         }
         if (resultadoObj != null)
             return DKbase.generales.Serializador_base.SerializarAJson(resultadoObj);
