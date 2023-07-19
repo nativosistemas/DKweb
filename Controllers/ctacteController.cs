@@ -213,4 +213,11 @@ public class ctacteController : Controller
         }
         return resultado;
     }
+    public async Task<string> CambiarClientePromotor(int IdCliente)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKbase.Util.RecuperarClientePorId(IdCliente);
+        DKweb.Codigo.Util.clientesDefault_Cliente_Set(_httpContextAccessor,oCliente);
+
+        return ""; 
+    }
 }

@@ -66,6 +66,8 @@ if (!app.Environment.IsDevelopment())
     //app.UseExceptionHandler("/Home/Error");
     app.UseExceptionHandler(exceptionHandlerApp =>
  {
+    //exceptionHandlerApp.ex
+    //"/Home/Error"
      exceptionHandlerApp.Run(async context =>
      {
 
@@ -75,7 +77,7 @@ if (!app.Environment.IsDevelopment())
          // using static System.Net.Mime.MediaTypeNames;
          context.Response.ContentType = System.Net.Mime.MediaTypeNames.Text.Plain;
 
-         await context.Response.WriteAsync("Se produjo un error.");
+         await context.Response.WriteAsync("Se produjo un error.");//"/Home/Error"
 
          var exceptionHandlerPathFeature =
              context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerPathFeature>();

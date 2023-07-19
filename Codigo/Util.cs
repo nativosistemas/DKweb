@@ -69,6 +69,11 @@ public class Util
         }
         return result;
     }
+    public static void clientesDefault_Cliente_Set(IHttpContextAccessor pHttpContextAccessor, DKbase.web.capaDatos.cClientes pCliente)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<DKbase.web.capaDatos.cClientes>("clientesDefault_Cliente", pCliente);
+    }
+
     public static string getHrefRevista(IHttpContextAccessor pHttpContextAccessor)
     {
         string resultado = "href=\"" + "#" + "\""; ;
