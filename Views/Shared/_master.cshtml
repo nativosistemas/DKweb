@@ -17,16 +17,13 @@
     <link rel="shortcut icon" href="~/favicon.ico" />
 
     <title>Droguería Kellerhoff</title>
-    <script type="text/javascript">
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date(); a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D92XD5YD7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
 
-        ga('create', 'UA-91993710-1', 'auto');
-        ga('send', 'pageview');
+        gtag('config', 'G-7D92XD5YD7');
     </script>
     <link href="../includes/home/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
@@ -126,39 +123,33 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li><a class="@{
                                         WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor,"index"));
-}"
-                                        href="../home/index">
+}" href="../home/index">
                                         <h3>INICIO</h3>
                                     </a></li>
                                 <li><a class="@{
                                         WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor,"promociones"));
-}"
-                                        href="../home/promociones">
+}" href="../home/promociones">
                                         <h3>OFERTAS</h3>
                                     </a></li>
 
                                 <li><a class="empresa hidden-sm @{
                                         WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor,"promociones"));
-}"
-                                        href="../home/empresa">
+}" href="../home/empresa">
                                         <h3>EMPRESA</h3>
                                     </a></li>
-                                <li><a class=" hidden-sm "
-                                        href="@{
+                                <li><a class=" hidden-sm " href="@{
                                         WriteLiteral(DKweb.Codigo.Util.hrefLinkSucursales(Accessor));
 }">
                                         <h3>SUCURSALES</h3>
                                     </a></li>
                                 <li><a class=" hidden-sm @{
                                         WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor,"recalls"));
-}"
-                                        href="../home/recalls">
+}" href="../home/recalls">
                                         <h3>RECALL</h3>
                                     </a></li>
                                 <li><a class="@{
                                         WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor,"contacto"));
-}"
-                                        href="../home/contacto">
+}" href="../home/contacto">
                                         <h3>CONTACTO</h3>
                                     </a></li>
                                 <li><a class="registracion " href="../home/registracion">
@@ -190,8 +181,7 @@
                         <a href="../home/empresa">EMPRESA</a>
                     </li>
                     <li>
-                        <a id="menu-close-sucursales"
-                            href="@{
+                        <a id="menu-close-sucursales" href="@{
                             WriteLiteral(DKweb.Codigo.Util.hrefLinkSucursalesMobile(Accessor));
 }">SUCURSALES
                         </a>

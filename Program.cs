@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews();//.AddRazorRuntimeCompilation();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
 
@@ -63,9 +63,10 @@ app.UseRewriter(optionsRewrite);
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    //app.UseExceptionHandler("/Home/Error");
+    //app.UseExceptionHandler("/config/Error");
     app.UseExceptionHandler(exceptionHandlerApp =>
  {
+    
     //exceptionHandlerApp.ex
     //"/Home/Error"
      exceptionHandlerApp.Run(async context =>
@@ -93,6 +94,7 @@ if (!app.Environment.IsDevelopment())
 
          if (exceptionHandlerPathFeature?.Path == "/")
          {
+            
              await context.Response.WriteAsync(" Page: Home.");
          }
      });

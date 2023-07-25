@@ -656,7 +656,7 @@ public class Util
         }
         return result;
     }
-    public static DKbase.web.capaDatos.cSucursalCarritoTransfer RecuperarCarritosTransferPorCliente_generico(IHttpContextAccessor pHttpContextAccessor, DKbase.web.capaDatos.cClientes pCliente, string pIdSucursal, string pTipo)
+    public static DKbase.web.capaDatos.cSucursalCarritoTransfer RecuperarCarritosTransferPorCliente_generico(IHttpContextAccessor pHttpContextAccessor, DKbase.web.capaDatos.cClientes pCliente, string pTipo, string pIdSucursal)
     {
         return RecuperarCarritosTransfer_generico(pHttpContextAccessor, pCliente, pTipo).Where(x => x.Sucursal == pIdSucursal).FirstOrDefault();
     }

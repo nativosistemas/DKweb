@@ -359,7 +359,7 @@ public class mvcController : Controller
         {
             DKbase.Util.AgregarHistorialProductoCarritoTransfer(user.usu_codCliente.Value, pListaProductosMasCantidad, user.id);
             objResult.isNotError = DKweb.Codigo.Util.AgregarProductosTransfersAlCarrito(pListaProductosMasCantidad, user.usu_codCliente.Value, user.id, pIdTransfers, pCodSucursal, DKbase.generales.Constantes.cTipo_CarritoTransfers);
-            objResult.oSucursalCarritoTransfer = DKweb.Codigo.Util.RecuperarCarritosTransferPorCliente_generico(_httpContextAccessor, oCliente, pCodSucursal, DKbase.generales.Constantes.cTipo_CarritoTransfers);
+            objResult.oSucursalCarritoTransfer = DKweb.Codigo.Util.RecuperarCarritosTransferPorCliente_generico(_httpContextAccessor, oCliente, DKbase.generales.Constantes.cTipo_CarritoTransfers ,pCodSucursal);
             objResult.listProductosAndCantidadError = pListaProductosMasCantidad;
             objResult.codSucursal = pCodSucursal;
             resultado = DKbase.generales.Serializador_base.SerializarAJson(objResult);
@@ -679,7 +679,7 @@ public class mvcController : Controller
         {
             DKbase.Util.AgregarHistorialProductoCarritoTransfer(oUsuario.usu_codCliente.Value, pListaProductosMasCantidad, oUsuario.id);
             objResult.isNotError = DKweb.Codigo.Util.AgregarProductosTransfersAlCarrito(pListaProductosMasCantidad, oUsuario.usu_codCliente.Value, oUsuario.id, pIdTransfers, pCodSucursal, DKbase.generales.Constantes.cTipo_CarritoDiferidoTransfers);
-            objResult.oSucursalCarritoTransfer = DKweb.Codigo.Util.RecuperarCarritosTransferPorCliente_generico(_httpContextAccessor, oCliente, pCodSucursal, DKbase.generales.Constantes.cTipo_CarritoDiferidoTransfers);
+            objResult.oSucursalCarritoTransfer = DKweb.Codigo.Util.RecuperarCarritosTransferPorCliente_generico(_httpContextAccessor, oCliente, DKbase.generales.Constantes.cTipo_CarritoDiferidoTransfers, pCodSucursal);
             objResult.listProductosAndCantidadError = pListaProductosMasCantidad;
             objResult.codSucursal = pCodSucursal;
             resultado = DKbase.generales.Serializador_base.SerializarAJson(objResult);
