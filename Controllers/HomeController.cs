@@ -261,10 +261,11 @@ public class HomeController : Controller
     }
     private async Task<string> login_general(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
     {
+        string result = "!Ok";
         if (pAuthenticateRequest != null && !string.IsNullOrEmpty(pAuthenticateRequest.login) && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
         {
             var result_login = DKweb.Codigo.Util.login(_httpContextAccessor, pAuthenticateRequest.login, pAuthenticateRequest.pass);// "romanello ", "alberdi"
-
+            result = result_login;
             if (!string.IsNullOrEmpty(result_login) && (result_login == "Ok" || result_login == "OkPromotor"))
             {
                 DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
@@ -281,7 +282,7 @@ public class HomeController : Controller
                 }
             }
         }
-        return "!Ok";
+        return result;
     }
     [HttpPost]
     public async Task<string> login(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
@@ -342,7 +343,8 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
     public async Task<IActionResult> contactoCtaCte()
-    {   DKweb.Codigo.Util.htmlCssBodySet(_httpContextAccessor, "bd_sec");
+    {
+        DKweb.Codigo.Util.htmlCssBodySet(_httpContextAccessor, "bd_sec");
         return View();
     }
 }

@@ -20,7 +20,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 .AddCookie(option =>
 {
     option.LoginPath = "/Home/Index";
-    option.ExpireTimeSpan = TimeSpan.MaxValue;
+    option.ExpireTimeSpan = TimeSpan.FromHours(23);
     option.AccessDeniedPath = "/config/sinpermiso";
 });
 
