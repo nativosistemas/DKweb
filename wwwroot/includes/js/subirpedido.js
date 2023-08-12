@@ -65,10 +65,10 @@ $(document).ready(function () {
         return false;
     });
 });
-$('#btn_MuestraOtroSistemas').click(function () {
+/*$('#btn_MuestraOtroSistemas').click(function () {
     $("#divMuestraOtroSistemas").toggle();
     return false;
-});
+});*/
 
 function subirArchivoMsgRepetido() {
     var strHtml = '';
