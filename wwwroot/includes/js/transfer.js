@@ -188,7 +188,7 @@ function AgregarCarritoTransfersPorSucursalHtml(pIndice) {
                 htmlColor = ' color_red ';
             }
             /* fin falta */
-            strHTML += '<td class="col-lg-7 col-md-3 col-sm-3 text-left ' + htmlColor + ' tdProductoTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">' + listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].tde_codpro + '</td>';
+            strHTML += '<td class="col-lg-7 col-md-3 col-sm-3 text-left ' + htmlColor + ' tdProductoTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">' + listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].pro_nombre + '</td>';
             strHTML += '<td class="col-lg-2 col-md-1 col-sm-1 col-xs-1 text-center tdCantTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">';
             strHTML += '<span>' + listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].cantidad + '</span>';
             strHTML += '</td>';

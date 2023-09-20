@@ -755,11 +755,11 @@ function onclickRecuperarTransfer(pIndice) {
     }
 }
 
-function ObtenerCantidadProductoMasTransfer(pIdSucursal, pIdProduco, pNombreProducto) {
+function ObtenerCantidadProductoMasTransfer(pIdSucursal, pIdProduco) {
     var resultado = '';
     resultado = ObtenerCantidadProducto(pIdSucursal, pIdProduco);
     /// NUEVO facturacion directa
-    var resultadoTransfer = ObtenerCantidadProductoTransfer(pIdSucursal, pNombreProducto);
+    var resultadoTransfer = ObtenerCantidadProductoTransfer(pIdSucursal, pIdProduco);
     if (resultadoTransfer !== 0) {
         if (resultado === '') {
             resultado = resultadoTransfer;
@@ -788,7 +788,7 @@ function ObtenerCantidadProducto(pIdSucursal, pIdProduco) {
     }
     return resultado;
 }
-function ObtenerCantidadProductoTransfer(pIdSucursal, pNombreProducto) {
+function ObtenerCantidadProductoTransfer(pIdSucursal, pCodProducto) {
     var resultado = 0;
     if (listaCarritoTransferPorSucursal !== null) {
         if (listaCarritoTransferPorSucursal.length > 0) {
@@ -796,7 +796,7 @@ function ObtenerCantidadProductoTransfer(pIdSucursal, pNombreProducto) {
                 if (listaCarritoTransferPorSucursal[iSucursal].Sucursal === pIdSucursal) {
                     for (var iTransfer = 0; iTransfer < listaCarritoTransferPorSucursal[iSucursal].listaTransfer.length; iTransfer++) {
                         for (var iTransferProductos = 0; iTransferProductos < listaCarritoTransferPorSucursal[iSucursal].listaTransfer[iTransfer].listaProductos.length; iTransferProductos++) {
-                            if (listaCarritoTransferPorSucursal[iSucursal].listaTransfer[iTransfer].listaProductos[iTransferProductos].tde_codpro === pNombreProducto) {
+                            if (listaCarritoTransferPorSucursal[iSucursal].listaTransfer[iTransfer].listaProductos[iTransferProductos].tde_codpro === pCodProducto) {
                                 if (listaCarritoTransferPorSucursal[iSucursal].listaTransfer[iTransfer].listaProductos[iTransferProductos].isProductoFacturacionDirecta) {
                                     resultado += listaCarritoTransferPorSucursal[iSucursal].listaTransfer[iTransfer].listaProductos[iTransferProductos].cantidad;
                                 }
@@ -861,7 +861,7 @@ function onblurSucursal_base(pCantidad, pFila, pColumna) {
             isPasarBase = true;
         else {
             // Calcular si producto transfer
-            var cantidadComparativa = ObtenerCantidadProductoMasTransfer(listaSucursal[columna], listaProductosBuscados[fila].pro_codigo, listaProductosBuscados[fila].pro_nombre);
+            var cantidadComparativa = ObtenerCantidadProductoMasTransfer(listaSucursal[columna], listaProductosBuscados[fila].pro_codigo);
             if (cantidadComparativa != pCantidad)
                 isPasarBase = true;
         }
@@ -1065,6 +1065,7 @@ function isSoloTransferFacturacionDirecta_logica_return_CantidadCarritoComun(pPr
                         var tempListaProductos = [];
                         var objProducto = new jcTransfersProductos();
                         objProducto.codProductoNombre = pProducto.tde_codpro; // Para la funcion en el servidor
+                        objProducto.codProducto  = pProducto.tde_codpro; 
                         objProducto.tde_codpro = pProducto.tde_codpro;
                         objProducto.cantidad = cantidadCarritoTransfer;
                         tempListaProductos.push(objProducto);
@@ -1100,6 +1101,7 @@ function isSoloTransferFacturacionDirecta_logica_return_CantidadCarritoComun(pPr
                         var tempListaProductos = [];
                         var objProducto = new jcTransfersProductos();
                         objProducto.codProductoNombre = pProducto.tde_codpro; // Para la funcion en el servidor
+                        objProducto.codProducto  = pProducto.tde_codpro; 
                         objProducto.tde_codpro = pProducto.tde_codpro;
                         objProducto.cantidad = cantidadCarritoTransfer;
                         tempListaProductos.push(objProducto);
@@ -1134,6 +1136,7 @@ function isSoloTransferFacturacionDirecta_logica_return_CantidadCarritoComun(pPr
                         var tempListaProductos = [];
                         var objProducto = new jcTransfersProductos();
                         objProducto.codProductoNombre = pProducto.tde_codpro; // Para la funcion en el servidor
+                        objProducto.codProducto  = pProducto.tde_codpro; 
                         objProducto.tde_codpro = pProducto.tde_codpro;
                         objProducto.cantidad = cantidadCarritoTransfer;
                         tempListaProductos.push(objProducto);
@@ -1165,6 +1168,7 @@ function isSoloTransferFacturacionDirecta_logica_return_CantidadCarritoComun(pPr
                         var tempListaProductos = [];
                         var objProducto = new jcTransfersProductos();
                         objProducto.codProductoNombre = pProducto.tde_codpro; // Para la funcion en el servidor
+                        objProducto.codProducto  = pProducto.tde_codpro; 
                         objProducto.tde_codpro = pProducto.tde_codpro;
                         objProducto.cantidad = cantidadCarritoTransfer;
                         tempListaProductos.push(objProducto);
@@ -1203,11 +1207,12 @@ function isSoloTransferFacturacionDirecta_logica_return_CantidadCarritoComun(pPr
     if (isPasarDirectamente) {
         cantidadCarritoComun = parseInt(pCantidad);
         if (!pIsSubirPedido) {
-            var cantidadTransfer = ObtenerCantidadProductoTransfer(pIdSucursal, pProducto.pro_nombre);
+            var cantidadTransfer = ObtenerCantidadProductoTransfer(pIdSucursal, pProducto.pro_codigo);
             if (cantidadTransfer != '') {
                 var tempListaProductos = [];
                 var objProducto = new jcTransfersProductos();
                 objProducto.codProductoNombre = pProducto.tde_codpro; // Para la funcion en el servidor
+                objProducto.codProducto  = pProducto.tde_codpro; 
                 objProducto.tde_codpro = pProducto.tde_codpro;
                 objProducto.cantidad = 0;
                 tempListaProductos.push(objProducto);
@@ -1423,6 +1428,7 @@ function CargarProductoCantidadDependiendoTransfer_base(pFila, pColumna, pCantid
                         var tempListaProductos = [];
                         var objProducto = new jcTransfersProductos();
                         objProducto.codProductoNombre = listaProductosBuscados[pFila].tde_codpro; // Para la funcion en el servidor
+                        objProducto.codProducto  = listaProductosBuscados[pFila].tde_codpro; 
                         objProducto.tde_codpro = listaProductosBuscados[pFila].tde_codpro;
                         objProducto.cantidad = cantidadCarritoTransfer;
                         tempListaProductos.push(objProducto);
@@ -1462,6 +1468,7 @@ function CargarProductoCantidadDependiendoTransfer_base(pFila, pColumna, pCantid
                         var tempListaProductos = [];
                         var objProducto = new jcTransfersProductos();
                         objProducto.codProductoNombre = listaProductosBuscados[pFila].tde_codpro; // Para la funcion en el servidor
+                        objProducto.codProducto  = listaProductosBuscados[pFila].tde_codpro; 
                         objProducto.tde_codpro = listaProductosBuscados[pFila].tde_codpro;
                         objProducto.cantidad = cantidadCarritoTransfer;
                         tempListaProductos.push(objProducto);
@@ -1499,6 +1506,7 @@ function CargarProductoCantidadDependiendoTransfer_base(pFila, pColumna, pCantid
                         var tempListaProductos = [];
                         var objProducto = new jcTransfersProductos();
                         objProducto.codProductoNombre = listaProductosBuscados[pFila].tde_codpro; // Para la funcion en el servidor
+                        objProducto.codProducto  = listaProductosBuscados[pFila].tde_codpro; 
                         objProducto.tde_codpro = listaProductosBuscados[pFila].tde_codpro;
                         objProducto.cantidad = cantidadCarritoTransfer;
                         tempListaProductos.push(objProducto);
@@ -1533,6 +1541,7 @@ function CargarProductoCantidadDependiendoTransfer_base(pFila, pColumna, pCantid
                         var tempListaProductos = [];
                         var objProducto = new jcTransfersProductos();
                         objProducto.codProductoNombre = listaProductosBuscados[pFila].tde_codpro; // Para la funcion en el servidor
+                        objProducto.codProducto  = listaProductosBuscados[pFila].tde_codpro; 
                         objProducto.tde_codpro = listaProductosBuscados[pFila].tde_codpro;
                         objProducto.cantidad = cantidadCarritoTransfer;
                         tempListaProductos.push(objProducto);
@@ -1577,12 +1586,13 @@ function CargarProductoCantidadDependiendoTransfer_base(pFila, pColumna, pCantid
         if (!pIsSubirPedido) {
             Log('CargarProductoCantidadDependiendoTransfer_base:' + '10');
             AgregarAlHistorialProductoCarrito(pFila, pColumna, pCantidad, true);
-            var cantidadTransfer = ObtenerCantidadProductoTransfer(listaSucursal[pColumna], listaProductosBuscados[pFila].pro_nombre); // ObtenerCantidadProducto(listaSucursal[pColumna], listaProductosBuscados[pFila].pro_codigo);
+            var cantidadTransfer = ObtenerCantidadProductoTransfer(listaSucursal[pColumna], listaProductosBuscados[pFila].pro_codigo); // ObtenerCantidadProducto(listaSucursal[pColumna], listaProductosBuscados[pFila].pro_codigo);
             if (cantidadTransfer != '') {
                 //AgregarAlHistorialProductoCarrito(pFila, pColumna, 0, true);
                 var tempListaProductos = [];
                 var objProducto = new jcTransfersProductos();
                 objProducto.codProductoNombre = listaProductosBuscados[pFila].tde_codpro; // Para la funcion en el servidor
+                objProducto.codProducto  = listaProductosBuscados[pFila].tde_codpro; 
                 objProducto.tde_codpro = listaProductosBuscados[pFila].tde_codpro;
                 objProducto.cantidad = 0;
                 tempListaProductos.push(objProducto);
@@ -2007,7 +2017,7 @@ function OnCallBackRecuperarProductos(args) {
                                                 }
                                             }
                                         } else {
-                                            cantidadDeProductoEnCarrito = ObtenerCantidadProductoMasTransfer(listaSucursal[iEncabezadoSucursal], listaProductosBuscados[i].pro_codigo, listaProductosBuscados[i].pro_nombre);
+                                            cantidadDeProductoEnCarrito = ObtenerCantidadProductoMasTransfer(listaSucursal[iEncabezadoSucursal], listaProductosBuscados[i].pro_codigo);
                                         }
                                         var typeInput = ' type="text" ';
                                         if (isMobile())
@@ -2591,7 +2601,7 @@ function volverCantidadAnterior_buscador(pIdSucursal, pIdProducto) {
             if (listaSucursal[iEncabezadoSucursal] == pIdSucursal) {
                 for (var i = 0; i < listaProductosBuscados.length; i++) {
                     if (listaProductosBuscados[i].pro_codigo == pIdProducto) {
-                        var valorCantidad = ObtenerCantidadProductoMasTransfer(pIdSucursal, listaProductosBuscados[i].pro_codigo, listaProductosBuscados[i].pro_nombre);
+                        var valorCantidad = ObtenerCantidadProductoMasTransfer(pIdSucursal, listaProductosBuscados[i].pro_codigo);
                         //$('#inputSuc' + i + "_" + iEncabezadoSucursal).val(valorCantidad);
                         setearValorInputBuscador(valorCantidad, i, iEncabezadoSucursal);
                         break;
@@ -2659,7 +2669,7 @@ function LimpiarTextBoxProductosBuscados(pIdSucursal) {
             if (listaSucursal[iEncabezadoSucursal] == pIdSucursal) {
                 for (var i = 0; i < listaProductosBuscados.length; i++) {
 
-                    var valorCantidad = ObtenerCantidadProductoMasTransfer(pIdSucursal, listaProductosBuscados[i].pro_codigo, listaProductosBuscados[i].pro_nombre);
+                    var valorCantidad = ObtenerCantidadProductoMasTransfer(pIdSucursal, listaProductosBuscados[i].pro_codigo);
                     //$('#inputSuc' + i + "_" + iEncabezadoSucursal).val(valorCantidad);
                     setearValorInputBuscador(valorCantidad, i, iEncabezadoSucursal);
                 }
@@ -2814,7 +2824,7 @@ function volverCantidadAnterior_buscadorTodaSucursal(pIdSucursal) {
         for (var iEncabezadoSucursal = 0; iEncabezadoSucursal < listaSucursal.length; iEncabezadoSucursal++) {
             if (listaSucursal[iEncabezadoSucursal] == pIdSucursal) {
                 for (var i = 0; i < listaProductosBuscados.length; i++) {
-                    var valorCantidad = ObtenerCantidadProductoMasTransfer(pIdSucursal, listaProductosBuscados[i].pro_codigo, listaProductosBuscados[i].pro_nombre);
+                    var valorCantidad = ObtenerCantidadProductoMasTransfer(pIdSucursal, listaProductosBuscados[i].pro_codigo);
                     //$('#inputSuc' + i + "_" + iEncabezadoSucursal).val(valorCantidad);
                     setearValorInputBuscador(valorCantidad, i, iEncabezadoSucursal);
                 }
@@ -3168,7 +3178,7 @@ function detalleProducto_celular(pIndex) {
                                 }
                             }
                         } else {
-                            cantidadDeProductoEnCarrito = ObtenerCantidadProductoMasTransfer(listaSucursal[iEncabezadoSucursal], listaProductosBuscados[pIndex].pro_codigo, listaProductosBuscados[pIndex].pro_nombre);
+                            cantidadDeProductoEnCarrito = ObtenerCantidadProductoMasTransfer(listaSucursal[iEncabezadoSucursal], listaProductosBuscados[pIndex].pro_codigo);
                         }
                         var typeInput = ' type="number" '; //isMobile()
                         if (!isMobile())
