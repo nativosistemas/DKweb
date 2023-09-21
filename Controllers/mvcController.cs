@@ -717,4 +717,33 @@ public class mvcController : Controller
         _httpContextAccessor?.HttpContext?.Session.SetString("url_type", "reservavacunas_total");
         return View();
     }
+    public async Task<bool> ModificarCantidadProductos(string pCodProducto, string pCodSucursal, int pCantidad)
+    {
+        bool resultado = false;
+        try
+        {
+            DKbase.web.cjSonBuscadorProductos o_update = _httpContextAccessor?.HttpContext?.Session.Get<DKbase.web.cjSonBuscadorProductos>("PedidosBuscador_productosTodos");
+            for (int i = 0; i < o_update.listaProductos.Count; i++)
+            {
+                for (int x = 0; x < o_update.listaProductos[i].listaSucursalStocks.Count; x++)
+                {
+                    if (o_update.listaProductos[i].listaSucursalStocks[x].stk_codsuc == pCodSucursal)
+                    {
+                        o_update.listaProductos[i].listaSucursalStocks[x].cantidadSucursal = pCantidad;
+                        return true;
+                        //resultado = true;
+                        //break;
+                    }
+                }
+            }
+            _httpContextAccessor?.HttpContext?.Session.Set<DKbase.web.cjSonBuscadorProductos>("PedidosBuscador_productosTodos", o_update);
+            //((cjSonBuscadorProductos)System.Web.HttpContext.Current.Session["PedidosBuscador_productosTodos"]).listaProductos[pIndexProducto].listaSucursalStocks[pIndexSucursal].cantidadSucursal = pCantidad;
+
+        }
+        catch (Exception ex)
+        {
+            DKbase.generales.Log.LogError(System.Reflection.MethodBase.GetCurrentMethod(), ex, DateTime.Now);
+        }
+        return resultado;
+    }
 }
