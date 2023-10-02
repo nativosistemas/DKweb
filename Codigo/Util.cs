@@ -278,9 +278,12 @@ public class Util
     {
         DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
         List<DKbase.web.capaDatos.cCarrito> l = DKbase.web.capaDatos.capaCAR_WebService_base.RecuperarCarritosPorSucursalYProductos_generica(oCliente, pTipo);
-        foreach (var item in l)
+        if (l != null)
         {
-            item.proximoHorarioEntrega = getObtenerHorarioCierre(pHttpContextAccessor, item.codSucursal);
+            foreach (var item in l)
+            {
+                item.proximoHorarioEntrega = getObtenerHorarioCierre(pHttpContextAccessor, item.codSucursal);
+            }
         }
         return l;
     }
@@ -640,8 +643,9 @@ public class Util
     }
     public static bool AgregarProductosTransfersAlCarrito(List<DKbase.web.capaDatos.cProductosAndCantidad> pListaProductosMasCantidad, int pIdCliente, int pIdUsuario, int pIdTransfers, string pCodSucursal, string pTipo)
     {
-        System.Data.DataTable pTablaDetalle = DKbase.web.FuncionesPersonalizadas_base.ConvertProductosAndCantidadToDataTable(pListaProductosMasCantidad);
-        return DKbase.web.capaDatos.capaCAR_base.AgregarProductosTransfersAlCarrito(pTablaDetalle, pIdCliente, pIdUsuario, pIdTransfers, pCodSucursal, pTipo);
+        pListaProductosMasCantidad.ForEach((v) => v.tde_codtfr =pIdTransfers );
+        System.Data.DataTable pTablaDetalle = DKbase.web.FuncionesPersonalizadas_base.ConvertProductosAndCantidadToDataTable_new(pListaProductosMasCantidad);
+        return DKbase.web.capaDatos.capaCAR_base.spCargarCarrito(pTablaDetalle, pIdCliente, pIdUsuario, pCodSucursal, pTipo);
     }
     public static List<DKbase.web.capaDatos.cSucursalCarritoTransfer> RecuperarCarritosTransfer_generico(IHttpContextAccessor pHttpContextAccessor, DKbase.web.capaDatos.cClientes pCliente, string pTipo)
     {
