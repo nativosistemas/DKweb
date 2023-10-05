@@ -749,7 +749,7 @@ function onclickRecuperarTransfer(pIndice) {
         if (cli_tomaTransfers()) {
             if (listaProductosBuscados[pIndice].isTieneTransfer) {
                 productoSeleccionado = listaProductosBuscados[pIndice].pro_nombre;
-                RecuperarTransfer(listaProductosBuscados[pIndice].pro_nombre);
+                RecuperarTransfer(listaProductosBuscados[pIndice].pro_codigo);
             }
         }
     }

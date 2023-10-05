@@ -367,7 +367,7 @@ public class mvcController : Controller
         else { return string.Empty; }
     }
 
-    public async Task<string> RecuperarTransfer(string pNombreProducto)
+    public async Task<string> RecuperarTransfer(int pNombreProducto)
     {
         List<DKbase.web.capaDatos.cTransfer> listaTransfer = null;
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
