@@ -260,7 +260,11 @@ public class Util
         string nameSession = "horario_" + pSucursal;
         if (pHttpContextAccessor.HttpContext.Session.GetString(nameSession) == null)
         {
-            pHttpContextAccessor.HttpContext.Session.SetString(nameSession, DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierre(oCliente, oCliente.cli_codsuc, pSucursal, oCliente.cli_codrep));
+            string strObtenerHorarioCierre = DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierre(oCliente, oCliente.cli_codsuc, pSucursal, oCliente.cli_codrep);
+            if (strObtenerHorarioCierre != null)
+            {
+                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, strObtenerHorarioCierre);
+            }
         }
         if (pHttpContextAccessor.HttpContext.Session.GetString(nameSession) != null)
         {
@@ -643,7 +647,7 @@ public class Util
     }
     public static bool AgregarProductosTransfersAlCarrito(List<DKbase.web.capaDatos.cProductosAndCantidad> pListaProductosMasCantidad, int pIdCliente, int pIdUsuario, int pIdTransfers, string pCodSucursal, string pTipo)
     {
-        pListaProductosMasCantidad.ForEach((v) => v.tde_codtfr =pIdTransfers );
+        pListaProductosMasCantidad.ForEach((v) => v.tde_codtfr = pIdTransfers);
         System.Data.DataTable pTablaDetalle = DKbase.web.FuncionesPersonalizadas_base.ConvertProductosAndCantidadToDataTable_new(pListaProductosMasCantidad);
         return DKbase.web.capaDatos.capaCAR_base.spCargarCarrito(pTablaDetalle, pIdCliente, pIdUsuario, pCodSucursal, pTipo);
     }

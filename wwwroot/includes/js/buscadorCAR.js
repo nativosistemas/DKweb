@@ -1716,6 +1716,8 @@ function OnCallBackRecuperarProductos(args) {
             strHtml += '</table>';
             strHtml += '</th>';
             //
+            /*
+            OFERTA
             strHtml += '<th class="col-lg-2 col-md-2 col-sm-2 text-center no-padding">';
             strHtml += '<table width="100%" cellpadding="0" cellspacing="0">';
             strHtml += '<tr><td colspan="3" class="col-lg-12 text-center">Oferta<div class="clear5"></div></td></tr>';
@@ -1726,6 +1728,7 @@ function OnCallBackRecuperarProductos(args) {
             strHtml += '</tr>';
             strHtml += '</table>';
             strHtml += '</th>';
+            */
             //
             //if (!isCarritoDiferido) {
             var col_lg_transfer_pvp = 4;
@@ -1902,7 +1905,7 @@ function OnCallBackRecuperarProductos(args) {
                     }
                     strHtml += '<td class="col-lg-1 col-md-1 col-sm-1 text-center tdSeparadorGrilla">' + precioHabitual + '</td>';
 
-
+                    /*
                     var varOfeunidades = ' &nbsp; ';
                     var varOfeporcentaje = ' &nbsp; ';
                     var varPrecioConDescuentoOferta = ' &nbsp; ';
@@ -1921,6 +1924,7 @@ function OnCallBackRecuperarProductos(args) {
                     strHtml += '<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col_small">' + varPrecioConDescuentoOferta + '</div>'
                     strHtml += '</td>';
                     // FIn Oferta
+                    */
                     // NUEVO Transfer facturacion directa
                     //if (!isCarritoDiferido) {
                     var varTransferFacturacionDirectaCondicion = '';
@@ -3073,7 +3077,7 @@ function detalleProducto_celular(pIndex) {
     }
     strHtml += '<div class="col-xs-12 mpbxs_dsc">Precio<span class="float-right">' + precioHabitual + '</span></div>';
 
-
+   /* OFERTA
     var varOfeunidades = ' &nbsp; ';
     var varOfeporcentaje = ' &nbsp; ';
     var varPrecioConDescuentoOferta = ' &nbsp; ';
@@ -3091,7 +3095,7 @@ function detalleProducto_celular(pIndex) {
     strHtml += '<div class="col-xs-12 mpbxs_dsc">Min<span class="float-right">' + varOfeunidades + '</span></div>';
     strHtml += '<div class="col-xs-12 mpbxs_dsc">Precio<span class="float-right">' + varPrecioConDescuentoOferta + '</span></div>';
 
-
+   */
 
     //if (!isCarritoDiferido) {
     var varTransferFacturacionDirectaPVP = '';

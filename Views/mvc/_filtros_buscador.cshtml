@@ -87,25 +87,25 @@
             <input id="checkBoxFamilia" class="checkbox" type="checkbox" value="pro_familia">
             <label for="checkBoxFamilia" value="">Familia</label>
         </div>
-        @{if (DKweb.Controllers.mvcController.isClienteTomaOferta(Accessor))
+        @{/*if (DKweb.Controllers.mvcController.isClienteTomaOferta(Accessor))
             {
                 <div class="radio-checkbox rc_buscador">
                     <input id="checkBoxTodosOfertas" class="checkbox" type="checkbox" value="">
                     <label for="checkBoxTodosOfertas" value="">Solo las ofertas</label>
                 </div>
             }
-        }
+       */ }
         @{if (DKweb.Controllers.mvcController.isClienteTomaTransfer(Accessor))//
             {
                 <div class="radio-checkbox rc_buscador">
                     <input id="checkBoxTodosTransfer" class="checkbox" type="checkbox" value="">
                     <label for="checkBoxTodosTransfer" value="">Solo los transfers</label>
                 </div>} }
-        @{if (DKweb.Controllers.mvcController.isClienteTomaOferta(Accessor))
+        @{/*if (DKweb.Controllers.mvcController.isClienteTomaOferta(Accessor))
             {
                 <a class="btn_a13-st" href="" onclick="onClickVerOfertas(); return false;">Todos los productos en ofertas</a>
             }
-        }
+        */  }
         @{if (DKweb.Controllers.mvcController.isClienteTomaTransfer(Accessor))//
             {
                 <a class="btn_a13-st" href="" onclick="onClickVerTransfer(); return false;">Todos los productos en transfer</a>
