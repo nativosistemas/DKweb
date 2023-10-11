@@ -1,4 +1,4 @@
-﻿﻿var indiceCarritoTransferBorrar = null;
+﻿var indiceCarritoTransferBorrar = null;
 var listaTransfer = null;
 var productoSeleccionado = '';
 var textTipoEnvioCarritoTransfer = '';
@@ -362,7 +362,8 @@ function OnCallBackRecuperarTransfer(args) {
     if (listaTransfer != null) {
         if (listaTransfer.length > 0) {
             if (listaTransfer.length == 1) {
-                onclickMostrarUnTransferDeVarios(0);
+                //onclickMostrarUnTransferDeVarios(0);
+                ComboCerrado(0);
                 //strHtmlTransfer += AgregarTransferHtmlAlPopUp(0);
             } else {
                 //strHtmlTransfer += '<div style="font-size:16px; margin-top: 10px;"  >' + 'Seleccione un transfer:' + '</div>';//Elija un transfer:
@@ -376,10 +377,172 @@ function OnCallBackRecuperarTransfer(args) {
         }
     }
 }
-function onclickMostrarUnTransferDeVarios(pValor) {
+
+function ComboCerrado(pValor) {
     //$('#modalModulo').modal('hide');
     $('#modalModulo').html(AgregarTransferHtmlAlPopUp(pValor));
     $('#modalModulo').modal();
+}
+
+/* function onclickMostrarUnTransferDeVarios(pValor) {
+    //$('#modalModulo').modal('hide');
+    $('#modalModulo').html(AgregarTransferHtmlAlPopUp(pValor));
+    $('#modalModulo').modal();
+} */
+
+function AgregarTransferHtmlAlPopUp(pIndex) { //calcar y transformar
+    var strHtmlTransfer = '';
+    strHtmlTransfer += '<div class="modal-background">&nbsp;</div>';
+    strHtmlTransfer += '<div class="modal-dialog modal-lg"><div class="modal-content border">';
+    strHtmlTransfer += '<div class="modal-header">';
+    strHtmlTransfer += '<div class="row">';
+    strHtmlTransfer += '<div class="col-lg-12">';
+    // strHtmlTransfer += '<h4>' + listaTransfer[pIndex].tfr_nombre + '</h4>';
+    strHtmlTransfer += '</div>';
+    strHtmlTransfer += '</div>';
+    strHtmlTransfer += '<div class="close-modal" data-dismiss="modal"><i class="fa fa-times"></i></div>';
+    strHtmlTransfer += '</div>';
+    strHtmlTransfer += '<div class="modal-body"><div class="col-lg-12">';
+    //
+    if (listaTransfer[pIndex].tfr_descripcion != null) {
+        strHtmlTransfer += '<div class="col-lg-3 tit_trasf_combo"><b>Nombre Combo</b></div>';
+        strHtmlTransfer += '<div class="clear"></div>';
+    }
+    //strHtmlTransfer += '<div class="row  style="display: flex; align-items: flex-start;">';
+    strHtmlTransfer += '<div class="row">';
+    strHtmlTransfer += '<div class="col-md-2 col-sm-4 no-padding-left"><b>Producto: </b>&nbsp;' + '</div>';
+    strHtmlTransfer += '<div class="col-md-3 col-sm-4 no-padding-left"><b>Descripción: </b>&nbsp;' + '</div>';
+    strHtmlTransfer += '<div class="col-md-1 col-sm-3 no-padding-left"><b>Precio:</b>&nbsp;' + '</div>';
+    strHtmlTransfer += '<div class="col-md-1 col-sm-3 no-padding-left"><b>Precio c/ Desc.:</b>&nbsp;' + '</div>';
+    strHtmlTransfer += '<div class="col-md-1 col-sm-2 no-padding-left"><b>Cant. Unid.</b>&nbsp;' + '</div>';
+    strHtmlTransfer += '<div class="col-md-1 col-sm-2 no-padding-left"><b>Cant. Total</b>&nbsp;' + '</div>';
+    strHtmlTransfer += '<div class="col-md-1 col-sm-2 no-padding-left"><b>Prod. Bonif.</b>&nbsp;' + '</div>';
+    strHtmlTransfer += '<div class="col-md-1 col-sm-2 no-padding-left"><b>Cant. Bonif.</b>&nbsp;' + '</div>';
+    strHtmlTransfer += '<div class="col-md-1 col-sm-2 no-padding-left"><b>Total Bonif.</b>&nbsp;' + '</div>';
+    strHtmlTransfer += '</div>'; // Cierre de la fila de títulos
+    strHtmlTransfer += '<hr style="margin-top: 2px; margin-bottom: 2px; border-bottom: 2px solid #000; margin-left: 2px; margin-right: 2px; class="no-padding-left">';
+    //
+    //strHtmlTransfer += '<div class="row">';
+    var tienePerfu = false;
+    for (var y = 0; y < listaTransfer[pIndex].listaDetalle.length; y++) {
+        
+/*         console.log(listaTransfer[pIndex].listaDetalle[y]);
+        if (listaTransfer[pIndex].listaDetalle[y].pro_codtpopro == "P") {
+            tienePerfu = true;
+        }
+        var cssDivContenedorProducto = '';
+        if (listaTransfer[pIndex].tfr_mospap) {// == 1
+            if (productoSeleccionado == listaTransfer[pIndex].listaDetalle[y].tde_codpro) {
+                cssDivContenedorProducto = '  class="cssMospapProductoVisible' + pIndex + '" ';
+            } else {
+                cssDivContenedorProducto = 'style="display:block;" class="cssMospapProductoOculto' + pIndex + '" ';
+            }
+        }
+        strHtmlTransfer += '<div ' + cssDivContenedorProducto + '>'; // contenedor general (no esta en el diseño) */
+
+        strHtmlTransfer += '<div class="row">';
+        strHtmlTransfer += '<div class="col-md-2 col-sm-4 no-padding-left">' + listaTransfer[pIndex].listaDetalle[y].pro_nombre + '</div>';
+        strHtmlTransfer += '<div class="col-md-3 col-sm-4 no-padding-left">' + listaTransfer[pIndex].listaDetalle[y].tde_descripcion + '</div>';
+        strHtmlTransfer += '<div class="col-md-1 col-sm-3 no-padding-left">$&nbsp;' + FormatoDecimalConDivisorMiles(listaTransfer[pIndex].listaDetalle[y].tde_prepublico) + '</div>';
+        strHtmlTransfer += '<div class="col-md-1 col-sm-3 no-padding-left">$&nbsp;' + FormatoDecimalConDivisorMiles(listaTransfer[pIndex].listaDetalle[y].PrecioFinalTransfer.toFixed(2)) + '</div>';
+        strHtmlTransfer += '<div class="col-md-1 col-sm-2 no-padding-left">' + listaTransfer[pIndex].listaDetalle[y].tde_fijuni + '</div>';
+        strHtmlTransfer += '<div class="col-md-1 col-sm-2 no-padding-left">' + listaTransfer[pIndex].listaDetalle[y].pro_nombre + '</div>'; //Cambiar por cantidad total    
+        strHtmlTransfer += '<div class="col-md-1 col-sm-2 no-padding-left">' + listaTransfer[pIndex].listaDetalle[y].pro_nombre + '</div>'; //Cambiar por Productos Bonificados
+        strHtmlTransfer += '<div class="col-md-1 col-sm-2 no-padding-left">' + listaTransfer[pIndex].listaDetalle[y].pro_nombre + '</div>'; //Cambiar por Cantidad Bonificada
+        strHtmlTransfer += '<div class="col-md-1 col-sm-2 no-padding-left">' + listaTransfer[pIndex].listaDetalle[y].pro_nombre + '</div>'; //Cambiar por Total bonificado
+        strHtmlTransfer += '</div>'; // Cierre de la fila de datos
+        if (y === listaTransfer[pIndex].listaDetalle.length - 1) {
+        strHtmlTransfer += '<hr style="margin-top: 2px; margin-bottom: 2px; border-bottom: 2px solid #000; margin-left: 2px; margin-right: 2px; class="no-padding-left">';
+        }else{
+        strHtmlTransfer += '<hr style="margin-top: 2px; margin-bottom: 2px; margin-left: 2px; margin-right: 2px;">';
+        }; 
+        strHtmlTransfer += '<div id="tdError' + pIndex + '_' + y + '"  class="errorFilaTransfer" ></div>';
+
+
+
+
+
+    } 
+    strHtmlTransfer += '<div class="style-bottom">';
+    strHtmlTransfer += '<div class="clear10"></div>';
+    strHtmlTransfer += '<div class="row">';
+    strHtmlTransfer += '<div class="col-md-3 col-sm-4 mx-auto d-flex justify-content-center align-items-center">';
+    strHtmlTransfer += '   <div class="button-modal">';
+    strHtmlTransfer += '  <div class="input-group input-group-sm text-center my-2 rounded">';
+    strHtmlTransfer += '    <span class="input-group-btn">';
+    strHtmlTransfer += '      <button type="button" class="btn btn-primary btn-number btn-sm rounded-circle" data-type="minus" data-field="qty">';
+    strHtmlTransfer += '        <span class="glyphicon glyphicon-minus"></span>';
+    strHtmlTransfer += '      </button>';
+    strHtmlTransfer += '    </span>';
+    strHtmlTransfer += '    <input type="text" name="qty" class="form-control input-number border border-dark rounded-pill text-center" value="1" min="1">';
+    strHtmlTransfer += '    <span class="input-group-btn">';
+    strHtmlTransfer += '      <button type="button" class="btn btn-primary btn-number btn-sm rounded-circle" data-type="plus" data-field="qty">';
+    strHtmlTransfer += '        <span class="glyphicon glyphicon-plus"></span>';
+    strHtmlTransfer += '      </button>';
+    strHtmlTransfer += '    </span>';
+    strHtmlTransfer += '  </div>';
+    strHtmlTransfer += '</div>';
+    strHtmlTransfer += '    </div>';
+    strHtmlTransfer +=     '<div class="col-md-2 col-sm-4 monto-total1">MONTO TOTAL:</div>&nbsp'; 
+    strHtmlTransfer +=     '<div class="col-md-2 col-sm-4 monto-total2">' + listaTransfer[pIndex].tde_fijuni + '</div>&nbsp'; //Cambiar por precio total
+    strHtmlTransfer += '</div>';
+    
+    strHtmlTransfer += '<script>';
+    strHtmlTransfer += 'var buttons = document.querySelectorAll(".btn-number");';
+    strHtmlTransfer += 'buttons.forEach(function(button) {';
+    strHtmlTransfer += '  button.addEventListener("click", function(e) {';
+    strHtmlTransfer += '    e.preventDefault();';
+    strHtmlTransfer += '    var fieldName = this.getAttribute("data-field");';
+    strHtmlTransfer += '    var type = this.getAttribute("data-type");';
+    strHtmlTransfer += '    var input = document.querySelector("input[name=\'" + fieldName + "\']");';
+    strHtmlTransfer += '    var currentValue = parseInt(input.value);';
+    strHtmlTransfer += '    if (!isNaN(currentValue)) {';
+    strHtmlTransfer += '      if (type === "minus" && currentValue > 1) {';
+    strHtmlTransfer += '        input.value = currentValue - 1;';
+    strHtmlTransfer += '      } else if (type === "plus") {';
+    strHtmlTransfer += '        input.value = currentValue + 1;';
+    strHtmlTransfer += '      }';
+    strHtmlTransfer += '    }';
+    strHtmlTransfer += '  });';
+    strHtmlTransfer += '});';
+    strHtmlTransfer += '</script>';
+    
+    
+    //
+    var cantBotonesSucursales = 0;
+    for (var iSucursalNombre = 0; iSucursalNombre < listaSucursalesDependienteInfo.length; iSucursalNombre++) {
+        // 25/02/2018
+        var strOcultar = false;
+        if (listaTransfer[pIndex].tfr_nombre == 'TRANSFER PAÑALES PAMI') {
+            if ((cli_codsuc() == 'CO' || cli_codsuc() == 'CD' || cli_codsuc() == 'SF' || cli_codsuc() == 'CB' || cli_codsuc() == 'VM' || cli_codsuc() == 'RC')
+                && listaSucursalesDependienteInfo[iSucursalNombre].sde_sucursal == 'CC') {
+                strOcultar = true;
+            }
+        }
+        // fin: 25/02/2018
+        if (!strOcultar) {
+            var btn_confirmar_sucursal = '';
+            var btn_confirmar_confirmar = 'CONFIRMAR';
+            console.log(listaTransfer[pIndex].listaDetalle);
+            if (!(cli_codsuc() == 'CC' && cli_IdSucursalAlternativa() == null)) {
+                btn_confirmar_sucursal = ConvertirSucursalParaColumna(listaSucursalesDependienteInfo[iSucursalNombre].sde_sucursal);
+                btn_confirmar_confirmar = '- CONFIRMAR'
+            }
+            var btn_confirmar_class = '';
+            if (cantBotonesSucursales == 0)
+                btn_confirmar_class = ' no-margin-r';
+            if (listaSucursalesDependienteInfo[iSucursalNombre].suc_trabajaPerfumeria || (!listaSucursalesDependienteInfo[iSucursalNombre].suc_trabajaPerfumeria && !tienePerfu)) {
+                strHtmlTransfer += '<a class="btn_confirmar' + btn_confirmar_class + '" href="#"  onclick="onClickTransfer(' + pIndex + ',' + iSucursalNombre + '); return false;">' + btn_confirmar_sucursal + '<span class="hidden-xs">' + btn_confirmar_confirmar + '</span></a>';
+                cantBotonesSucursales++;
+            }
+        }
+    }
+
+    strHtmlTransfer += '</div></div>'; //'<div class="modal-body"><div class="col-lg-12">'
+    strHtmlTransfer += '<div class="clear"></div>';
+    strHtmlTransfer += '</div></div>'; // <div class="modal-dialog modal-lg"><div class="modal-content"> 
+
+    return strHtmlTransfer;
 }
 
 function htmlSeleccioneTransfer(pListaTransfer) {
@@ -410,232 +573,12 @@ function htmlSeleccioneTransfer(pListaTransfer) {
     strHtmlTransfer += '</div></div>'; //'<div class="modal-body"><div class="col-lg-12">'
     strHtmlTransfer += '<div class="clear"></div>';
     strHtmlTransfer += '</div></div>'; // <div class="modal-dialog modal-md"><div class="modal-content"> 
-    return strHtmlTransfer;
-}
 
-function AgregarTransferHtmlAlPopUp(pIndex) {
-    var strHtmlTransfer = '';
-    strHtmlTransfer += '<div class="modal-background">&nbsp;</div>';
-    strHtmlTransfer += '<div class="modal-dialog modal-lg"><div class="modal-content">';
-    strHtmlTransfer += '<div class="modal-header no-padding-bottom">';
-    strHtmlTransfer += '<div class="row">';
-    strHtmlTransfer += '<div class="col-lg-12">';
-    // strHtmlTransfer += '<h4>' + listaTransfer[pIndex].tfr_nombre + '</h4>';
-    strHtmlTransfer += '</div>';
-    strHtmlTransfer += '</div>';
-    strHtmlTransfer += '<div class="close-modal" data-dismiss="modal"><i class="fa fa-times"></i></div>';
-    strHtmlTransfer += '</div>';
-    strHtmlTransfer += '<div class="modal-body"><div class="col-lg-12">';
-    //
-    if (listaTransfer[pIndex].tfr_descripcion != null) {
-        strHtmlTransfer += '<div class="col-md-6 col-sm-6 no-padding"><b>DESCRIPCIÓN Y CONDICIÓN</b>' + listaTransfer[pIndex].tfr_descripcion + '</div><div class="col-md-6 col-sm-6 col-xs-12 date_trasf_combo"></div>';
-        strHtmlTransfer += '<div class="clear"></div>';
-    }
-
-    var tituloTrfMinimoRenglon = 'Mínima Renglones:';
-    var valorTrfMinimoRenglon = '-';
-    if (listaTransfer[pIndex].tfr_minrenglones != null) {
-        tituloTrfMinimoRenglon = '<b>' + 'Mínima Renglones:' + '</b>';
-        valorTrfMinimoRenglon = '<b>' + listaTransfer[pIndex].tfr_minrenglones + '</b>';
-    }
-    strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloTrfMinimoRenglon + ' ' + valorTrfMinimoRenglon + '</div>';
-
-    var tituloTrfUnidadMinima = 'Unidad Mínima:';
-    var valorTrfUnidadMinima = '-';
-    if (listaTransfer[pIndex].tfr_minunidades != null) {
-        tituloTrfUnidadMinima = '<b>' + 'Unidad Mínima:' + '</b>';
-        valorTrfUnidadMinima = '<b>' + listaTransfer[pIndex].tfr_minunidades + '</b>';
-    }
-    strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloTrfUnidadMinima + ' ' + valorTrfUnidadMinima + '</div>';
-
-    var tituloTrfUnidadMaxima = 'Unidad Máxima:';
-    var valorTrfUnidadMaxima = '-';
-    if (listaTransfer[pIndex].tfr_maxunidades != null) {
-        tituloTrfUnidadMaxima = '<b>' + 'Unidad Máxima:' + '</b>';
-        valorTrfUnidadMaxima = '<b>' + listaTransfer[pIndex].tfr_maxunidades + '</b>';
-    }
-    strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloTrfUnidadMaxima + ' ' + valorTrfUnidadMaxima + '</div>';
-
-    var tituloTrfMultiploUnidades = 'Múltiplo unidades:';
-    var valorTrfMultiploUnidades = '-';
-    if (listaTransfer[pIndex].tfr_mulunidades != null) {
-        tituloTrfMultiploUnidades = '<b>' + 'Múltiplo unidades:' + '</b>';
-        valorTrfMultiploUnidades = '<b>' + listaTransfer[pIndex].tfr_mulunidades + '</b>';
-    }
-    strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloTrfMultiploUnidades + ' ' + valorTrfMultiploUnidades + '</div>';
-
-    var tituloTrfUnidadesFijas = 'Unidades Fijas:';
-    var valorTrfUnidadesFijas = '-';
-    if (listaTransfer[pIndex].tfr_fijunidades != null) {
-        tituloTrfUnidadesFijas = '<b>' + 'Unidades Fijas:' + '</b>';
-        valorTrfUnidadesFijas = '<b>' + listaTransfer[pIndex].tfr_fijunidades + '</b>';
-    }
-    strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloTrfUnidadesFijas + ' ' + valorTrfUnidadesFijas + '</div>';
-    strHtmlTransfer += '<div class="clear15"></div>';
-    //
-    var tienePerfu = false;
-    for (var y = 0; y < listaTransfer[pIndex].listaDetalle.length; y++) {
-        console.log(listaTransfer[pIndex].listaDetalle[y]);
-        if (listaTransfer[pIndex].listaDetalle[y].pro_codtpopro == "P") {
-            tienePerfu = true;
-        }
-        var cssDivContenedorProducto = '';
-        if (listaTransfer[pIndex].tfr_mospap) {// == 1
-            if (productoSeleccionado == listaTransfer[pIndex].listaDetalle[y].tde_codpro) {
-                cssDivContenedorProducto = '  class="cssMospapProductoVisible' + pIndex + '" ';
-            } else {
-                cssDivContenedorProducto = ' style="display:none;" class="cssMospapProductoOculto' + pIndex + '" ';
-            }
-        }
-        strHtmlTransfer += '<div ' + cssDivContenedorProducto + '>'; // contenedor general (no esta en el diseño)
-        strHtmlTransfer += '<div class="col-lg-12 tit_trasf_combo">' + listaTransfer[pIndex].listaDetalle[y].tde_codpro + '</div>';
-        if (listaTransfer[pIndex].listaDetalle[y].tde_descripcion != null) {
-            strHtmlTransfer += '<div class="col-lg-12 no-padding-left">' + '<b>Descripción: </b>&nbsp;' + listaTransfer[pIndex].listaDetalle[y].tde_descripcion + '</div>';
-        }
-        strHtmlTransfer += '<div class="col-md-3 col-sm-6 no-padding-left"><b>Precio Público:</b>&nbsp;$&nbsp;' + FormatoDecimalConDivisorMiles(listaTransfer[pIndex].listaDetalle[y].tde_prepublico) + '</div>';
-        strHtmlTransfer += '<div class="col-md-3 col-sm-6 no-padding-left"><b>Precio con descuento:</b>&nbsp;$&nbsp;' + FormatoDecimalConDivisorMiles(listaTransfer[pIndex].listaDetalle[y].PrecioFinalTransfer.toFixed(2)) + '</div>';
-        strHtmlTransfer += '<div class="clear"></div>';
-        var tituloDetalleUnidadMinima = 'Unidad Mínima:';
-        var valorDetalleUnidadMinima = '-';
-        if (listaTransfer[pIndex].listaDetalle[y].tde_minuni != null) {
-            tituloDetalleUnidadMinima = '<b>' + 'Unidad Mínima: ' + '</b>';
-            valorDetalleUnidadMinima = '<b>' + listaTransfer[pIndex].listaDetalle[y].tde_minuni + '</b>';
-        }
-        strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloDetalleUnidadMinima + ' ' + valorDetalleUnidadMinima + '</div>';
-
-        var tituloDetalleUnidadMaxima = 'Unidad Máxima:';
-        var valorDetalleUnidadMaxima = '-';
-        if (listaTransfer[pIndex].listaDetalle[y].tde_maxuni != null) {
-            tituloDetalleUnidadMaxima = '<b>' + 'Unidad Máxima:' + '</b>';
-            valorDetalleUnidadMaxima = '<b>' + listaTransfer[pIndex].listaDetalle[y].tde_maxuni + '</b>';
-        }
-        strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloDetalleUnidadMaxima + ' ' + valorDetalleUnidadMaxima + '</div>';
-
-        var tituloDetalleMultiploUnidades = 'Múltiplo Unidades:';
-        var valorDetalleMultiploUnidades = '-';
-        if (listaTransfer[pIndex].listaDetalle[y].tde_muluni != null) {
-            tituloDetalleMultiploUnidades = '<b>' + 'Múltiplo Unidades:' + '</b>';
-            valorDetalleMultiploUnidades = '<b>' + listaTransfer[pIndex].listaDetalle[y].tde_muluni + '</b>';
-        }
-        strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloDetalleMultiploUnidades + ' ' + valorDetalleMultiploUnidades + '</div>';
-
-        var tituloDetalleUnidadesFijas = 'Unidades Fijas:';
-        var valorDetalleUnidadesFijas = '-';
-        if (listaTransfer[pIndex].listaDetalle[y].tde_fijuni != null) {
-            tituloDetalleUnidadesFijas = '<b>' + 'Unidades Fijas:' + '</b>';
-            valorDetalleUnidadesFijas = '<b>' + listaTransfer[pIndex].listaDetalle[y].tde_fijuni + '</b>';
-        }
-        strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloDetalleUnidadesFijas + ' ' + valorDetalleUnidadesFijas + '</div>';
-
-        var valorDefaultCantidad = '';
-        var tituloDetalleObligatorio = 'Obligatorio:';
-        var valorDetalleObligatorio = '-';
-        if (listaTransfer[pIndex].listaDetalle[y].tde_proobligatorio) {
-            tituloDetalleObligatorio = '<b>' + 'Obligatorio:' + '</b>';
-            valorDetalleObligatorio = '<b>' + 'Si' + '</b>';
-            // Valor default
-            if (listaTransfer[pIndex].listaDetalle[y].tde_minuni != null) {
-                valorDefaultCantidad = listaTransfer[pIndex].listaDetalle[y].tde_minuni;
-            } else if (listaTransfer[pIndex].listaDetalle[y].tde_muluni != null) {
-                valorDefaultCantidad = listaTransfer[pIndex].listaDetalle[y].tde_muluni;
-            }
-        }
-        else {
-            valorDetalleObligatorio = 'No';
-        }
-        strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloDetalleObligatorio + ' ' + valorDetalleObligatorio + '</div>';
-
-        strHtmlTransfer += '<div class="clear5"></div>';
-        var cssMostrarInput = '';
-        if (!isMostrarImput_AceptaPsicotropicos(listaTransfer[pIndex].listaDetalle[y].pro_codtpovta)) {
-            cssMostrarInput = ' cssInputNoMostrar ';
-        }
-        var typeInput = ' type="text" ';
-        if (isMobile())
-            typeInput = ' type="number" ';
-        strHtmlTransfer += '<div class="col-md-6 col-xs-6 cant_trasf_combo">CANTIDAD:<input id="txtProdTransf' + pIndex + '_' + y + '" ' + typeInput + ' class="form-shop ' + cssMostrarInput + '" onblur="onblurCantProductosTransfer(this)"  onfocus="onfocusInputTransfer(this)" onkeypress="return onKeypressCantProductos(event)" value="' + valorDefaultCantidad + '" ></input></div>';
-
-        strHtmlTransfer += '<div class="col-md-6 col-xs-6 pt_transf_combo">';
-
-        if (listaSucursalesDependienteInfo != null) {
-            for (var iSucursalNombre = 0; iSucursalNombre < listaSucursalesDependienteInfo.length; iSucursalNombre++) {
-                for (var iSucursal = 0; iSucursal < listaTransfer[pIndex].listaDetalle[y].listaSucursalStocks.length; iSucursal++) {
-                    if (listaSucursalesDependienteInfo[iSucursalNombre].sde_sucursal == listaTransfer[pIndex].listaDetalle[y].listaSucursalStocks[iSucursal].stk_codsuc) {
-                        // 25/02/2018
-                        var strOcultar = false;
-                        if (listaTransfer[pIndex].tfr_nombre == 'TRANSFER PAÑALES PAMI') {
-                            if ((cli_codsuc() == 'CO' || cli_codsuc() == 'CD' || cli_codsuc() == 'SF' || cli_codsuc() == 'CB' || cli_codsuc() == 'VM' || cli_codsuc() == 'RC')
-                                && listaSucursalesDependienteInfo[iSucursalNombre].sde_sucursal == 'CC') {
-                                strOcultar = true;
-                            }
-                        }
-                        // fin: 25/02/2018
-                        if (!strOcultar) {
-                            if (!(cli_codsuc() == 'CC' && cli_IdSucursalAlternativa() == null)) { // como esta en produccion ---> if (cli_codsuc() != 'CC') {
-                                strHtmlTransfer += '<div class="div-pt_popup">' + ConvertirSucursalParaColumna(listaSucursalesDependienteInfo[iSucursalNombre].sde_sucursal) + '</div>';
-                            }
-                            strHtmlTransfer += '<div class="pt_popup ' + getNameClassStock(listaTransfer[pIndex].listaDetalle[y].listaSucursalStocks[iSucursal].stk_stock) + '"></div>';
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-
-        //strHtmlTransfer += '<div class="div-pt_popup no-margin-r">CC</div><div class="pt_sin_stock pt_popup"></div><div class="div-pt_popup">CBA</div><div class="pt_critico pt_popup"></div><div class="div-pt_popup">AAA</div><div class="pt_stock pt_popup"></div>';
-        strHtmlTransfer += '</div>'; //'<div class="col-md-6 col-xs-6 pt_transf_combo">';
-
-        strHtmlTransfer += '<div id="tdError' + pIndex + '_' + y + '"  class="errorFilaTransfer" ></div>';
-
-        strHtmlTransfer += '<div class="clear10"></div>';
-
-        strHtmlTransfer += '</div>'; // fin contenedor general  (no esta en el diseño)
-
-    }
-
-    //
-    var cantBotonesSucursales = 0;
-    for (var iSucursalNombre = 0; iSucursalNombre < listaSucursalesDependienteInfo.length; iSucursalNombre++) {
-        // 25/02/2018
-        var strOcultar = false;
-        if (listaTransfer[pIndex].tfr_nombre == 'TRANSFER PAÑALES PAMI') {
-            if ((cli_codsuc() == 'CO' || cli_codsuc() == 'CD' || cli_codsuc() == 'SF' || cli_codsuc() == 'CB' || cli_codsuc() == 'VM' || cli_codsuc() == 'RC')
-                && listaSucursalesDependienteInfo[iSucursalNombre].sde_sucursal == 'CC') {
-                strOcultar = true;
-            }
-        }
-        // fin: 25/02/2018
-        if (!strOcultar) {
-            var btn_confirmar_sucursal = '';
-            var btn_confirmar_confirmar = 'CONFIRMAR';
-            console.log(listaTransfer[pIndex].listaDetalle);
-            if (!(cli_codsuc() == 'CC' && cli_IdSucursalAlternativa() == null)) {
-                btn_confirmar_sucursal = ConvertirSucursalParaColumna(listaSucursalesDependienteInfo[iSucursalNombre].sde_sucursal);
-                btn_confirmar_confirmar = '- CONFIRMAR'
-            }
-            var btn_confirmar_class = '';
-            if (cantBotonesSucursales == 0)
-                btn_confirmar_class = ' no-margin-r';
-            if (listaSucursalesDependienteInfo[iSucursalNombre].suc_trabajaPerfumeria || (!listaSucursalesDependienteInfo[iSucursalNombre].suc_trabajaPerfumeria && !tienePerfu)) {
-                strHtmlTransfer += '<a class="btn_confirmar' + btn_confirmar_class + '" href="#"  onclick="onClickTransfer(' + pIndex + ',' + iSucursalNombre + '); return false;">' + btn_confirmar_sucursal + '<span class="hidden-xs">' + btn_confirmar_confirmar + '</span></a>';
-                cantBotonesSucursales++;
-            }
-        }
-    }
-    if (listaTransfer[pIndex].tfr_mospap == 1) {//class="carro-btn-confirmarTransfer"
-
-        //strHtmlTransfer += ' <a style="margin-left:5px;" id="btnVerTransferCompleto' + pIndex + '" onclick="onClickVerTransferCompleto(' + pIndex + '); return false;" href="#">Ver transfer completo</a>';
-        strHtmlTransfer += ' <a class="btn_transf_comp" id="btnVerTransferCompleto' + pIndex + '" onclick="onClickVerTransferCompleto(' + pIndex + '); return false;" href="#">VER TRANSFER COMPLETO</a>';
-        //strHtmlTransfer += '<div class="clear10"></div>';
-    }
-
-    //
-    strHtmlTransfer += '</div></div>'; //'<div class="modal-body"><div class="col-lg-12">'
-    strHtmlTransfer += '<div class="clear"></div>';
-    strHtmlTransfer += '</div></div>'; // <div class="modal-dialog modal-lg"><div class="modal-content"> 
 
     return strHtmlTransfer;
 }
+
+
 function onClickTransfer(pIndice, pIndiceSucursal) {
     ValidarTransferTotal_sucursal(pIndice, pIndiceSucursal);
 }
