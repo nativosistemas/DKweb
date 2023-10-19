@@ -629,6 +629,7 @@ function ValidarTransferTotal_sucursal(pIndice, pIndiceSursal) {
             if (intMensajeProducto > 0) {
                 var objProducto = new jcTransfersProductos();
                 objProducto.codProductoNombre = listaTransfer[pIndice].listaDetalle[i].tde_codpro; // Para la funcion en el servidor
+                objProducto.codProducto = listaTransfer[pIndice].listaDetalle[i].tde_codpro; 
                 objProducto.tde_codpro = listaTransfer[pIndice].listaDetalle[i].tde_codpro;
                 objProducto.cantidad = intMensajeProducto;
                 objProducto.indexAuxProducto = i;
