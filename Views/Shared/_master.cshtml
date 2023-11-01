@@ -78,9 +78,12 @@
                 <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 text-right">
 
                     <div class="col-lg-1 cont_right no-padding-right">
-                        <button tabindex="3" id="btnIngresar" class="ingreso" name="btnIngresar"
-                            onclick="onclickIngresar(); return false;" type="submit"></button>
-
+                        <button class="ingreso" 
+                                id="botonIniciarSesion"
+                                data-sitekey="reCAPTCHA_site_key" 
+                                data-callback='onSubmit' 
+                                data-action='submit'>
+                        </button>
                     </div>
                     <div class="col-lg-2 cont_right no-padding-right">
                         <input tabindex="2" name="login_password" id="login_password" class="form-control form_login"
@@ -234,8 +237,13 @@
                             class="form-control form_login_ftr" type="password" placeholder="Contrase&ntilde;a"
                             onkeypress="onkeypressIngresarAbajo(event)" />
                         <div class="clear20"></div>
-                        <button tabindex="6" id="btnIngresar_footer" class="btn_emp" name="btnIngresar_footer"
-                            type="submit" onclick="onclickIngresarAbajo(); return  false;">INGRESAR</button>
+                        <button class="btn_emp"
+                                tabindex="6" 
+                                id="botonIniciarSesionAbajo"
+                                data-sitekey="reCAPTCHA_site_key" 
+                                data-callback='onSubmit' 
+                                data-action='submit'>INGRESAR
+                        </button>
 
                     </div>
                     <div class="col-sm-6 col-md-6 visible-md visible-sm ftr_contacto">
@@ -523,6 +531,43 @@
             $('#name_carrito').focus();
         });
 
+    </script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LeVNeQoAAAAAB8BX4-pJCSwCfdS7iWes-JQWhJe"></script>
+    <script>
+        // Función para ejecutar reCAPTCHA v3
+        function executeRecaptcha() {
+            grecaptcha.ready(function () {
+                grecaptcha.execute('6LeVNeQoAAAAAB8BX4-pJCSwCfdS7iWes-JQWhJe', { action: 'iniciar_sesion' })
+                    .then(function (token) {
+                        onclickIngresar();
+                    });
+            });
+        }
+        document.getElementById('botonIniciarSesion').addEventListener('click', function () {
+            event.preventDefault();
+            executeRecaptcha();
+        });
+    </script>
+        <script>
+        // Función para ejecutar reCAPTCHA v3 abajo
+        function executeRecaptchaAbajo() {
+            grecaptcha.ready(function () {
+                grecaptcha.execute('6LeVNeQoAAAAAB8BX4-pJCSwCfdS7iWes-JQWhJe', { action: 'iniciar_sesion' })
+                    .then(function (token) {
+                        onclickIngresarAbajo();
+                    });
+            });
+        }
+        document.getElementById('botonIniciarSesionAbajo').addEventListener('click', function () {
+            event.preventDefault();
+            executeRecaptchaAbajo();
+        });
+    </script>
+
+    <script>
+        function onSubmit(token) {
+            document.getElementById("demo-form").submit();
+        }
     </script>
 </body>
 
