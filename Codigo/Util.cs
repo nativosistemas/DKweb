@@ -382,9 +382,19 @@ public class Util
         string IdSuc = "CC";
         string GrupoCliente = "";
         string resultado = null;
-        string userAgent = "";//System.Web.HttpContext.Current.Request.UserAgent;
-        string ip = "";//System.Web.HttpContext.Current.Server.HtmlEncode(System.Web.HttpContext.Current.Request.UserHostAddress);
-        string hostName = "";//System.Web.HttpContext.Current.Request.UserHostName;
+        string userAgent = string.Empty;
+        string ip = string.Empty;
+        string hostName = string.Empty;
+        /* try
+         {*/
+        userAgent = pHttpContextAccessor.HttpContext.Request.Headers["User-Agent"].ToString();
+        ip = pHttpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString();
+        hostName = pHttpContextAccessor.HttpContext.Request.Host.Host;
+        /*  }
+          catch (System.Exception ex)
+          {
+              DKbase.generales.Log.LogError(System.Reflection.MethodBase.GetCurrentMethod(), ex, DateTime.Now);
+          }*/
         DKbase.web.Usuario user = DKbase.Util.Login(pName, pPass, ip, hostName, userAgent);
         if (user != null)
         {
