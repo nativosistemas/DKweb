@@ -535,34 +535,18 @@
     <script src="https://www.google.com/recaptcha/api.js?render=6LeVNeQoAAAAAB8BX4-pJCSwCfdS7iWes-JQWhJe"></script>
     <script>
         // Función para ejecutar reCAPTCHA v3
-        function executeRecaptcha() {
-            grecaptcha.ready(function () {
-                grecaptcha.execute('6LeVNeQoAAAAAB8BX4-pJCSwCfdS7iWes-JQWhJe', { action: 'iniciar_sesion' })
-                    .then(function (token) {
-                        onclickIngresar();
-                    });
-            });
-        }
         document.getElementById('botonIniciarSesion').addEventListener('click', function () {
             event.preventDefault();
-            executeRecaptcha();
+            onclickIngresar();
         });
     </script>
         <script>
         // Función para ejecutar reCAPTCHA v3 abajo
-        function executeRecaptchaAbajo() {
-            grecaptcha.ready(function () {
-                grecaptcha.execute('6LeVNeQoAAAAAB8BX4-pJCSwCfdS7iWes-JQWhJe', { action: 'iniciar_sesion' })
-                    .then(function (token) {
-                        onclickIngresarAbajo();
-                    });
-            });
-        }
         document.getElementById('botonIniciarSesionAbajo').addEventListener('click', function () {
             event.preventDefault();
-            executeRecaptchaAbajo();
+            onclickIngresarAbajo();
         });
-    </script>
+        </script>
 
     <script>
         function onSubmit(token) {

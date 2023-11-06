@@ -5,8 +5,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-  <PackageReference Include="NativoSistemas.DKbase" Version="1.0.91" />
+    <ItemGroup>
+      <!-- 
+              <PackageReference Include="NativoSistemas.DKbase" Version="1.0.91" />
+        
+  -->
+  <ProjectReference Include="../DKbase/DKbase.csproj"   />
+
   </ItemGroup>
 
 </Project>
