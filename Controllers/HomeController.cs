@@ -4,6 +4,7 @@ using DKweb.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using DocumentFormat.OpenXml.Bibliography;
 
 namespace DKweb.Controllers;
 
@@ -254,31 +255,36 @@ public class HomeController : Controller
         }
         return View();
     }//    [HttpGet]
-    public async Task<string> login(string pLogin, string pPass)
+    public async Task<string> login(string pLogin, string pPass, string pToken)
     {
-        DKbase.Models.AuthenticateRequest pAuthenticateRequest = new DKbase.Models.AuthenticateRequest() { login = pLogin, pass = pPass };
+        DKbase.Models.AuthenticateRequest pAuthenticateRequest = new DKbase.Models.AuthenticateRequest() { login = pLogin, pass = pPass, token = pToken };
         return await login_general(pAuthenticateRequest);
     }
     private async Task<string> login_general(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
     {
-        string result = "!Ok";
-        if (pAuthenticateRequest != null && !string.IsNullOrEmpty(pAuthenticateRequest.login) && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
+        string publicKey = pAuthenticateRequest.token;
+        string result = "reCAPTCHA Invalido";
+        if (DKbase.web.generales.ReCaptchaClass.Validate(publicKey))
         {
-            var result_login = DKweb.Codigo.Util.login(_httpContextAccessor, pAuthenticateRequest.login, pAuthenticateRequest.pass);// "romanello ", "alberdi"
-            result = result_login;
-            if (!string.IsNullOrEmpty(result_login) && (result_login == "Ok" || result_login == "OkPromotor"))
+            result = "!Ok";
+            if (pAuthenticateRequest != null && !string.IsNullOrEmpty(pAuthenticateRequest.login) && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
             {
-                DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
-                if (oUsuario != null)
+                var result_login = DKweb.Codigo.Util.login(_httpContextAccessor, pAuthenticateRequest.login, pAuthenticateRequest.pass);// "romanello ", "alberdi"
+                result = result_login;
+                if (!string.IsNullOrEmpty(result_login) && (result_login == "Ok" || result_login == "OkPromotor"))
                 {
-                    var claims = new List<Claim>{
+                    DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+                    if (oUsuario != null)
+                    {
+                        var claims = new List<Claim>{
                     new Claim(ClaimTypes.Name, oUsuario.NombreYApellido),
                     new Claim("dk_login"  as string, oUsuario.usu_login),
                     new Claim(ClaimTypes.Role, oUsuario.idRol.ToString())};
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                    return result_login;
+                        return result_login;
+                    }
                 }
             }
         }
@@ -346,5 +352,10 @@ public class HomeController : Controller
     {
         DKweb.Codigo.Util.htmlCssBodySet(_httpContextAccessor, "bd_sec");
         return View();
+
+
     }
 }
+
+
+

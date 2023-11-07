@@ -43,6 +43,7 @@ DKbase.Helper.getMailContacto = builder.Configuration.GetSection("appSettings")[
 DKbase.Helper.getArchivo_ImpresionesComprobante = builder.Configuration.GetSection("appSettings")["ImpresionesComprobante"];
 DKbase.Helper.getConnectionStringSQL = builder.Configuration.GetConnectionString("ConnectionSQL");
 DKbase.Helper.getMail_reclamos =builder.Configuration.GetSection("appSettings")["mail_reclamos"];// System.Configuration.ConfigurationManager.AppSettings["mail_reclamos"].ToString();
+DKbase.Helper.getReCAPTCHA_ClaveSecreta = builder.Configuration.GetSection("appSettings")["reCAPTCHA_ClaveSecreta"];
 
 var optionsRewrite = new RewriteOptions()
 .AddRedirect("home/index.aspx", "home/index")
