@@ -62,7 +62,7 @@
         if (isSoloTransferFacturacionDirecta(listaCarritos[pIndexCarrito].listaProductos[iProductos], listaCarritos[pIndexCarrito].codSucursal, listaCarritos[pIndexCarrito].listaProductos[iProductos].cantidad, false)) {
             typeInput_SoloTransferFacturacionDirecta = ' disabled ';
         }
-        strHTML += '<input ' + typeInput_SoloTransferFacturacionDirecta+' class="form-shop w_100" id="inputCarrito' + pIndexCarrito + '_' + iProductos + '" ' + typeInput + '  value="' + listaCarritos[pIndexCarrito].listaProductos[iProductos].cantidad + '" onblur="onblurInputCarrito(this)" onfocus="onfocusInputCarrito(this)" onkeypress="return onKeypressCantProductos(event)" />';
+        strHTML += '<input ' + typeInput_SoloTransferFacturacionDirecta + ' class="form-shop w_100" id="inputCarrito' + pIndexCarrito + '_' + iProductos + '" ' + typeInput + '  value="' + listaCarritos[pIndexCarrito].listaProductos[iProductos].cantidad + '" onblur="onblurInputCarrito(this)" onfocus="onfocusInputCarrito(this)" onkeypress="return onKeypressCantProductos(event)" />';
         strHTML += '</td>';
         var strHtmlPrecioProducto = '';
         if (listaCarritos[pIndexCarrito].listaProductos[iProductos].stk_stock == 'N') {
@@ -93,9 +93,9 @@
     return strHTML;
 }
 function obtenerCarritoUnidades(pIndexCarrito) {
-    var cantProductosTotales = parseInt( 0);
+    var cantProductosTotales = parseInt(0);
     for (var iProductos = 0; iProductos < listaCarritos[pIndexCarrito].listaProductos.length; iProductos++) {
-        if (isNotNullEmpty(listaCarritos[pIndexCarrito].listaProductos[iProductos].cantidad)) { 
+        if (isNotNullEmpty(listaCarritos[pIndexCarrito].listaProductos[iProductos].cantidad)) {
             cantProductosTotales += parseInt(listaCarritos[pIndexCarrito].listaProductos[iProductos].cantidad);
         }
     }
@@ -129,11 +129,11 @@ function OnCallBackIsHacerPedidos(args) {
             location.href = '../mvc/Buscador'; //= 'PedidosBuscador.aspx';
         }
     } else if (args == 1) {
-        mensaje_informacion( mensajeTareasMantenimiento);
+        mensaje_informacion(mensajeTareasMantenimiento);
     }
 }
 function onclickConfirmarCarrito(pIndexCarrito) {
-    MostrarConfirmarCarrito(pIndexCarrito,false);
+    MostrarConfirmarCarrito(pIndexCarrito, false);
     onChangeTipoEnvio();
     $("#hiddenIndexCarrito").val(pIndexCarrito);
     //// Acutalizar horario reparto
@@ -196,7 +196,7 @@ function OnCallBackObtenerHorarioCierre(args) {
 }
 function MostrarConfirmarCarrito(pIndexCarrito, pIsTransfer) {
     var onclick = '';
-    var codSucursal ='';
+    var codSucursal = '';
     if (pIsTransfer) {
         onclick = 'onclickConfimarTransferPedidoOk()';
         codSucursal = listaCarritoTransferPorSucursal[pIndexCarrito].Sucursal;
@@ -309,7 +309,7 @@ function ConfirmarCarrito(pIndexCarrito) {
             if (isCarritoDiferido) {
                 TomarPedidoCarritoDiferido(listaCarritos[pIndexCarrito].codSucursal, textFactura, textRemito, idTipoEnvio, isUrgente);
             }
-            else { 
+            else {
                 TomarPedidoCarrito(listaCarritos[pIndexCarrito].codSucursal, textFactura, textRemito, idTipoEnvio, isUrgente);
             }
             //
@@ -318,7 +318,7 @@ function ConfirmarCarrito(pIndexCarrito) {
             //
         } else {
             //alert('Para hacer el pedido se debe superar el monto mínimo de ' + '$ ' + montoMinimo);
-            mensaje_informacion( 'Para hacer el pedido se debe superar el monto mínimo de ' + '$ ' + montoMinimo);
+            mensaje_informacion('Para hacer el pedido se debe superar el monto mínimo de ' + '$ ' + montoMinimo);
             isBotonNoEstaEnProceso = true;
         }
     } // fin   if (isOkCadeteriaRestricciones) {
@@ -345,7 +345,7 @@ function OnCallBackTomarPedidoCarrito(args) {
         mensaje_alert_base(mensajeCuandoSeMuestraError, 'volverBuscador()');
     } else {
         // Error dsd dll pedido
-        if (args.Error != '' || args.web_Error != '' ) {
+        if (args.Error != '' || args.web_Error != '') {
             var msgError = '';
             if (args.Error != '') {
                 msgError = args.Error;
@@ -354,7 +354,7 @@ function OnCallBackTomarPedidoCarrito(args) {
             }
             mensaje_alert_base(msgError, 'volverBuscador()');
             // Fin Error dsd dll pedido
-        } else{
+        } else {
             isHacerBorradoCarritos = true;
             CargarRespuestaDePedido(args);
         }
@@ -374,19 +374,19 @@ function getHtml_ProductosFacturados(pValor) {
     strHtml += '<table class="footable table popup table-stripped" data-empty="No hay informacion disponible" width="100%" align="center" cellspacing="0" cellpadding="0" border="0">';
     strHtml += '<tbody>';
     if (listaFaltantes != null) {
-    for (var iFaltantes = 0; iFaltantes < listaFaltantes.length; iFaltantes++) {
-        if (listaFaltantes[iFaltantes].Cantidad > 0) {
-            isProductosPedidos = true;
-            var strHtmlColorFondo = 'grs';
-            if (cant % 2 != 0) {
-                strHtmlColorFondo = 'wht';
+        for (var iFaltantes = 0; iFaltantes < listaFaltantes.length; iFaltantes++) {
+            if (listaFaltantes[iFaltantes].Cantidad > 0) {
+                isProductosPedidos = true;
+                var strHtmlColorFondo = 'grs';
+                if (cant % 2 != 0) {
+                    strHtmlColorFondo = 'wht';
+                }
+                strHtml += '<tr class="' + strHtmlColorFondo + '">';
+                strHtml += '<td class="col-lg-10 col-md-10 col-sm-10 col-xs-9 text-left">' + listaFaltantes[iFaltantes].NombreObjetoComercial + '</td>';
+                strHtml += '<td class="col-lg-2 col-md-2 col-sm-10 col-xs-3 text-center">' + listaFaltantes[iFaltantes].Cantidad + '</td>';
+                strHtml += '</tr>';
+                cant++;
             }
-            strHtml += '<tr class="' + strHtmlColorFondo + '">';
-            strHtml += '<td class="col-lg-10 col-md-10 col-sm-10 col-xs-9 text-left">' + listaFaltantes[iFaltantes].NombreObjetoComercial + '</td>';
-            strHtml += '<td class="col-lg-2 col-md-2 col-sm-10 col-xs-3 text-center">' + listaFaltantes[iFaltantes].Cantidad + '</td>';
-            strHtml += '</tr>';
-            cant++;
-        }
         }
     }
     strHtml += '</tbody></table>';
@@ -496,7 +496,7 @@ function CargarRespuestaDePedido(pValor) {
     strHtml += '<div class="modal-body">';
     //
     if (strHtmlProductosPedidos != '') {
- 
+
         strHtml += strHtmlProductosPedidos;
     }
     if (strHtmlProblemasCrediticios == '' && strHtmlFaltantes == '') {
@@ -514,7 +514,7 @@ function CargarRespuestaDePedido(pValor) {
     }
     //
     strHtml += '<div class="clear"></div>';
-    strHtml += '<a class="btn_confirmar" href="#" onclick="onclickBtnConfirmarResultadoPedido(); return false;">CONFIRMAR</a>';				
+    strHtml += '<a class="btn_confirmar" href="#" onclick="onclickBtnConfirmarResultadoPedido(); return false;">CONFIRMAR</a>';
     strHtml += '<div class="clear"></div>';
     strHtml += '</div>';
     strHtml += '<div class="clear"></div>';
@@ -574,7 +574,7 @@ function OnCallBackBorrarCarrito(args) {
         modalModuloAlertHide();
         LimpiarTextBoxProductosBuscados(sucur);
         carritoNoHayCarritosCelular();
-        
+
     }
 }
 
@@ -600,7 +600,7 @@ function CalcularPrecioProductosEnCarrito(pPrecioFinal, pCantidad, pOfertaPorUni
 function setScrollFinDeCarrito(pIndexCarrito) {
     //setTimeout(function () { $('#Scroll_' + pIndexCarrito).scrollTop($('#Scroll_' + pIndexCarrito).prop('scrollHeight')); }, 40);
     setTimeout(function () { $('#div_carrito_cont_' + pIndexCarrito).scrollTop($('#div_carrito_cont_' + pIndexCarrito).prop('scrollHeight')); }, 40);
-    setTimeout(function () { ReAjustarColumnasCarritos(listaCarritos[pIndexCarrito].codSucursal,false); }, 40);
+    setTimeout(function () { ReAjustarColumnasCarritos(listaCarritos[pIndexCarrito].codSucursal, false); }, 40);
 }
 function onfocusInputCarrito(pValor) {
     DesmarcarFilaSeleccionada();
@@ -618,7 +618,7 @@ function onblurInputCarrito(pValor) {
         var columna = parseInt(palabrasBase[0]);
 
         if (pValor.value != '') {
-     
+
             var cantidadProducto = parseInt(pValor.value);
             var cantidadAnterior_temp = listaCarritos[columna].listaProductos[fila].cantidad;
             if (cantidadProducto != cantidadAnterior_temp) {
@@ -647,15 +647,15 @@ function onblurInputCarrito(pValor) {
                     }
                     //Fin Cantidad producto parametrizada
                     if (!isCantidadMaximaParametrizada) {
-                            cantidadAnterior_carrito = listaCarritos[columna].listaProductos[fila].cantidad;
-                            var cantidadFinalCarrito = CargarProductoCantidadDependiendoTransferCarrito(fila, columna, cantidadProducto);
-                            if (cantidadFinalCarrito != cantidadProducto) {
-                                pValor.value = cantidadFinalCarrito;
-                            }
+                        cantidadAnterior_carrito = listaCarritos[columna].listaProductos[fila].cantidad;
+                        var cantidadFinalCarrito = CargarProductoCantidadDependiendoTransferCarrito(fila, columna, cantidadProducto);
+                        if (cantidadFinalCarrito != cantidadProducto) {
+                            pValor.value = cantidadFinalCarrito;
+                        }
                     }
                 } else {
                     //alert(MostrarTextoSuperaCantidadMaxima(listaCarritos[columna].listaProductos[fila].pro_nombre, listaCarritos[columna].listaProductos[fila].pro_canmaxima));
-                    mensaje_informacion( MostrarTextoSuperaCantidadMaxima(listaCarritos[columna].listaProductos[fila].pro_nombre, listaCarritos[columna].listaProductos[fila].pro_canmaxima));
+                    mensaje_informacion(MostrarTextoSuperaCantidadMaxima(listaCarritos[columna].listaProductos[fila].pro_nombre, listaCarritos[columna].listaProductos[fila].pro_canmaxima));
                     var cantidadAnterior = listaCarritos[columna].listaProductos[fila].cantidad;
                     if (cantidadAnterior != '') {
                         pValor.value = cantidadAnterior;
@@ -710,17 +710,17 @@ function funExcedeImporteCancelarCarrito() {
 }
 function funExcedeImporteAceptarCarrito() {
     if (ExcedeImporteColumnaCarrito != null && ExcedeImporteFilaCarrito != null && ExcedeImporteValorCarrito != null) {
-            var cantidadFinalCarrito = CargarProductoCantidadDependiendoTransferCarrito(ExcedeImporteFilaCarrito, ExcedeImporteColumnaCarrito, ExcedeImporteValorCarrito);
-            if (cantidadFinalCarrito != ExcedeImporteValorCarrito) {
-                var objCarrito = $("#inputCarrito" + ExcedeImporteIndiceCarrito + "_" + ExcedeImporteIndiceCarritoProducto);
-                if (objCarrito.length > 0) {
-                } else {
-                    objCarrito = null;
-                }
-                if (objCarrito != null) {
-                    objCarrito.val(cantidadFinalCarrito);
-                }
+        var cantidadFinalCarrito = CargarProductoCantidadDependiendoTransferCarrito(ExcedeImporteFilaCarrito, ExcedeImporteColumnaCarrito, ExcedeImporteValorCarrito);
+        if (cantidadFinalCarrito != ExcedeImporteValorCarrito) {
+            var objCarrito = $("#inputCarrito" + ExcedeImporteIndiceCarrito + "_" + ExcedeImporteIndiceCarritoProducto);
+            if (objCarrito.length > 0) {
+            } else {
+                objCarrito = null;
             }
+            if (objCarrito != null) {
+                objCarrito.val(cantidadFinalCarrito);
+            }
+        }
         $('#modalModulo').modal('hide');
 
         setTimeout('ActualizarFocusCarritoExcedeImporte()', 5);
@@ -821,6 +821,7 @@ function CargarProductoCantidadDependiendoTransferCarrito(pFila, pColumna, pCant
                         var tempListaProductos = [];
                         var objProducto = new jcTransfersProductos();
                         objProducto.codProductoNombre = listaCarritos[pColumna].listaProductos[pFila].tde_codpro; // Para la funcion en el servidor
+                        objProducto.codProducto = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                         objProducto.tde_codpro = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                         objProducto.cantidad = cantidadCarritoTransfer; //  cantidadCarritoTransfer + cantidadTransfer;
                         tempListaProductos.push(objProducto);
@@ -856,10 +857,11 @@ function CargarProductoCantidadDependiendoTransferCarrito(pFila, pColumna, pCant
                     var tempListaProductos = [];
                     var objProducto = new jcTransfersProductos();
                     objProducto.codProductoNombre = listaCarritos[pColumna].listaProductos[pFila].tde_codpro; // Para la funcion en el servidor
+                    objProducto.codProducto = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                     objProducto.tde_codpro = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                     objProducto.cantidad = cantidadCarritoTransfer;
                     tempListaProductos.push(objProducto);
-                    AgregarProductosTransfersAlCarrito(tempListaProductos, listaCarritos[pColumna].listaProductos[pFila].tde_codtfr, listaCarritos[pColumna].codSucursal,'OnCallBackAgregarProductosTransfersAlCarritoDesdeBuscador');
+                    AgregarProductosTransfersAlCarrito(tempListaProductos, listaCarritos[pColumna].listaProductos[pFila].tde_codtfr, listaCarritos[pColumna].codSucursal, 'OnCallBackAgregarProductosTransfersAlCarritoDesdeBuscador');
                     if (cantidadCarritoComun == 0) {
                         var cantidad = ObtenerCantidadProducto(listaCarritos[pColumna].codSucursal, listaCarritos[pColumna].listaProductos[pFila].codProducto);
                         if (cantidad != '') {
@@ -874,6 +876,7 @@ function CargarProductoCantidadDependiendoTransferCarrito(pFila, pColumna, pCant
                         var tempListaProductos = [];
                         var objProducto = new jcTransfersProductos();
                         objProducto.codProductoNombre = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
+                        objProducto.codProducto = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                         objProducto.tde_codpro = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                         objProducto.cantidad = 0;
                         tempListaProductos.push(objProducto);
@@ -900,6 +903,7 @@ function CargarProductoCantidadDependiendoTransferCarrito(pFila, pColumna, pCant
                     var tempListaProductos = [];
                     var objProducto = new jcTransfersProductos();
                     objProducto.codProductoNombre = listaCarritos[pColumna].listaProductos[pFila].tde_codpro; // Para la funcion en el servidor
+                    objProducto.codProducto = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                     objProducto.tde_codpro = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                     objProducto.cantidad = cantidadCarritoTransfer;
                     tempListaProductos.push(objProducto);
@@ -918,6 +922,7 @@ function CargarProductoCantidadDependiendoTransferCarrito(pFila, pColumna, pCant
                         var tempListaProductos = [];
                         var objProducto = new jcTransfersProductos();
                         objProducto.codProductoNombre = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
+                        objProducto.codProducto= listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                         objProducto.tde_codpro = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                         objProducto.cantidad = 0;
                         tempListaProductos.push(objProducto);
@@ -941,6 +946,7 @@ function CargarProductoCantidadDependiendoTransferCarrito(pFila, pColumna, pCant
                     var tempListaProductos = [];
                     var objProducto = new jcTransfersProductos();
                     objProducto.codProductoNombre = listaCarritos[pColumna].listaProductos[pFila].tde_codpro; // Para la funcion en el servidor
+                    objProducto.codProducto= listaCarritos[pColumna].listaProductos[pFila].tde_codpro; 
                     objProducto.tde_codpro = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                     objProducto.cantidad = cantidadCarritoTransfer;
                     tempListaProductos.push(objProducto);
@@ -959,6 +965,7 @@ function CargarProductoCantidadDependiendoTransferCarrito(pFila, pColumna, pCant
                         var tempListaProductos = [];
                         var objProducto = new jcTransfersProductos();
                         objProducto.codProductoNombre = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
+                        objProducto.codProducto = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                         objProducto.tde_codpro = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                         objProducto.cantidad = 0;
                         tempListaProductos.push(objProducto);

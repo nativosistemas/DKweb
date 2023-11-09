@@ -401,7 +401,7 @@ function onclickConfirmarRecuperador(pIndexCarrito) {
     for (var iProductos = 0; iProductos < listaRecuperardor[pIndexCarrito].listaProductos.length; iProductos++) {
         if ($('#checkRecuperador_' + pIndexCarrito + '_' + iProductos).is(":checked") && listaRecuperardor[pIndexCarrito].listaProductos[iProductos].stk_stock.toUpperCase() != 'N') {
             contadorArray++;
-            ArrayProductos[contadorArray] = listaRecuperardor[pIndexCarrito].listaProductos[iProductos].fpc_nombreProducto;
+            ArrayProductos[contadorArray] = listaRecuperardor[pIndexCarrito].listaProductos[iProductos].pro_codigo;
             ArrayCantidad[contadorArray] = $('#tdCantidadRecuperador_' + pIndexCarrito + '_' + iProductos).html();
             if (listaRecuperardor[pIndexCarrito].listaProductos[iProductos].pro_ofeunidades == 0 && listaRecuperardor[pIndexCarrito].listaProductos[iProductos].pro_ofeporcentaje == 0) {
                 ArrayOferta[contadorArray] = false;
