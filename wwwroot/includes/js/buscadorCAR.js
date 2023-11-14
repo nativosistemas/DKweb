@@ -694,7 +694,7 @@ function getHtmlTablaResolucionCelular() {
 
             var precioHabitual = '$&nbsp;' + FormatoDecimalConDivisorMiles(listaProductosBuscados[i].PrecioFinal.toFixed(2));
             if (listaProductosBuscados[i].pro_nombre.match("^PAÑAL PAMI AD")) {
-                precioHabitual = '$&nbsp;' + FormatoDecimalConDivisorMiles(listaProductosBuscados[i].pro_preciofarmacia.toFixed(2));
+                precioHabitual = '$&nbsp;' + FormatoDecimalConDivisorMiles(listaProductosBuscados[i].pro_PrecioBase.toFixed(2));
             }
             if (listaProductosBuscados[i].pro_AltoCosto) {
                 precioHabitual = '';
@@ -1898,7 +1898,7 @@ function OnCallBackRecuperarProductos(args) {
 
                     var precioHabitual = '$&nbsp;' + FormatoDecimalConDivisorMiles(listaProductosBuscados[i].PrecioFinal.toFixed(2));
                     if (listaProductosBuscados[i].pro_nombre.match("^PAÑAL PAMI AD")) {
-                        precioHabitual = '$&nbsp;' + FormatoDecimalConDivisorMiles(listaProductosBuscados[i].pro_preciofarmacia.toFixed(2));
+                        precioHabitual = '$&nbsp;' + FormatoDecimalConDivisorMiles(listaProductosBuscados[i].pro_PrecioBase.toFixed(2));
                     }
                     if (listaProductosBuscados[i].pro_AltoCosto) {
                         precioHabitual = '';
@@ -3070,7 +3070,7 @@ function detalleProducto_celular(pIndex) {
     strHtml += '<div class="col-xs-12 mpbxs_dsc">Público<span class="float-right">' + precioPublico + '</span></div>';
     var precioHabitual = '$&nbsp;' + FormatoDecimalConDivisorMiles(listaProductosBuscados[pIndex].PrecioFinal.toFixed(2));
     if (listaProductosBuscados[pIndex].pro_nombre.match("^PAÑAL PAMI AD")) {
-        precioHabitual = FormatoDecimalConDivisorMiles(listaProductosBuscados[pIndex].pro_preciofarmacia.toFixed(2));
+        precioHabitual = FormatoDecimalConDivisorMiles(listaProductosBuscados[pIndex].pro_PrecioBase.toFixed(2));
     }
     if (listaProductosBuscados[pIndex].pro_AltoCosto) {
         precioHabitual = '';
