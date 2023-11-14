@@ -262,8 +262,29 @@ public class HomeController : Controller
     }
     private async Task<string> login_general(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
     {
-        string publicKey = pAuthenticateRequest.token;
         string result = "reCAPTCHA Invalido";
+        if (pAuthenticateRequest != null && pAuthenticateRequest.login == "farmacity" && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
+        {
+            var result_login = DKweb.Codigo.Util.login(_httpContextAccessor, pAuthenticateRequest.login, pAuthenticateRequest.pass);// "romanello ", "alberdi"
+            result = result_login;
+            if (!string.IsNullOrEmpty(result_login) && (result_login == "Ok" || result_login == "OkPromotor"))
+            {
+                DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+                if (oUsuario != null)
+                {
+                    var claims = new List<Claim>{
+                    new Claim(ClaimTypes.Name, oUsuario.NombreYApellido),
+                    new Claim("dk_login"  as string, oUsuario.usu_login),
+                    new Claim(ClaimTypes.Role, oUsuario.idRol.ToString())};
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+                    return result_login;
+                }
+            }
+        }
+        
+        string publicKey = pAuthenticateRequest.token;
         if (DKbase.web.generales.ReCaptchaClass.Validate(publicKey))
         {
             result = "!Ok";
@@ -350,9 +371,9 @@ public class HomeController : Controller
     }
     public async Task<IActionResult> contactoCtaCte()
     {
+
         DKweb.Codigo.Util.htmlCssBodySet(_httpContextAccessor, "bd_sec");
         return View();
-
 
     }
 }
