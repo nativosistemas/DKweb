@@ -265,7 +265,21 @@ public class HomeController : Controller
         string result = "reCAPTCHA Invalido";
         if (pAuthenticateRequest != null && pAuthenticateRequest.login == "farmacity" && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
         {
-            var result_login = DKweb.Codigo.Util.login(_httpContextAccessor, pAuthenticateRequest.login, pAuthenticateRequest.pass);// "romanello ", "alberdi"
+            return login_general_reutilizar(pAuthenticateRequest);
+        }
+        string publicKey = pAuthenticateRequest.token;
+        if (DKbase.web.generales.ReCaptchaClass.Validate(publicKey))
+        {
+            return login_general_reutilizar(pAuthenticateRequest);
+        }
+        return result;
+    }
+    private async Task<string> login_general_reutilizar(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
+    {
+        string result = "!Ok";
+        if (pAuthenticateRequest != null && !string.IsNullOrEmpty(pAuthenticateRequest.login) && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
+        {
+            var result_login = DKweb.Codigo.Util.login(_httpContextAccessor, pAuthenticateRequest.login, pAuthenticateRequest.pass);
             result = result_login;
             if (!string.IsNullOrEmpty(result_login) && (result_login == "Ok" || result_login == "OkPromotor"))
             {
@@ -283,33 +297,6 @@ public class HomeController : Controller
                 }
             }
         }
-        
-        string publicKey = pAuthenticateRequest.token;
-        if (DKbase.web.generales.ReCaptchaClass.Validate(publicKey))
-        {
-            result = "!Ok";
-            if (pAuthenticateRequest != null && !string.IsNullOrEmpty(pAuthenticateRequest.login) && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
-            {
-                var result_login = DKweb.Codigo.Util.login(_httpContextAccessor, pAuthenticateRequest.login, pAuthenticateRequest.pass);// "romanello ", "alberdi"
-                result = result_login;
-                if (!string.IsNullOrEmpty(result_login) && (result_login == "Ok" || result_login == "OkPromotor"))
-                {
-                    DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
-                    if (oUsuario != null)
-                    {
-                        var claims = new List<Claim>{
-                    new Claim(ClaimTypes.Name, oUsuario.NombreYApellido),
-                    new Claim("dk_login"  as string, oUsuario.usu_login),
-                    new Claim(ClaimTypes.Role, oUsuario.idRol.ToString())};
-                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-                        return result_login;
-                    }
-                }
-            }
-        }
-        return result;
     }
     [HttpPost]
     public async Task<string> login(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
