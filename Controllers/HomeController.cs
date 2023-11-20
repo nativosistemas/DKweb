@@ -262,26 +262,29 @@ public class HomeController : Controller
     }
     private async Task<string> login_general(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
     {
-        string result = "reCAPTCHA Invalido";
-        if (pAuthenticateRequest != null && pAuthenticateRequest.login == "farmacity" && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
+        string result = "!Ok";
+        if (pAuthenticateRequest != null && !string.IsNullOrEmpty(pAuthenticateRequest.login) && pAuthenticateRequest.login.Equals("farmacity", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
         {
-            return login_general_reutilizar(pAuthenticateRequest);
+            return await login_general_reutilizar(pAuthenticateRequest);
         }
         string publicKey = pAuthenticateRequest.token;
         if (DKbase.web.generales.ReCaptchaClass.Validate(publicKey))
         {
-            return login_general_reutilizar(pAuthenticateRequest);
+            return await login_general_reutilizar(pAuthenticateRequest);
+        }
+        else
+        {
+            result = "reCAPTCHA Invalido";
         }
         return result;
     }
-    private async Task<string> login_general_reutilizar(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
+    public async Task<string> login_general_reutilizar(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
     {
         string result = "!Ok";
         if (pAuthenticateRequest != null && !string.IsNullOrEmpty(pAuthenticateRequest.login) && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
         {
-            var result_login = DKweb.Codigo.Util.login(_httpContextAccessor, pAuthenticateRequest.login, pAuthenticateRequest.pass);
-            result = result_login;
-            if (!string.IsNullOrEmpty(result_login) && (result_login == "Ok" || result_login == "OkPromotor"))
+            result = DKweb.Codigo.Util.login(_httpContextAccessor, pAuthenticateRequest.login, pAuthenticateRequest.pass);
+            if (!string.IsNullOrEmpty(result) && (result == "Ok" || result == "OkPromotor"))
             {
                 DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
                 if (oUsuario != null)
@@ -293,10 +296,11 @@ public class HomeController : Controller
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                    return result_login;
+                    return result;
                 }
             }
         }
+        return result;
     }
     [HttpPost]
     public async Task<string> login(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
