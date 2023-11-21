@@ -247,7 +247,7 @@ function CargarHtmlCompocisionSaldo_CtaCte() {
                     strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 text-center c_to_l-xs">' + ObtenerLinkDeDocumentoDesdeStr(listaCompocisionSaldo[i].NumeroRecibo) + '</td>'; //Recibo Nro
                     var strPago = '&nbsp;';
                     if (isNotNullEmpty(listaCompocisionSaldo[i].Pago)) {
-                        var doublePago = parseFloat(listaCompocisionSaldo[i].Pago.replace(".", "").replace(",", "."));
+                        var doublePago = parseFloat(listaCompocisionSaldo[i].Pago.replace(/\./g, '').replace(",", "."));
                         strPago = '$&nbsp;' + FormatoDecimalConDivisorMiles(doublePago.toFixed(2));
                     }
                     strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 text-right r_to_l-xs r_to_l-sm">' + strPago + '</td>'; //Pago
@@ -270,7 +270,7 @@ function CargarHtmlCompocisionSaldo_CtaCte() {
                     strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 text-center c_to_l-xs"><div class="txt_link_doc">' + ObtenerLinkDeDocumentoDesdeStr(listaCompocisionSaldo[i].NumeroRecibo) + '</div></td>'; //Recibo Nro
                     var strPago = '&nbsp;';
                     if (isNotNullEmpty(listaCompocisionSaldo[i].Pago)) {
-                        var doublePago = parseFloat(listaCompocisionSaldo[i].Pago.replace(".", "").replace(",", "."));
+                        var doublePago = parseFloat(listaCompocisionSaldo[i].Pago.replace(/\./g, '').replace(",", "."));
                         strPago = '$&nbsp;' + FormatoDecimalConDivisorMiles(doublePago.toFixed(2));
                     }
                     strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 text-right r_to_l-xs r_to_l-sm">' + strPago + '</td>'; //Pago
