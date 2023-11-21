@@ -14,7 +14,14 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
+// inicio admin
+builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("RequiereAdmin", policy =>
+            policy.Requirements.Add(new DKweb.AuthorizationHandlers.AdminRequisito(DKbase.generales.Constantes.cROL_ADMINISTRADOR)));//
+    });
+builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.AdminRequisitoHandler>();
+// fin admin
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 .AddCookie(option =>
