@@ -260,7 +260,11 @@ public class Util
         string nameSession = "horario_" + pSucursal;
         if (pHttpContextAccessor.HttpContext.Session.GetString(nameSession) == null)
         {
-            pHttpContextAccessor.HttpContext.Session.SetString(nameSession, DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierre(oCliente, oCliente.cli_codsuc, pSucursal, oCliente.cli_codrep));
+            string strObtenerHorarioCierre = DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierre(oCliente, oCliente.cli_codsuc, pSucursal, oCliente.cli_codrep);
+            if (strObtenerHorarioCierre != null)
+            {
+                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, strObtenerHorarioCierre);
+            }
         }
         if (pHttpContextAccessor.HttpContext.Session.GetString(nameSession) != null)
         {
@@ -268,8 +272,12 @@ public class Util
             DateTime? fechaGuarda = DKbase.web.FuncionesPersonalizadas_base.getFecha_Horario(result);
             if (fechaGuarda != null && fechaGuarda.Value < DateTime.Now)
             {
-                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierre(oCliente, oCliente.cli_codsuc, pSucursal, oCliente.cli_codrep));
-                result = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
+                string strObtenerHorarioCierre_2 = DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierre(oCliente, oCliente.cli_codsuc, pSucursal, oCliente.cli_codrep);
+                if (strObtenerHorarioCierre_2 != null)
+                {
+                    pHttpContextAccessor.HttpContext.Session.SetString(nameSession, strObtenerHorarioCierre_2);
+                    result = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
+                }
             }
         }
         return result;
@@ -536,38 +544,43 @@ public class Util
     public static DKbase.web.cjSonBuscadorProductos RecuperarProductosBase_V3(IHttpContextAccessor pHttpContextAccessor, int? pIdOferta, string pTxtBuscador, List<string> pListaColumna, bool pIsBuscarConOferta, bool pIsBuscarConTransfer)
     {
         DKbase.web.cjSonBuscadorProductos resultado = null;
-        if (!string.IsNullOrEmpty(pTxtBuscador) || pIdOferta != null)
+        try
         {
-            DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
-            DKbase.web.Usuario user = getSessionUsuario(pHttpContextAccessor);
-            if (!string.IsNullOrEmpty(pTxtBuscador) && pTxtBuscador.Trim() != string.Empty && oCliente != null)
+            if (!string.IsNullOrEmpty(pTxtBuscador) || pIdOferta != null)
             {
-                DKbase.Util.InsertarPalabraBuscada(pTxtBuscador.ToUpper(), user.id, DKbase.generales.Constantes.cTABLA_PRODUCTO);
-            }
-            resultado = RecuperarProductosGeneral_V3(pHttpContextAccessor, pIdOferta, pTxtBuscador, pListaColumna, oCliente.cli_tomaOfertas, oCliente.cli_tomaTransfers);
-            if (pIsBuscarConOferta || pIsBuscarConTransfer)
-            {
-                if (resultado != null)
+                DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
+                DKbase.web.Usuario user = getSessionUsuario(pHttpContextAccessor);
+                if (!string.IsNullOrEmpty(pTxtBuscador) && pTxtBuscador.Trim() != string.Empty && oCliente != null)
                 {
-                    if (pIsBuscarConOferta && pIsBuscarConTransfer)
+                    DKbase.Util.InsertarPalabraBuscada(pTxtBuscador.ToUpper(), user.id, DKbase.generales.Constantes.cTABLA_PRODUCTO);
+                }
+                resultado = RecuperarProductosGeneral_V3(pHttpContextAccessor, pIdOferta, pTxtBuscador, pListaColumna, oCliente.cli_tomaOfertas, oCliente.cli_tomaTransfers);
+                if (pIsBuscarConOferta || pIsBuscarConTransfer)
+                {
+                    if (resultado != null)
                     {
-                        resultado.listaProductos = resultado.listaProductos.Where(x => x.pro_ofeporcentaje > 0 || x.isTieneTransfer || x.isProductoFacturacionDirecta).ToList();
-                    }
-                    else
-                    {
-                        if (pIsBuscarConOferta)
+                        if (pIsBuscarConOferta && pIsBuscarConTransfer)
                         {
-                            resultado.listaProductos = resultado.listaProductos.Where(x => x.pro_ofeporcentaje > 0).ToList();
+                            resultado.listaProductos = resultado.listaProductos.Where(x => x.pro_ofeporcentaje > 0 || x.isTieneTransfer || x.isProductoFacturacionDirecta).ToList();
                         }
-                        else if (pIsBuscarConTransfer)
+                        else
                         {
-                            resultado.listaProductos = resultado.listaProductos.Where(x => x.isTieneTransfer || x.isProductoFacturacionDirecta).ToList();
+                            if (pIsBuscarConOferta)
+                            {
+                                resultado.listaProductos = resultado.listaProductos.Where(x => x.pro_ofeporcentaje > 0).ToList();
+                            }
+                            else if (pIsBuscarConTransfer)
+                            {
+                                resultado.listaProductos = resultado.listaProductos.Where(x => x.isTieneTransfer || x.isProductoFacturacionDirecta).ToList();
+                            }
                         }
                     }
                 }
             }
-
-
+        }
+        catch (Exception ex)
+        {
+            DKbase.generales.Log.LogError(System.Reflection.MethodBase.GetCurrentMethod(), ex, DateTime.Now);
         }
         return resultado;
     }
@@ -624,7 +637,11 @@ public class Util
 
         if (horario_siguiente == null)
         {
-            pHttpContextAccessor.HttpContext.Session.SetString(nameSession, DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierreAnterior(oCliente, pSucursalDependiente, pHorarioCierre));
+            string horarioCierre = DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierreAnterior(oCliente, pSucursalDependiente, pHorarioCierre);
+            if (!string.IsNullOrEmpty(horarioCierre))
+            {
+                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, );
+            }
         }
         horario_siguiente = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
         if (horario_siguiente != null)
@@ -634,8 +651,12 @@ public class Util
             DateTime? fechaGuarda = DKbase.web.FuncionesPersonalizadas_base.getFecha_Horario(result);
             if (fechaHorarioCierre != null && fechaGuarda != null && fechaGuarda.Value < fechaHorarioCierre.Value)
             {
-                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierreAnterior(oCliente, pSucursalDependiente, pHorarioCierre));
-                result = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
+                string horarioCierre_2 = DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierreAnterior(oCliente, pSucursalDependiente, pHorarioCierre);
+                if (!string.IsNullOrEmpty(horarioCierre_2))
+                {
+                    pHttpContextAccessor.HttpContext.Session.SetString(nameSession, horarioCierre_2);
+                    result = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
+                }
             }
         }
         return result;
