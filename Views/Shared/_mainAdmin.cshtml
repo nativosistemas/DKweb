@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow,noarchive,noodp,nosnippet">
+    <meta name="author" content="Nativo Sistemas">
+    <meta name="distribution" content="Global">
+
+    <title>Droguería Kellerhoff</title>
+    <link rel="shortcut icon" href="~/favicon.ico">
+    <link rel="stylesheet" href="../includes/admin/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../includes/admin/css/mainAdmin.css">
+</head>
+
+<body>
+
+    <header class="bg-dark text-white text-center py-1 hdr_estilo">
+        <!--  <img src="ruta/de/tu/logo.png" alt="Logo de Mi Página" class="img-fluid" style="max-width: 150px;">-->
+        <h1><a class="nav-link" href="/admin/index">admin</a></h1>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+
+                <li class="nav-item active">
+                    <a class="nav-link" href="/admin/usuarios">usuarios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contacto</a>
+                </li>
+            </ul>
+            <button class="btn btn-danger ml-auto" onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+    </nav>
+    @RenderBody()
+    <script src="../includes/admin/js/bootstrap.min.js"></script>
+</body>
+
+</html>
