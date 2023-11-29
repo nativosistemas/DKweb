@@ -640,7 +640,7 @@ public class Util
             string horarioCierre = DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierreAnterior(oCliente, pSucursalDependiente, pHorarioCierre);
             if (!string.IsNullOrEmpty(horarioCierre))
             {
-                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, );
+                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, horarioCierre);
             }
         }
         horario_siguiente = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
