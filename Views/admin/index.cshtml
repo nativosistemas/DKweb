@@ -1,4 +1,80 @@
 @inject IHttpContextAccessor Accessor
 @{
-    Layout = "_mainAdmin";
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex,nofollow,noarchive,noodp,nosnippet">
+    <meta name="author" content="Nativo Sistemas">
+    <meta name="distribution" content="Global">
+
+    <title>Droguería Kellerhoff</title>
+    <link rel="shortcut icon" href="~/favicon.ico">
+    <link rel="stylesheet" href="../includes/admin/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../includes/admin/css/mainAdmin.css">
+</head>
+
+<body>
+
+    <header class="bg-dark text-white text-center py-1 hdr_estilo">
+
+        <h1> admin</h1>
+    </header>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="text-center">Login</h4>
+                    </div>
+                    <div class="card-body">
+                        @{
+                            if (ViewData.ContainsKey("admin_msg"))
+                            {
+                                string admin_msg = ViewData["admin_msg"] as string;
+                                string resultado = string.Empty;
+                                resultado += "<div class=\"alert alert-danger\" role=\"alert\">";
+                                resultado += admin_msg;
+                                resultado += "</div>";
+                                resultado += "<input type=\"hidden\" id=\"hiddenMsgLogin\" value=\"" +
+                                System.Net.WebUtility.HtmlEncode(admin_msg) + "\" />";
+                                WriteLiteral(resultado);
+                            }
+                        }
+                        <form name="formAdminLogin" id="formAdminLogin" action="/admin/Login" method="post">
+                            <input name="admin_token" id="admin_token" type="hidden">
+                            <div class="form-group mb-3">
+                                <!--   <label for="admin_usuario">Usuario:</label>-->
+                                <input type="text" class="form-control" id="admin_usuario" name="admin_usuario"
+                                    placeholder="Usuario">
+                            </div>
+                            <div class="form-group mb-3">
+                                <!--     <label for="admin_contrasena">Contraseña:</label>-->
+                                <input type="password" class="form-control" id="admin_contrasena"
+                                    name="admin_contrasena" placeholder="Contrase&ntilde;a">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+                            <!--      <button class="ingreso" 
+                                id="botonIniciarSesion"
+                                data-sitekey="reCAPTCHA_site_key" 
+                                data-callback='onSubmit' 
+                                data-action='submit'>
+                        </button>-->
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LeVNeQoAAAAAB8BX4-pJCSwCfdS7iWes-JQWhJe"></script>
+    <script src="../includes/admin/js/bootstrap.min.js"></script>
+    <script src="../includes/admin/js/admin.js?id=0"></script>
+</body>
+
+</html>

@@ -1,7 +1,8 @@
 namespace DKweb.Codigo;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
-
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 public class Util
 {
     public static bool IsUsuariosDK(IHttpContextAccessor pHttpContextAccessor)
@@ -511,8 +512,14 @@ public class Util
                     }
                 }
                 else
-                {
-                    if (user.usu_codCliente == null)
+                {/////////////////////
+
+                    if (user.idRol == DKbase.generales.Constantes.cROL_ADMINISTRADOR)
+                    {
+                        pHttpContextAccessor.HttpContext.Session.Set<DKbase.web.Usuario>("clientesDefault_Usuario", user);
+                        resultado = "Ok_ADMINISTRADOR";
+                    }
+                    else if (user.usu_codCliente == null)
                     {
                         resultado = "Usuario no asigando cliente";
                     }
@@ -1281,5 +1288,42 @@ public class Util
     public static void Cliente_CartelImprimir_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
     {
         pHttpContextAccessor.HttpContext.Session.SetString("Cliente_CartelImprimir", pValue);
+    }
+    public static async Task<string> login_general_reutilizar(IHttpContextAccessor pHttpContextAccessor, DKbase.Models.AuthenticateRequest pAuthenticateRequest)
+    {
+        string result = "!Ok";
+        if (pAuthenticateRequest != null && !string.IsNullOrEmpty(pAuthenticateRequest.login) && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
+        {
+            result = DKweb.Codigo.Util.login(pHttpContextAccessor, pAuthenticateRequest.login, pAuthenticateRequest.pass);
+            if (!string.IsNullOrEmpty(result) && (result == "Ok" || result == "OkPromotor" || result == "Ok_ADMINISTRADOR"))
+            {
+                DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(pHttpContextAccessor);
+                if (oUsuario != null)
+                {
+                    var claims = new List<Claim>{
+                    new Claim(ClaimTypes.Name, oUsuario.NombreYApellido),
+                    new Claim("dk_login"  as string, oUsuario.usu_login),
+                    new Claim(ClaimTypes.Role, oUsuario.idRol.ToString())};
+                    var claimsIdentity = new ClaimsIdentity(claims, Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
+                    await pHttpContextAccessor.HttpContext.SignInAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+                    return result;
+                }
+            }
+        }
+        return result;
+    }
+    public static string admin_msg(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.GetString("admin_msg") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.GetString("admin_msg");
+        }
+        return resultado;
+    }
+    public static void admin_msg_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.SetString("admin_msg", pValue);
     }
 }

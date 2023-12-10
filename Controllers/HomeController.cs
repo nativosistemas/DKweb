@@ -260,7 +260,7 @@ public class HomeController : Controller
         DKbase.Models.AuthenticateRequest pAuthenticateRequest = new DKbase.Models.AuthenticateRequest() { login = pLogin, pass = pPass, token = pToken };
         return await login_general(pAuthenticateRequest);
     }
-    private async Task<string> login_general(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
+    public  async Task<string> login_general(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
     {
         string result = "!Ok";
         if (pAuthenticateRequest != null && !string.IsNullOrEmpty(pAuthenticateRequest.login) && pAuthenticateRequest.login.Equals("farmacity", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
@@ -278,7 +278,7 @@ public class HomeController : Controller
         }
         return result;
     }
-    public async Task<string> login_general_reutilizar(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
+    public  async Task<string> login_general_reutilizar(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
     {
         string result = "!Ok";
         if (pAuthenticateRequest != null && !string.IsNullOrEmpty(pAuthenticateRequest.login) && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
