@@ -659,6 +659,7 @@ a.mtz {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
+    margin-left: 25px;
 }
 .monto-total2{
 
@@ -671,8 +672,93 @@ a.mtz {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
+    margin-bottom: 15px;
 }
 
 .modal-body{
     padding: 10px !important;
+}
+
+/*Titulos Combo Cerrado <--------------*/
+
+.modal-lg{
+    width: 1200px !important;
+}
+.rowComboCerrado {
+    display: flex;
+    text-align: center;
+    align-items: center;
+    padding: 0;
+    height: 100%;
+    flex-direction: row;
+}
+  
+/*Titulos <----------------*/
+  .producto {
+    flex: 3;
+  }
+  
+  .descripcion {
+    flex: 2;
+
+  }
+  
+  .precio {
+    flex: 1.5;
+
+  }
+  
+  .precio-descuento {
+    flex: 1.5;
+  }
+  
+  .cant-unidadesCombo {
+    flex: 1;
+
+
+  }
+  
+  .cant-total-unidades {
+    flex: 1;
+
+  }
+  
+  .producto-bonificado {
+    flex: 2;
+
+  }
+  
+  .cant-bonificada {
+    flex: 1;
+
+  }
+  
+  .cant-total-bonificada {
+    flex: 0.5;
+
+  }
+  .precio-bonificado {
+    flex: 1;
+
+  }
+  
+  .precio-total-descuento {
+    flex: 1;
+
+  }
+  
+  .precio-unidad {
+    flex: 1;
+
+  }
+
+/* Estilo para ocultar los botones de incremento y decremento */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important
+}
+
+input[type="number"] {
+  -moz-appearance: textfield !important; /* Firefox */
 }
