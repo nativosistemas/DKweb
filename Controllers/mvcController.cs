@@ -692,8 +692,8 @@ public class mvcController : Controller
     }
     public async Task<IActionResult> reservavacunas(string t)
     {
-        return RedirectToAction("reservavacunas_mis");
-        /*bool resultado = false;
+        //return RedirectToAction("reservavacunas_mis");
+        bool resultado = false;
         if (!string.IsNullOrEmpty(t) && t == "1")
         {
             resultado = true;
@@ -704,7 +704,7 @@ public class mvcController : Controller
         {
             return RedirectToAction("reservavacunas_mis");
         }
-        return View();*/
+        return View();
     }
     public async Task<IActionResult> reservavacunas_mis()
     {
