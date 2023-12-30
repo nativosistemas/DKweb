@@ -16,10 +16,10 @@ window.addEventListener("load", (event) => {
         if (elementoMsgLogin !== null && elementoMsgLogin !== undefined) {
             var msg = elementoMsgLogin.value;
             if (msg == 'Ok_ADMINISTRADOR') {
-               // alert(msg);
-             //  window.location.href = "/admin/usuarios";
-//admin/usuarios
-            } 
+                // alert(msg);
+                //  window.location.href = "/admin/usuarios";
+                //admin/usuarios
+            }
         }
     }
 
@@ -77,5 +77,18 @@ async function validarDatos() {
 
     return true; // Retorna true si todos los datos son válidos
 }
+function cerrarSesion() {
+    fetchSignOff().then(text => {
+        if (text == 'Ok') {
+            location.href = '../admin';
+        }
+    });
+}
 
-//isIngresarPageMethods = true;
+async function fetchSignOff() {
+    const response = await fetch('/Home/SignOff', {
+        method: 'POST'
+    });
+    const text = await response.text();
+    return text;
+}

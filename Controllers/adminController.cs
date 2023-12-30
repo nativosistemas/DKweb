@@ -54,7 +54,7 @@ public class adminController : Controller
             result = "reCAPTCHA Invalido";
         }
         DKweb.Codigo.Util.admin_msg_Set(_httpContextAccessor, result);
-        if (result == "Ok_ADMINISTRADOR" )
+        if (result == "Ok_ADMINISTRADOR")
         {
             return RedirectToAction("usuarios", "admin");
 
@@ -69,5 +69,10 @@ public class adminController : Controller
 
         // _httpContextAccessor?.HttpContext?.Session.SetString("url_type", "Buscador");
         return View();
+    }
+    public async Task<IActionResult> GetUsuarios(string sortExpression, string pFiltro)
+    {
+        var result = DKbase.web.AccesoGrilla_base.GetUsuarios(sortExpression,  pFiltro);
+        return Json(result);
     }
 }
