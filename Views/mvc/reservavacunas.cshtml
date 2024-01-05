@@ -17,6 +17,9 @@
         System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(listaReservaVacunas)) + "\" />";
     }
     WriteLiteral(resultado);
+
+
+
 }
 
 @*<h2>reservavacunas</h2>*@
@@ -26,7 +29,8 @@
     <div class="col-xs-12" id="divGridReservaVacunas">
     </div>
 
-    <div class="col-xs-12" style="margin-top: 30px;">
+    <div class="col-xs-12"
+        style="margin-top: 30px;@{if (DKweb.Codigo.Util.clientes_pages_reservavacunas_SinTroquel(Accessor)){WriteLiteral("display: none;");}}">
         <strong> COMBO ISTIVAC 4 + EFLUELDA</strong>
         <br>
         ISTIVAC 23% DESCUENTO 10 UNIDADES POR COMBO
