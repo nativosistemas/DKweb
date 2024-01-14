@@ -1230,27 +1230,3 @@ function enviarReservaVacunas(pValue) {
         }
     });
 }
-//function ObtenerTotalReservasDeVacunasPorClienteEntreFechas() {
-//    showCargandoBuscador();
-//    $.ajax({
-//        type: "POST",
-//        url: "/mvc/ObtenerTotalReservasDeVacunasPorClienteEntreFechas",
-//        //data: { pListaVacunas: pValue },
-//        success:
-//            function (response) {
-//                hideCargandoBuscador();
-//                mensaje_ReservaVacunas();
-//                limpiarReservarVacunas();
-//            },
-//        failure: function (response) {
-
-//            hideCargandoBuscador();
-//            OnFail(response);
-//        },
-//        error: function (response) {
-
-//            hideCargandoBuscador();
-//            OnFail(response);
-//        }
-//    });
-//}

@@ -1,3 +1,10 @@
+var l_usuarios = null;
+// paginador
+let itemsPorPagina = 10;
+let paginaActual = 1;
+let paginaMax = 1;
+// fin paginador
+
 function getNamePage() {
     var url = location.href;
     var pagina = url.substring(url.lastIndexOf('/') + 1);
@@ -21,6 +28,13 @@ window.addEventListener("load", (event) => {
                 //admin/usuarios
             }
         }
+    } else if (pagina == 'usuarios') {
+        GetUsuarios('', '').then(x => {
+            l_usuarios = x;
+            paginaMax = l_usuarios.length;
+
+
+        }).then(x => { htmlUsuarios(1); })
     }
 
 
@@ -91,4 +105,88 @@ async function fetchSignOff() {
     });
     const text = await response.text();
     return text;
+}
+
+async function GetUsuarios(sortExpression, pFiltro) {
+    const parametros = {
+        sortExpression: sortExpression,
+        pFiltro: pFiltro
+    };
+    const url = '/admin/GetUsuarios?' + new URLSearchParams(parametros);
+
+    const response = await fetch(url, {
+        method: 'GET'
+    });
+    const resultJson = await response.json();
+
+    return resultJson;
+
+}
+function htmlUsuarios(pagina) {
+    paginaActual = pagina;
+    if (l_usuarios != null) {
+        const inicio = (paginaActual - 1) * itemsPorPagina;
+        const fin = inicio + itemsPorPagina;
+
+        const l_grilla = l_usuarios.slice(inicio, fin);
+        if (fin < l_usuarios.length) {
+            // if (l_grilla.length > 0) {}
+        }
+
+
+
+        var strHtml = '';
+
+        strHtml += '<table class="table">';
+        strHtml += '<thead>';
+        //
+        strHtml += '<tr>';
+        strHtml += '<th scope="col">ID</th>';
+        strHtml += '<th scope="col">Nombre</th>';
+        strHtml += '<th scope="col">Apellido</th>';
+        strHtml += '<th scope="col">Correo Electrónico</th>';
+        strHtml += '</tr>';
+        //
+        strHtml += '</thead>';
+        strHtml += '<tbody>';
+        l_grilla.forEach(function (elt) {
+            strHtml += '<tr>';
+            strHtml += '<th scope="row">' + elt.usu_codigo + '</th>';
+            strHtml += '<td>' + elt.usu_nombre + '</td>';
+            strHtml += '<td>' + elt.usu_apellido + '</td>';
+            strHtml += '<td>' + elt.usu_mail + '</td>';
+            strHtml += '</tr>';
+        });
+        strHtml += '</tbody>';
+        strHtml += '</table>';
+        strHtml += htmlPaginador();
+        document.querySelector("#divContainer").innerHTML = strHtml;
+
+    }
+}
+
+function htmlPaginador() {
+    var strHtml = '';
+    strHtml += '<div class="container">';
+    strHtml += '<div class="row">';
+    strHtml += '<div class="col-12 text-center mb-3">';
+    strHtml += '<button class="btn btn-primary mx-2"  onclick="onclickPaginador(-1)">Anterior</button>';
+    strHtml += '<button class="btn btn-primary mx-2"  onclick="onclickPaginador(1)">Siguiente</button>';
+    strHtml += '</div>';
+    strHtml += '</div>';
+    return strHtml;
+}
+function onclickPaginador(accion) {
+    var pagina = paginaActual + accion;
+    if (pagina < 1) {
+        pagina = 1;
+    }
+    const inicio = (pagina - 1) * itemsPorPagina;
+    const fin = inicio + itemsPorPagina;
+    if (paginaMax  < fin){
+        pagina = paginaMax;
+    }
+
+    htmlUsuarios(pagina);
+
 }
