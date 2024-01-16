@@ -29,12 +29,12 @@ window.addEventListener("load", (event) => {
             }
         }
     } else if (pagina == 'usuarios') {
-        GetUsuarios('', '').then(x => {
+        GetUsuarios('', '',0).then(x => {
             l_usuarios = x;
             paginaMax = l_usuarios.length;
 
 
-        }).then(x => { htmlUsuarios(1); })
+        }).then(x => { htmlUsuarios(); })
     }
 
 
@@ -107,10 +107,11 @@ async function fetchSignOff() {
     return text;
 }
 
-async function GetUsuarios(sortExpression, pFiltro) {
+async function GetUsuarios(sortExpression, pFiltro,pAvanzar) {
     const parametros = {
         sortExpression: sortExpression,
-        pFiltro: pFiltro
+        pFiltro: pFiltro,
+        pAvanzar: pAvanzar
     };
     const url = '/admin/GetUsuarios?' + new URLSearchParams(parametros);
 
@@ -122,17 +123,17 @@ async function GetUsuarios(sortExpression, pFiltro) {
     return resultJson;
 
 }
-function htmlUsuarios(pagina) {
-    paginaActual = pagina;
+function htmlUsuarios() {
+    //paginaActual = pagina;
     if (l_usuarios != null) {
-        const inicio = (paginaActual - 1) * itemsPorPagina;
+     /*   const inicio = (paginaActual - 1) * itemsPorPagina;
         const fin = inicio + itemsPorPagina;
 
         const l_grilla = l_usuarios.slice(inicio, fin);
         if (fin < l_usuarios.length) {
             // if (l_grilla.length > 0) {}
         }
-
+*/
 
 
         var strHtml = '';
@@ -149,7 +150,7 @@ function htmlUsuarios(pagina) {
         //
         strHtml += '</thead>';
         strHtml += '<tbody>';
-        l_grilla.forEach(function (elt) {
+        l_usuarios.forEach(function (elt) {
             strHtml += '<tr>';
             strHtml += '<th scope="row">' + elt.usu_codigo + '</th>';
             strHtml += '<td>' + elt.usu_nombre + '</td>';
@@ -177,7 +178,8 @@ function htmlPaginador() {
     return strHtml;
 }
 function onclickPaginador(accion) {
-    var pagina = paginaActual + accion;
+
+   /* var pagina = paginaActual + accion;
     if (pagina < 1) {
         pagina = 1;
     }
@@ -185,8 +187,17 @@ function onclickPaginador(accion) {
     const fin = inicio + itemsPorPagina;
     if (paginaMax  < fin){
         pagina = paginaMax;
-    }
+    }*/
 
-    htmlUsuarios(pagina);
+    GetUsuarios('', '',accion).then(x => {
+        l_usuarios = x;
+        paginaMax = l_usuarios.length;
+
+
+    }).then(x => { htmlUsuarios(); })
+
+    
+
+    //htmlUsuarios(pagina);
 
 }

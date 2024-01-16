@@ -6,6 +6,7 @@ using DKbase;
 using Microsoft.AspNetCore.Components.RenderTree;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using DKbase.web;
 
 
 namespace DKweb.Controllers;
@@ -70,9 +71,41 @@ public class adminController : Controller
         // _httpContextAccessor?.HttpContext?.Session.SetString("url_type", "Buscador");
         return View();
     }
-    public async Task<IActionResult> GetUsuarios(string sortExpression, string pFiltro)
+    public static int grillaPagUsuario = 0;
+    public async Task<IActionResult> GetUsuarios(string sortExpression, string pFiltro, int pAvanzar)
     {
-        var result = DKbase.web.AccesoGrilla_base.GetUsuarios(sortExpression,  pFiltro);
-        return Json(result);
+        var result = DKbase.web.AccesoGrilla_base.GetUsuarios(sortExpression, pFiltro);
+        if (pAvanzar == 0)
+        {
+            grillaPagUsuario = 0;
+        }
+        else //  if (pAvanzar > 0) else if (pAvanzar < 0)
+        {
+            grillaPagUsuario += pAvanzar;
+
+        }
+        if (grillaPagUsuario < 0)
+        {
+            grillaPagUsuario = 0;
+        }
+        int cantidadMaxPaginador = result.Count / DKbase.generales.Constantes.cCantidadFilaPorPagina;
+        if (cantidadMaxPaginador < 1)
+        {
+            cantidadMaxPaginador = 1;
+        }
+        if (grillaPagUsuario > cantidadMaxPaginador)
+        {
+            grillaPagUsuario = cantidadMaxPaginador;
+        }
+        int desde = grillaPagUsuario * DKbase.generales.Constantes.cCantidadFilaPorPagina;
+        int hasta = DKbase.generales.Constantes.cCantidadFilaPorPagina;
+        if ((desde + hasta) > result.Count)
+        {
+            hasta = result.Count - desde;
+            grillaPagUsuario--;
+        }
+        List<cUsuario> resultFiltro = result.GetRange(desde, hasta);
+
+        return Json(resultFiltro);
     }
 }
