@@ -329,7 +329,12 @@ public class HomeController : Controller
         }
         return resultado;
     }
-
+    public async Task<IActionResult> cerrarsession()
+    {
+        await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);  //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        _httpContextAccessor.HttpContext.Session.Clear();
+        return RedirectToAction("Index", "Home");
+    }
     [HttpPost]
     public async Task<IActionResult> SignOff()
     {
