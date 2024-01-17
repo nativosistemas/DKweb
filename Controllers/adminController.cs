@@ -75,37 +75,51 @@ public class adminController : Controller
     public async Task<IActionResult> GetUsuarios(string sortExpression, string pFiltro, int pAvanzar)
     {
         var result = DKbase.web.AccesoGrilla_base.GetUsuarios(sortExpression, pFiltro);
+        List<int> l = desdeHastaRefe(result.Count, pAvanzar, grillaPagUsuario);
+        int desde = l[0];
+        int hasta = l[1];
+        grillaPagUsuario = l[2];
+        List<cUsuario> resultFiltro = result.GetRange(desde, hasta);
+
+        return Json(resultFiltro);
+    }
+    public List<int> desdeHastaRefe(int listCount, int pAvanzar, int grillaPagRefe)
+    {
+
+        //  var result = DKbase.web.AccesoGrilla_base.GetUsuarios(sortExpression, pFiltro);
         if (pAvanzar == 0)
         {
-            grillaPagUsuario = 0;
+            grillaPagRefe = 0;
         }
         else //  if (pAvanzar > 0) else if (pAvanzar < 0)
         {
-            grillaPagUsuario += pAvanzar;
+            grillaPagRefe += pAvanzar;
 
         }
-        if (grillaPagUsuario < 0)
+        if (grillaPagRefe < 0)
         {
-            grillaPagUsuario = 0;
+            grillaPagRefe = 0;
         }
-        int cantidadMaxPaginador = result.Count / DKbase.generales.Constantes.cCantidadFilaPorPagina;
+        int cantidadMaxPaginador = listCount / DKbase.generales.Constantes.cCantidadFilaPorPagina;
         if (cantidadMaxPaginador < 1)
         {
             cantidadMaxPaginador = 1;
         }
-        if (grillaPagUsuario > cantidadMaxPaginador)
+        if (grillaPagRefe > cantidadMaxPaginador)
         {
-            grillaPagUsuario = cantidadMaxPaginador;
+            grillaPagRefe = cantidadMaxPaginador;
         }
-        int desde = grillaPagUsuario * DKbase.generales.Constantes.cCantidadFilaPorPagina;
+        int desde = grillaPagRefe * DKbase.generales.Constantes.cCantidadFilaPorPagina;
         int hasta = DKbase.generales.Constantes.cCantidadFilaPorPagina;
-        if ((desde + hasta) > result.Count)
+        if ((desde + hasta) > listCount)
         {
-            hasta = result.Count - desde;
-            grillaPagUsuario--;
+            hasta = listCount - desde;
+            grillaPagRefe--;
         }
-        List<cUsuario> resultFiltro = result.GetRange(desde, hasta);
-
-        return Json(resultFiltro);
+        List<int> l = new List<int>();
+        l.Add(desde);
+        l.Add(hasta);
+        l.Add(grillaPagRefe);
+        return l;
     }
 }
