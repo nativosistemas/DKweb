@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,7 +44,7 @@ DKbase.Helper.getMail_ctacte = builder.Configuration.GetSection("appSettings")["
 DKbase.Helper.getMailContacto = builder.Configuration.GetSection("appSettings")["mailContacto"];
 DKbase.Helper.getArchivo_ImpresionesComprobante = builder.Configuration.GetSection("appSettings")["ImpresionesComprobante"];
 DKbase.Helper.getConnectionStringSQL = builder.Configuration.GetConnectionString("ConnectionSQL");
-DKbase.Helper.getMail_reclamos =builder.Configuration.GetSection("appSettings")["mail_reclamos"];// System.Configuration.ConfigurationManager.AppSettings["mail_reclamos"].ToString();
+DKbase.Helper.getMail_reclamos = builder.Configuration.GetSection("appSettings")["mail_reclamos"];// System.Configuration.ConfigurationManager.AppSettings["mail_reclamos"].ToString();
 DKbase.Helper.getReCAPTCHA_ClaveSecreta = builder.Configuration.GetSection("appSettings")["reCAPTCHA_ClaveSecreta"];
 
 var optionsRewrite = new RewriteOptions()
@@ -67,9 +69,9 @@ if (!app.Environment.IsDevelopment())
     //app.UseExceptionHandler("/config/Error");
     app.UseExceptionHandler(exceptionHandlerApp =>
  {
-    
-    //exceptionHandlerApp.ex
-    //"/Home/Error"
+
+     //exceptionHandlerApp.ex
+     //"/Home/Error"
      exceptionHandlerApp.Run(async context =>
      {
 
@@ -95,7 +97,7 @@ if (!app.Environment.IsDevelopment())
 
          if (exceptionHandlerPathFeature?.Path == "/")
          {
-            
+
              await context.Response.WriteAsync(" Page: Home.");
          }
      });
@@ -118,5 +120,12 @@ app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}");
-
+    
+app.MapGet("/cerrar", async (Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor) =>
+{
+    await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);  //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    _httpContextAccessor.HttpContext.Session.Clear();
+    _httpContextAccessor.HttpContext.Response.Redirect("/Home/Index");
+    return System.Threading.Tasks.Task.CompletedTask;// "Ok"; 
+});
 app.Run();
