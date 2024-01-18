@@ -5,11 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
+///
 builder.Services.AddControllers()
             .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.MaxDepth = Int32.MaxValue;
             });
+builder.Services.AddMvc(options => {
+             options.MaxModelBindingCollectionSize = int.MaxValue;
+        });
+///        
 builder.Services.AddControllersWithViews();//.AddRazorRuntimeCompilation();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();

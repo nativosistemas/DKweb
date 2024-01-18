@@ -1,4 +1,14 @@
 @inject IHttpContextAccessor Accessor
+@{  DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(Accessor);
+    if (oCliente == null)
+{
+       <text>
+        <script>
+            window.location.href = '/';
+        </script>
+    </text>    
+}
+}
 <!DOCTYPE html>
 <html>
 <head>
