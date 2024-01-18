@@ -19,15 +19,15 @@ public class mvcController : Controller
     }
     private string msgCarritoRepetido = "Carrito ya se encuentra facturado.";
     private string msgCarritoEnProceso = "Carrito se está procesando.";
-   /* public static String isPrueba(IHttpContextAccessor pHttpContextAccessor)
-    {
-        String result = pHttpContextAccessor.HttpContext?.Session.GetString("SessionVar");
-        if (result != null)
-        {
-            return result;
-        }
-        return "";
-    }*/
+    /* public static String isPrueba(IHttpContextAccessor pHttpContextAccessor)
+     {
+         String result = pHttpContextAccessor.HttpContext?.Session.GetString("SessionVar");
+         if (result != null)
+         {
+             return result;
+         }
+         return "";
+     }*/
     public static bool isDiferido(IHttpContextAccessor pHttpContextAccessor)
     {
         String url_type = pHttpContextAccessor.HttpContext?.Session.GetString("url_type");
@@ -111,7 +111,7 @@ public class mvcController : Controller
     }
     public async Task<IActionResult> funIsMostrarOferta(bool pIsMostrarOferta)
     {
-        DKweb.Codigo.Util.isMostrarOferta_Set(_httpContextAccessor,pIsMostrarOferta.ToString());
+        DKweb.Codigo.Util.isMostrarOferta_Set(_httpContextAccessor, pIsMostrarOferta.ToString());
         return Content("Ok");
     }
     public async Task<string> RecuperarProductosVariasColumnas(string pTxtBuscador, string[] pListaColumna, bool pIsBuscarConOferta, bool pIsBuscarConTransfer)
@@ -359,7 +359,7 @@ public class mvcController : Controller
         {
             DKbase.Util.AgregarHistorialProductoCarritoTransfer(user.usu_codCliente.Value, pListaProductosMasCantidad, user.id);
             objResult.isNotError = DKweb.Codigo.Util.AgregarProductosTransfersAlCarrito(pListaProductosMasCantidad, user.usu_codCliente.Value, user.id, pIdTransfers, pCodSucursal, DKbase.generales.Constantes.cTipo_CarritoTransfers);
-            objResult.oSucursalCarritoTransfer = DKweb.Codigo.Util.RecuperarCarritosTransferPorCliente_generico(_httpContextAccessor, oCliente, DKbase.generales.Constantes.cTipo_CarritoTransfers ,pCodSucursal);
+            objResult.oSucursalCarritoTransfer = DKweb.Codigo.Util.RecuperarCarritosTransferPorCliente_generico(_httpContextAccessor, oCliente, DKbase.generales.Constantes.cTipo_CarritoTransfers, pCodSucursal);
             objResult.listProductosAndCantidadError = pListaProductosMasCantidad;
             objResult.codSucursal = pCodSucursal;
             resultado = DKbase.generales.Serializador_base.SerializarAJson(objResult);
@@ -502,7 +502,7 @@ public class mvcController : Controller
         else
             return null;
     }
-    public async Task<List<string>>  ObtenerRangoFecha_pedidos(int pDia)
+    public async Task<List<string>> ObtenerRangoFecha_pedidos(int pDia)
     {
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         DKbase.web.cRangoFecha_Pedidos o = DKbase.Util.ObtenerRangoFecha_pedidos(oCliente, pDia);
@@ -510,7 +510,7 @@ public class mvcController : Controller
         DKweb.Codigo.Util.estadopedidos_Resultado_Set(_httpContextAccessor, o.resultadoObj);
         return lista;
     }
-   // [Authorize(Roles = DKbase.generales.Constantes.cROL_const_ADMINISTRADORCLIENTE)]
+    // [Authorize(Roles = DKbase.generales.Constantes.cROL_const_ADMINISTRADORCLIENTE)]
     public async Task<IActionResult> estadopedidos()
     {
         return View();
@@ -529,7 +529,7 @@ public class mvcController : Controller
         }
         return View();
     }
-    public async Task<string>  RecuperarFaltasProblemasCrediticios(int pDia)
+    public async Task<string> RecuperarFaltasProblemasCrediticios(int pDia)
     {
         List<DKbase.web.capaDatos.cFaltantesConProblemasCrediticiosPadre> listaRecuperador = null;
         int? tipo = DKweb.Codigo.Util.clientes_pages_Recuperador_Tipo(_httpContextAccessor);
@@ -545,7 +545,7 @@ public class mvcController : Controller
         else
             return null;
     }
-    public async Task<string>  RecuperarFaltasProblemasCrediticiosTodosEstados(int pDia)
+    public async Task<string> RecuperarFaltasProblemasCrediticiosTodosEstados(int pDia)
     {
         List<DKbase.web.capaDatos.cFaltantesConProblemasCrediticiosPadre> listaRecuperador = null;
         int? tipo = DKweb.Codigo.Util.clientes_pages_Recuperador_Tipo(_httpContextAccessor);
@@ -560,7 +560,7 @@ public class mvcController : Controller
         else
             return null;
     }
-    public async Task<bool>  AgregarProductosDelRecuperardorAlCarrito(string pSucursal, string[] pArrayNombreProducto, int[] pArrayCantidad, bool[] pArrayOferta)
+    public async Task<bool> AgregarProductosDelRecuperardorAlCarrito(string pSucursal, string[] pArrayNombreProducto, int[] pArrayCantidad, bool[] pArrayOferta)
     {
         DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
@@ -572,7 +572,7 @@ public class mvcController : Controller
         }
         return false;
     }
-    public async Task<string>  BorrarPorProductosFaltasProblemasCrediticios(string pSucursal, string[] pArrayNombreProducto)
+    public async Task<string> BorrarPorProductosFaltasProblemasCrediticios(string pSucursal, string[] pArrayNombreProducto)
     {
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         int? tipo = DKweb.Codigo.Util.clientes_pages_Recuperador_Tipo(_httpContextAccessor);
@@ -586,7 +586,7 @@ public class mvcController : Controller
         //System.Web.HttpContext.Current.Session["clientesDefault_CantRecuperadorFaltaFechaHora"] = null;
         return "Ok";
     }
-    public async Task<string>  TomarPedidoCarrito(string pIdSucursal, string pMensajeEnFactura, string pMensajeEnRemito, string pTipoEnvio, bool pIsUrgente)
+    public async Task<string> TomarPedidoCarrito(string pIdSucursal, string pMensajeEnFactura, string pMensajeEnRemito, string pTipoEnvio, bool pIsUrgente)
     {
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
@@ -604,7 +604,7 @@ public class mvcController : Controller
             return DKbase.generales.Serializador_base.SerializarAJson(resultPedido);
         }
     }
-    public async Task<string>  TomarPedidoCarritoDiferido(string pIdSucursal, string pMensajeEnFactura, string pMensajeEnRemito, string pTipoEnvio, bool pIsUrgente)
+    public async Task<string> TomarPedidoCarritoDiferido(string pIdSucursal, string pMensajeEnFactura, string pMensajeEnRemito, string pTipoEnvio, bool pIsUrgente)
     {
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
@@ -622,7 +622,7 @@ public class mvcController : Controller
             return DKbase.generales.Serializador_base.SerializarAJson(resultadoPedido);
         }
     }
-    public async Task<string>  TomarTransferPedidoCarrito(bool pIsDiferido, string pIdSucursal, string pMensajeEnFactura, string pMensajeEnRemito, string pTipoEnvio)
+    public async Task<string> TomarTransferPedidoCarrito(bool pIsDiferido, string pIdSucursal, string pMensajeEnFactura, string pMensajeEnRemito, string pTipoEnvio)
     {
         string tipo = pIsDiferido ? DKbase.generales.Constantes.cTipo_CarritoDiferidoTransfers : DKbase.generales.Constantes.cTipo_CarritoTransfers;
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
@@ -640,7 +640,7 @@ public class mvcController : Controller
             return DKbase.generales.Serializador_base.SerializarAJson(resultadoPedido);
         }
     }
-    public async Task<string>  TomarPedidoCarritoFacturarseFormaHabitual(string pIdSucursal, string pMensajeEnFactura, string pMensajeEnRemito, string pTipoEnvio, bool pIsUrgente, string[] pListaNombreComercial, int[] pListaCantidad)
+    public async Task<string> TomarPedidoCarritoFacturarseFormaHabitual(string pIdSucursal, string pMensajeEnFactura, string pMensajeEnRemito, string pTipoEnvio, bool pIsUrgente, string[] pListaNombreComercial, int[] pListaCantidad)
     {
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
@@ -715,5 +715,34 @@ public class mvcController : Controller
     {
         _httpContextAccessor?.HttpContext?.Session.SetString("url_type", "reservavacunas_total");
         return View();
+    }
+    public async Task<bool> ModificarCantidadProductos(string pCodProducto, string pCodSucursal, int pCantidad)
+    {
+        bool resultado = false;
+        try
+        {
+            DKbase.web.cjSonBuscadorProductos o_update = _httpContextAccessor?.HttpContext?.Session.Get<DKbase.web.cjSonBuscadorProductos>("PedidosBuscador_productosTodos");
+            for (int i = 0; i < o_update.listaProductos.Count; i++)
+            {
+                for (int x = 0; x < o_update.listaProductos[i].listaSucursalStocks.Count; x++)
+                {
+                    if (o_update.listaProductos[i].listaSucursalStocks[x].stk_codsuc == pCodSucursal)
+                    {
+                        o_update.listaProductos[i].listaSucursalStocks[x].cantidadSucursal = pCantidad;
+                        return true;
+                        //resultado = true;
+                        //break;
+                    }
+                }
+            }
+            _httpContextAccessor?.HttpContext?.Session.Set<DKbase.web.cjSonBuscadorProductos>("PedidosBuscador_productosTodos", o_update);
+            //((cjSonBuscadorProductos)System.Web.HttpContext.Current.Session["PedidosBuscador_productosTodos"]).listaProductos[pIndexProducto].listaSucursalStocks[pIndexSucursal].cantidadSucursal = pCantidad;
+
+        }
+        catch (Exception ex)
+        {
+            DKbase.generales.Log.LogError(System.Reflection.MethodBase.GetCurrentMethod(), ex, DateTime.Now);
+        }
+        return resultado;
     }
 }

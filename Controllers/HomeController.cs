@@ -308,10 +308,10 @@ public class HomeController : Controller
         return await login_general(pAuthenticateRequest);
     }
     [HttpPost]
-    public async Task<string> loginCarrito(string pName, string pPass, int pIdOferta)
+    public async Task<string> loginCarrito(string pName, string pPass, int pIdOferta, string pToken)
     {
         string resultado = null;
-        resultado = await login(new DKbase.Models.AuthenticateRequest() { login = pName, pass = pPass });
+        resultado = await login(new DKbase.Models.AuthenticateRequest() { login = pName, pass = pPass , token = pToken});
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         if (resultado == "Ok" && oCliente != null)
         {
