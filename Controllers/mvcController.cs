@@ -274,7 +274,9 @@ public class mvcController : Controller
         }
         return null;
     }
-    public async Task<string> ActualizarProductoCarritoSubirArchivo(List<DKbase.web.capaDatos.cProductosAndCantidad> pListaValor)
+    //[FromBody]
+    [HttpPost]
+    public async Task<string> ActualizarProductoCarritoSubirArchivo([FromBody]List<DKbase.web.capaDatos.cProductosAndCantidad> pListaValor)
     {
         DKbase.web.Usuario user = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
         bool isOk = DKbase.web.capaDatos.capaCAR_WebService_base.ActualizarProductoCarritoSubirArchivo(pListaValor, user.usu_codCliente.Value, user.id);

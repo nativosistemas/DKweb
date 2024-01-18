@@ -2,14 +2,27 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
+///
 builder.Services.AddControllers()
             .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.MaxDepth = Int32.MaxValue;
             });
+builder.Services.AddMvc(options =>
+{
+    options.MaxModelBindingCollectionSize = int.MaxValue;
+});
+builder.Services.Configure<FormOptions>(opt =>
+{
+    opt.ValueLengthLimit = int.MaxValue;
+    opt.MultipartBodyLengthLimit = int.MaxValue;
+
+});
+///        
 builder.Services.AddControllersWithViews();//.AddRazorRuntimeCompilation();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();

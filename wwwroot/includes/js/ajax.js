@@ -576,7 +576,26 @@ function RecuperarTransferPorId(pIdTransfer) {
         }
     });
 }
-function ActualizarProductoCarritoSubirArchivo(pListaValor) {
+async function ActualizarProductoCarritoSubirArchivo(pListaValor) {
+    var json = JSON.stringify(pListaValor);
+    const response = await fetch('/mvc/ActualizarProductoCarritoSubirArchivo', {
+        method: 'POST',
+         headers: {
+            'Content-Type': 'application/json'
+        },
+        body: json
+    });
+    const result = await response.text();
+    if (result == '1') {
+        location.href = '../mvc/Buscador';
+    } else {
+        mensaje('INFORMACIÓN', "<div style='font-size:1.5em'>" + objMensajeIntentaNuevamente + "</div>");
+        hideCargandoBuscador();
+    }
+    return result;
+
+
+/*
     $.ajax({
         type: "POST",
         url: "/mvc/ActualizarProductoCarritoSubirArchivo",
@@ -598,7 +617,7 @@ function ActualizarProductoCarritoSubirArchivo(pListaValor) {
             OnFail(response);
             hideCargandoBuscador();
         }
-    });
+    });*/
 }
 function CargarArchivoPedidoDeNuevo(has_id) {
     $.ajax({
