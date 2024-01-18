@@ -23,11 +23,24 @@ function ajaxLogin(name, pass, token) {
 }
 
 function ajaxLoginCarrito(name, pass, pIdOferta) {
+  // 
+  grecaptcha
+    .execute("6LeVNeQoAAAAAB8BX4-pJCSwCfdS7iWes-JQWhJe", {
+      action: "iniciar_sesion",
+    })
+    .then(function (tokenResponse) {
+      token = tokenResponse;
+
+      ajaxLoginCarrito_base(name, pass, pIdOferta, token);
+    });
+}
+function ajaxLoginCarrito_base(name, pass, pIdOferta, token) {
+
   if (isNotNullEmpty(name) && isNotNullEmpty(pass)) {
     $.ajax({
       type: "POST",
       url: "../Home/loginCarrito",
-      data: { pName: name, pPass: pass, pIdOferta: pIdOferta },
+      data: { pName: name, pPass: pass, pIdOferta: pIdOferta, pToken: token },
       success: function (response) {
         OnCallBackLoginCarrito(response);
       },
@@ -102,7 +115,7 @@ function onclickIngresarAbajo() {
         token = tokenResponse;
 
         ajaxLogin(name, pass, token);
-    });
+      });
   }
   return false;
 }
