@@ -22,6 +22,10 @@ builder.Services.Configure<FormOptions>(opt =>
     opt.MultipartBodyLengthLimit = int.MaxValue;
 
 });
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(5);
+});
 ///        
 builder.Services.AddControllersWithViews();//.AddRazorRuntimeCompilation();
 builder.Services.AddHttpContextAccessor();
