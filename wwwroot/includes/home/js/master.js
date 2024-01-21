@@ -61,7 +61,7 @@ async function loginCarrito_fetch(name, pass, pIdOferta, token) {
   var datos = { pName: name, pPass: pass, pIdOferta: pIdOferta, pToken: token };
 
 
-  const response = await fetch('/Home/loginCarrito_model', {
+  const response = await fetch('../Home/loginCarrito_model', {
     method: 'POST',
    headers: {
       'Content-Type': 'application/json', 
