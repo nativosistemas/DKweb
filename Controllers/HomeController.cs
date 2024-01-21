@@ -311,7 +311,7 @@ public class HomeController : Controller
     public async Task<string> loginCarrito(string pName, string pPass, int pIdOferta, string pToken)
     {
         string resultado = null;
-        resultado = await login(new DKbase.Models.AuthenticateRequest() { login = pName, pass = pPass , token = pToken});
+        resultado = await login(new DKbase.Models.AuthenticateRequest() { login = pName, pass = pPass, token = pToken });
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         if (resultado == "Ok" && oCliente != null)
         {
@@ -326,6 +326,28 @@ public class HomeController : Controller
                 }
             }
             DKweb.Codigo.Util.set_home_IdOferta(_httpContextAccessor, pIdOferta);
+        }
+        return resultado;
+    }
+    [HttpPost]
+    public async Task<string> loginCarrito_model([FromBody]DKweb.Models.LoginModel pLoginModel)
+    {
+        string resultado = null;
+        resultado = await login(new DKbase.Models.AuthenticateRequest() { login = pLoginModel.pName, pass = pLoginModel.pPass, token = pLoginModel.pToken });
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (resultado == "Ok" && oCliente != null)
+        {
+            DKbase.Util.InsertarOfertaRating(pLoginModel.pIdOferta, oCliente.cli_codigo, true);
+            DKbase.web.capaDatos.cOferta o = DKbase.Util.RecuperarOfertaPorId(pLoginModel.pIdOferta);
+            if (o != null)
+            {
+                DKweb.Codigo.Util.set_home_Tipo(_httpContextAccessor, o.ofe_tipo);
+                if (o.tfr_codigo != null)
+                {
+                    DKweb.Codigo.Util.set_home_IdTransfer(_httpContextAccessor, o.tfr_codigo.Value);
+                }
+            }
+            DKweb.Codigo.Util.set_home_IdOferta(_httpContextAccessor, pLoginModel.pIdOferta);
         }
         return resultado;
     }
