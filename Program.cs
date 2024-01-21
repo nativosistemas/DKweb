@@ -25,6 +25,7 @@ builder.Services.Configure<FormOptions>(opt =>
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
     serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(5);
+     serverOptions.Limits.MaxRequestBodySize  =  int.MaxValue;
 });
 ///        
 builder.Services.AddControllersWithViews();//.AddRazorRuntimeCompilation();

@@ -22,6 +22,7 @@ public class devolucionesController : Controller
            }*/
         return View();
     }
+    [HttpPost]
     public async Task<string> RecuperarDevolucionesPorCliente()
     {
         List<DKbase.dll.cDevolucionItemPrecarga_java> resultadoObj = null;
@@ -35,6 +36,7 @@ public class devolucionesController : Controller
         else
             return null;
     }
+    [HttpPost]
     public async Task<string> RecuperarDevolucionesPorClientePorNumero(string NumeroDevolucion)
     {
         object resultadoObj = null;
@@ -63,6 +65,7 @@ public class devolucionesController : Controller
         }
         return View();
     }
+    [HttpPost]
     public async Task<string> RecuperarItemsDevolucionFacturaCompletaPrecargaPorCliente()
     {
         object resultadoObj = null;
@@ -76,6 +79,7 @@ public class devolucionesController : Controller
         else
             return null;
     }
+    [HttpPost]
     public async Task<string> RecuperarItemsDevolucionPrecargaPorCliente()
     {
         object resultadoObj = null;
@@ -102,7 +106,7 @@ public class devolucionesController : Controller
         else
             return null;
     }
-
+    [HttpPost]
     public async Task<string> RecuperarItemsReclamoFacturadoNoEnviado()
     {
         object resultadoObj = null;
@@ -116,6 +120,7 @@ public class devolucionesController : Controller
         else
             return null;
     }
+    [HttpPost]
     public async Task<string> ObtenerReclamosFacturadoNoEnviadoPorCliente()
     {
         object resultadoObj = null;
@@ -148,6 +153,7 @@ public class devolucionesController : Controller
         DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
         return DKbase.Util.enviarConsultaValePsicotropico(oUsuario, pMail, pComentario, pNombreProducto);
     }
+    [HttpPost]
     public async Task<double?> ObtenerUnidadesEnSolicitudesNCFactNoEnvNoAnuladasDeFacturayObjetoComercial(string NumeroFactura, string NombreProducto)
     {
         double? resultado = null;
@@ -159,6 +165,7 @@ public class devolucionesController : Controller
 
         return resultado;
     }
+    [HttpPost]
     public async Task<double?> ObtenerCantidadSolicitadaDevolucionPorProductoFacturaYCliente(string NombreProducto, string NumeroFactura)
     {
         double? resultado = null;
@@ -170,6 +177,7 @@ public class devolucionesController : Controller
 
         return resultado;
     }
+    [HttpPost]
     public async Task<bool> EsFacturaConDevolucionesEnProceso(string pNroFactura)
     {
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
@@ -180,6 +188,7 @@ public class devolucionesController : Controller
 
         return false;
     }
+    [HttpPost]
     public async Task<string> ObtenerFacturasPorUltimosNumeros(string Cbte)
     {
         object resultadoObj = null;
@@ -215,26 +224,28 @@ public class devolucionesController : Controller
         }
         return resultado;
     }
+    [HttpPost]
     public async Task<bool> EliminarDevolucionItemPrecarga(int NumeroItem)
     {
         bool resultadoObj = false;
         resultadoObj = DKbase.Util.EliminarDevolucionItemPrecarga(NumeroItem);
         return resultadoObj;
     }
-
+    [HttpPost]
     public async Task<bool> ElimminarItemReclamoFNEPrecarga(int NumeroItem)
     {
         bool resultadoObj = false;
         resultadoObj = DKbase.Util.ElimminarItemReclamoFNEPrecarga(NumeroItem);
         return resultadoObj;
     }
+    [HttpPost]
     public async Task<bool> EliminarPrecargaDevolucionPorCliente(int NumeroCliente)
     {
         bool resultadoObj = false;
         resultadoObj = DKbase.Util.EliminarPrecargaDevolucionPorCliente(NumeroCliente);
         return resultadoObj;
     }
-
+    [HttpPost]
     public async Task<bool> EliminarPrecargaDevolucionVencidosPorCliente(int NumeroCliente)
     {
         bool resultadoObj = false;
@@ -248,7 +259,7 @@ public class devolucionesController : Controller
         resultadoObj = DKbase.Util.EliminarPrecargaDevolucionFacturaCompletaPorCliente(NumeroCliente);
         return resultadoObj;
     }
-
+    [HttpPost]
     public async Task<bool> EliminarPrecargaReclamoFNEPorCliente(int NumeroCliente)
     {
         bool resultadoObj = false;
@@ -325,6 +336,7 @@ public class devolucionesController : Controller
         }
         return View();
     }
+    [HttpPost]
     public async Task<string> ObtenerFacturaCliente(string pNroFactura)
     {
         object resultadoObj = null;
@@ -338,6 +350,7 @@ public class devolucionesController : Controller
         else
             return null;
     }
+    [HttpPost]
     public async Task<string> ObtenerNumerosLoteDeProductoDeFacturaProveedorLogLotesConCadena(string pNombreProducto, string pNumeroLote)
     {
         object resultadoObj = null;
