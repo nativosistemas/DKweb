@@ -37,7 +37,11 @@ function ajaxLoginCarrito(name, pass, pIdOferta) {
 function ajaxLoginCarrito_base(name, pass, pIdOferta, token) {
 
   if (isNotNullEmpty(name) && isNotNullEmpty(pass)) {
-    $.ajax({
+    loginCarrito_fetch(name, pass, pIdOferta, token).then(response => {
+      OnCallBackLoginCarrito(response);
+
+    })
+    /*$.ajax({
       type: "POST",
       url: "../Home/loginCarrito",
       data: { pName: name, pPass: pass, pIdOferta: pIdOferta, pToken: token },
@@ -50,8 +54,25 @@ function ajaxLoginCarrito_base(name, pass, pIdOferta, token) {
       error: function (response) {
         OnFail(response);
       },
-    });
+    });*/
   }
+}
+async function loginCarrito_fetch(name, pass, pIdOferta, token) {
+  var datos = { pName: name, pPass: pass, pIdOferta: pIdOferta, pToken: token };
+
+
+  const response = await fetch('/Home/loginCarrito_model', {
+    method: 'POST',
+   headers: {
+      'Content-Type': 'application/json', 
+   },
+    body: JSON.stringify(datos) // Convierte los datos a formato JSON
+  });
+
+
+
+  const text = await response.text();
+  return text;
 }
 function onkeypressIngresar(e) {
   if (!e) e = window.event;
