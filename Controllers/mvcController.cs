@@ -423,7 +423,7 @@ public class mvcController : Controller
         //Usuario oUsuario, cClientes oCliente, IFormFile pFileUpload, string pSucursal
     }*/
     [HttpPost]
-    public async Task<IActionResult> subirpedidoUpload()//List<IFormFile> files
+    public async Task<IActionResult> subirpedidoUpload(IFormFile fileUpload)//List<IFormFile> files
     {
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         if (oCliente.cli_estado.ToUpper() == DKbase.generales.Constantes.cESTADO_INH)
@@ -432,9 +432,9 @@ public class mvcController : Controller
         }
         else
         {
-            if (Request.Form.Files.Count > 0)
+            if (fileUpload != null)//(Request.Form.Files.Count > 0)
             {
-                var file = Request.Form.Files[0];
+                var file = fileUpload; //Request.Form.Files[0];
                 if (file != null)//&& file.ContentLength > 0
                 {
                     //Request.Form["HiddenFieldSucursalEleginda"] != null && 
