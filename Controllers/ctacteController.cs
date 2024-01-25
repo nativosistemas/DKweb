@@ -245,4 +245,12 @@ public class ctacteController : Controller
             }
         }
     }
+    public async Task<IActionResult> RespuestaConsultaDeComprobantes(string t)
+    {
+        if (t != null) //Request.QueryString["t"]
+        {
+            DKweb.Codigo.Util.RespuestaConsultaDeComprobantes_TIPO_Set(_httpContextAccessor,t.ToUpper());
+        }
+        return View();
+    }
 }

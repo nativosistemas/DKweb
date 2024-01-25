@@ -1291,4 +1291,17 @@ public class Util
     {
         pHttpContextAccessor.HttpContext.Session.Set<List<object>>("ConsultaDeComprobantes_NumerosDeComprobantes", pValue);
     }
+    public static string RespuestaConsultaDeComprobantes_TIPO(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.GetString("RespuestaConsultaDeComprobantes_TIPO") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.GetString("RespuestaConsultaDeComprobantes_TIPO");
+        }
+        return resultado;
+    }
+    public static void RespuestaConsultaDeComprobantes_TIPO_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.SetString("RespuestaConsultaDeComprobantes_TIPO", pValue);
+    }    
 }
