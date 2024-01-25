@@ -1326,4 +1326,17 @@ public class Util
     {
         pHttpContextAccessor.HttpContext.Session.SetString("admin_msg", pValue);
     }
+    public static List<object> ConsultaDeComprobantes_NumerosDeComprobantes(IHttpContextAccessor pHttpContextAccessor)
+    {
+        List<object> resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<List<object>>("ConsultaDeComprobantes_NumerosDeComprobantes") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<List<object>>("ConsultaDeComprobantes_NumerosDeComprobantes");
+        }
+        return resultado;
+    }
+    public static void ConsultaDeComprobantes_NumerosDeComprobantes_Set(IHttpContextAccessor pHttpContextAccessor, List<object> pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<List<object>>("ConsultaDeComprobantes_NumerosDeComprobantes", pValue);
+    }
 }
