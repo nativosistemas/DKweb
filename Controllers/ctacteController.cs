@@ -216,8 +216,33 @@ public class ctacteController : Controller
     public async Task<string> CambiarClientePromotor(int IdCliente)
     {
         DKbase.web.capaDatos.cClientes oCliente = DKbase.Util.RecuperarClientePorId(IdCliente);
-        DKweb.Codigo.Util.clientesDefault_Cliente_Set(_httpContextAccessor,oCliente);
+        DKweb.Codigo.Util.clientesDefault_Cliente_Set(_httpContextAccessor, oCliente);
 
-        return ""; 
+        return "";
+    }
+    public async Task AgregarVariableSessionConsultaDeComprobantes(string pTipo, int diaDesde, int mesDesde, int añoDesde, int diaHasta, int mesHasta, int añoHasta)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente != null)
+        {
+            string resultado = string.Empty;
+            object NroComprobante = null;
+            List<object> NrosDeComprobante = new List<object>();
+            DateTime fechaDesde = new DateTime(añoDesde, mesDesde, diaDesde);
+            DateTime fechaHasta = new DateTime(añoHasta, mesHasta, diaHasta);
+            List<DKbase.dll.cComprobanteDiscriminado> resultadoObj = DKbase.Util.ObtenerComprobantesEntreFechas(pTipo, fechaDesde, fechaHasta, oCliente.cli_login);
+            if (resultadoObj != null)
+            {
+                DKweb.Codigo.Util.ConsultaDeComprobantes_ComprobantesEntreFecha_Set(_httpContextAccessor, resultadoObj);//Session["ConsultaDeComprobantes_ComprobantesEntreFecha"] = resultadoObj;
+                DKweb.Codigo.Util.comprobantescompleto_FechaDesde_Set(_httpContextAccessor, fechaDesde); //Session["comprobantescompleto_FechaDesde"] = fechaDesde;
+                DKweb.Codigo.Util.comprobantescompleto_FechaHasta_Set(_httpContextAccessor, fechaHasta); //Session["comprobantescompleto_FechaHasta"] = fechaHasta;
+                for (var i = 0; i < resultadoObj.Count; i++)
+                {
+                    NroComprobante = resultadoObj[i].NumeroComprobante;
+                    NrosDeComprobante.Add(NroComprobante);
+                }
+                DKweb.Codigo.Util.ConsultaDeComprobantes_NumerosDeComprobantes_Set(_httpContextAccessor, NrosDeComprobante); //  Session["ConsultaDeComprobantes_NumerosDeComprobantes"] = NrosDeComprobante;
+            }
+        }
     }
 }
