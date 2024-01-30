@@ -276,7 +276,7 @@ public class mvcController : Controller
     }
     //[FromBody]
     [HttpPost]
-    public async Task<string> ActualizarProductoCarritoSubirArchivo([FromBody]List<DKbase.web.capaDatos.cProductosAndCantidad> pListaValor)
+    public async Task<string> ActualizarProductoCarritoSubirArchivo([FromBody] List<DKbase.web.capaDatos.cProductosAndCantidad> pListaValor)
     {
         DKbase.web.Usuario user = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
         bool isOk = DKbase.web.capaDatos.capaCAR_WebService_base.ActualizarProductoCarritoSubirArchivo(pListaValor, user.usu_codCliente.Value, user.id);
@@ -425,6 +425,27 @@ public class mvcController : Controller
     [HttpPost]
     public async Task<IActionResult> subirpedidoUpload(IFormFile fileUpload)//List<IFormFile> files
     {
+        if (fileUpload == null || fileUpload.Length == 0)
+        {
+            return BadRequest("Archivo no válido");
+        }
+        string log_msg = string.Empty;
+        log_msg += "FileName: " + fileUpload.FileName;
+        log_msg += " - fileUpload.Length: " + Convert.ToString(fileUpload.Length);
+        double tamañoEnMB = (double)fileUpload.Length / (1024.0 * 1024.0);
+        log_msg += " - tamañoEnMB: " + Convert.ToString(tamañoEnMB);
+        string pFile_type = fileUpload.ContentType;
+        string log_adicional = string.Empty;
+        byte[] byteArray = null;
+        using (var ms = new MemoryStream())
+        {
+            await fileUpload.CopyToAsync(ms);
+            byteArray = ms.ToArray();
+            string resultadoUtf8 = System.Text.Encoding.UTF8.GetString(byteArray);
+            log_adicional += resultadoUtf8;
+        }
+        string pType = DKbase.generales.Constantes.cLog_type_subirArchivo;
+        DKbase.Util.LogInfo(System.Reflection.MethodBase.GetCurrentMethod(), log_msg, log_adicional, pType, pFile_type, byteArray, fileUpload);
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         if (oCliente.cli_estado.ToUpper() == DKbase.generales.Constantes.cESTADO_INH)
         {
