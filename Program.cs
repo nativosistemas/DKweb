@@ -25,7 +25,7 @@ builder.Services.Configure<FormOptions>(opt =>
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
     serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(5);
-     serverOptions.Limits.MaxRequestBodySize  =  int.MaxValue;
+    serverOptions.Limits.MaxRequestBodySize = int.MaxValue;
 });
 ///        
 builder.Services.AddControllersWithViews();//.AddRazorRuntimeCompilation();
@@ -75,6 +75,8 @@ DKbase.Helper.getArchivo_ImpresionesComprobante = builder.Configuration.GetSecti
 DKbase.Helper.getConnectionStringSQL = builder.Configuration.GetConnectionString("ConnectionSQL");
 DKbase.Helper.getMail_reclamos = builder.Configuration.GetSection("appSettings")["mail_reclamos"];// System.Configuration.ConfigurationManager.AppSettings["mail_reclamos"].ToString();
 DKbase.Helper.getReCAPTCHA_ClaveSecreta = builder.Configuration.GetSection("appSettings")["reCAPTCHA_ClaveSecreta"];
+DKbase.Helper.getSMTP_SERVER = builder.Configuration.GetSection("appSettings")["SMTP_SERVER"];
+DKbase.Helper.getSMTP_PORT = Convert.ToInt32(builder.Configuration.GetSection("appSettings")["SMTP_PORT"]);
 
 var optionsRewrite = new RewriteOptions()
 .AddRedirect("home/index.aspx", "home/index")
