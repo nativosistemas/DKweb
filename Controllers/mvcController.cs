@@ -465,7 +465,7 @@ public class mvcController : Controller
                         string sucursal = Request.Form["HiddenFieldSucursalEleginda"];
                         //Boolean? isNotRepetido = true;
                         // Boolean? isNotRepetido = cSubirpedido.LeerArchivoPedido(file, sucursal);
-                        DKbase.web.cSubirPedido_return oResult = DKbase.web.cSubirpedido_base.LeerArchivoPedido(oUsuario, oCliente, file, sucursal);
+                        DKbase.web.cSubirPedido_return oResult = await DKbase.web.cSubirpedido_base.LeerArchivoPedido(oUsuario, oCliente, file, sucursal);
                         if (oResult == null)
                         {
                             return RedirectToAction("subirpedido");
