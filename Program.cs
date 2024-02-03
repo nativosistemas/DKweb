@@ -54,6 +54,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     option.ExpireTimeSpan = TimeSpan.FromHours(23);
     option.AccessDeniedPath = "/config/sinpermiso";
 });
+// inicio admin
+builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("RequiereAdmin", policy =>
+            policy.Requirements.Add(new DKweb.AuthorizationHandlers.AdminRequisito(DKbase.generales.Constantes.cROL_ADMINISTRADOR)));//
+    });
+builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.AdminRequisitoHandler>();
+// fin admin
 
 var app = builder.Build();
 DKweb.Helper.app = builder.Configuration.GetSection("appSettings")["getTipoApp"];
