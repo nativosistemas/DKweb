@@ -310,7 +310,7 @@ function CargarHtmlComprobanteEntreFecha() {
             var strHtmlDescarga = '';
             strHtmlDescarga += '<a class="btn_download float-right" href="../../servicios/generarCSV.aspx?t=ConsultaDeComprobantesEntreFecha" data-toggle="tooltip" data-placement="bottom" title="Descarga csv" data-original-title="Descarga csv">CSV</a>';
             if (esFactura) {
-                strHtmlDescarga += '<a class="btn_download float-right" href="../../servicios/generar_comprobantes_txt.aspx" data-toggle="tooltip" data-placement="bottom" title="Descarga TXT" data-original-title="Descarga TXT">TXT</a>';
+                strHtmlDescarga += '<a class="btn_download float-right" href="../../servicios/generar_comprobantes_txt" data-toggle="tooltip" data-placement="bottom" title="Descarga TXT" data-original-title="Descarga TXT">TXT</a>';
                 strHtmlDescarga += '<a class="btn_download float-right" href="../../archivos/FormatoArchivoTXTFacturas.pdf" target="_blank" data-toggle="tooltip" data-placement="bottom" title="Descargar en formato txt" data-original-title="Descargar en formato txt">FORMATO TXT</a>';
             }
             strHtmlDescarga += '<div class="float-right pad_7 hidden-xs">Descargas:</div>';
