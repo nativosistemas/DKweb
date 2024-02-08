@@ -2122,7 +2122,7 @@ function RecuperarItemsDevolucionPrecargaPorCliente() {
                     html += "<td>" + ItemsPrecargados[i].dev_numerofactura + "</td>";
                     html += "<td>" + PRD + "</td>";
                     html += "<td>" + ItemsPrecargados[i].dev_nombreproductodevolucion + "</td>";
-                    html += "<td>" + colMotivos[parseInt(ItemsPrecargados[i].dev_motivo)] + "</td>";
+                    html += "<td>" + colMotivos[ItemsPrecargados[i].dev_motivo] + "</td>";
                     html += "<td class='text-center'>" + ItemsPrecargados[i].dev_cantidad + "</td>";
                     html += "<td>" + NLote + "</td>";
                     html += "<td>" + FechaVto + "</td>";
@@ -2850,7 +2850,7 @@ function ObtenerItemsDevolucionPorNumero(NumeroDevolucion) {
                         html += "<td>" + NroFact + "</td>";
                         html += "<td>" + ItemsDev[i].dev_nombreproductodevolucion + "</td>";
                         html += "<td>" + PRD + "</td>";
-                        html += "<td>" + colMotivos[parseInt((ItemsDev[i].dev_motivo) + 1)] + "</td>";
+                        html += "<td>" + colMotivos[ItemsDev[i].dev_motivo] + "</td>";
                         html += "<td class='text-center'>" + ItemsDev[i].dev_cantidad + "</td>";
                         html += "<td class='text-center'>" + ItemsDev[i].dev_cantidadrecibida + "</td>";
                         html += "<td class='text-center " + ColorRed + "'>" + ItemsDev[i].dev_cantidadrechazada + "</td>";
@@ -3157,7 +3157,7 @@ function Imprimir() {
         esFacturaCompleta = true;
     }
     var esDevVencidos = false;
-    if (colMotivos[parseInt((ItemsDev[0].dev_motivo) + 1)] == 'Producto Vencido') {
+    if (colMotivos[ItemsDev[0].dev_motivo] == 'Producto Vencido') {
         esDevVencidos = true;
     }
 
@@ -3258,7 +3258,7 @@ function Imprimir() {
                 }
                 html += "<td style=' font-size:9px !important;'>" + ItemsDev[i].dev_nombreproductodevolucion + "</td>";
                 if (!esDevVencidos) {
-                    html += "<td style=' font-size:9px !important;'>" + colMotivos[parseInt((ItemsDev[i].dev_motivo) + 1)] + "</td>";
+                    html += "<td style=' font-size:9px !important;'>" + colMotivos[ItemsDev[i].dev_motivo] + "</td>";
                 }
                 html += "<td style=' font-size:9px !important;' class='text-center'>" + ItemsDev[i].dev_cantidad + "</td>";
                 if (!esFacturaCompleta) {
@@ -3394,7 +3394,7 @@ function Imprimir() {
                 }
                 html += "<td style=' font-size:9px !important;'>" + ItemsDev[i].dev_nombreproductodevolucion + "</td>";
                 if (!esDevVencidos) {
-                    html += "<td style=' font-size:9px !important;'>" + colMotivos[parseInt((ItemsDev[i].dev_motivo) + 1)] + "</td>";
+                    html += "<td style=' font-size:9px !important;'>" + colMotivos[ItemsDev[i].dev_motivo] + "</td>";
                 }
                 html += "<td style=' font-size:9px !important;' class='text-center'>" + ItemsDev[i].dev_cantidad + "</td>";
                 if (!esFacturaCompleta) {
