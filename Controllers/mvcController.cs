@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace DKweb.Controllers;
 
 [Authorize]
+[Authorize(Policy = "RequiereClienteHabilitado")]
 public class mvcController : Controller
 {
     private readonly ILogger<mvcController> _logger;
