@@ -299,7 +299,13 @@ public class HomeController : Controller
                     new Claim(ClaimTypes.Role, oUsuario.idRol.ToString())};
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                    return result;
+                    if (oCliente.cli_estado == "INH"){
+                        return result = "INH";
+                    }else{
+                        return result;
+                    }
+                    
+        
                 }
             }
         }
