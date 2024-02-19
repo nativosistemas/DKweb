@@ -299,8 +299,8 @@ public class HomeController : Controller
                     new Claim(ClaimTypes.Role, oUsuario.idRol.ToString())};
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                    if (oCliente.cli_estado == "INH"){
-                        return result = "INH";
+                    if (oCliente.cli_estado == DKbase.generales.Constantes.cESTADO_INH){
+                        return result = DKbase.generales.Constantes.cESTADO_INH;
                     }else{
                         return result;
                     }
