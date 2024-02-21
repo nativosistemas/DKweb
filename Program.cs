@@ -63,6 +63,16 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.AdminRequisitoHandler>();
 // fin admin
 
+// inicio hablitacion clientes
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequiereClienteHabilitado", policy =>
+        policy.Requirements.Add(new DKweb.AuthorizationHandlers.ClientePedidos(DKbase.generales.Constantes.cESTADO_HAB)));
+});
+
+builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.ClientePedidosHandler>();
+// fin habilitacion clientes
+
 var app = builder.Build();
 DKweb.Helper.app = builder.Configuration.GetSection("appSettings")["getTipoApp"];
 DKweb.Helper.folder = builder.Configuration.GetSection("appSettings")["getFolder"];

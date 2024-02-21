@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using DocumentFormat.OpenXml.Bibliography;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DKweb.Controllers;
+
 
 public class HomeController : Controller
 {
@@ -287,16 +289,23 @@ public class HomeController : Controller
             if (!string.IsNullOrEmpty(result) && (result == "Ok" || result == "OkPromotor"))
             {
                 DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+                DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
                 if (oUsuario != null)
                 {
                     var claims = new List<Claim>{
                     new Claim(ClaimTypes.Name, oUsuario.NombreYApellido),
                     new Claim("dk_login"  as string, oUsuario.usu_login),
+                    new Claim("cli_estado" as string, oCliente.cli_estado),
                     new Claim(ClaimTypes.Role, oUsuario.idRol.ToString())};
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-                    return result;
+                    if (oCliente.cli_estado == DKbase.generales.Constantes.cESTADO_INH){
+                        return result = DKbase.generales.Constantes.cESTADO_INH;
+                    }else{
+                        return result;
+                    }
+                    
+        
                 }
             }
         }

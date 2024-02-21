@@ -175,6 +175,9 @@ function funIrIntranet() {
 function funIrIntranetPromotor() {
   location.href = "../ctacte/composicionsaldo";
 }
+function funIrIntranetInhabilitado(){
+  location.href = "../ctacte/composicionsaldo";
+}
 
 function OnCallBackLogin(args) {
   isIngresarPageMethods = false;
@@ -183,7 +186,9 @@ function OnCallBackLogin(args) {
     funIrIntranet();
   } else if (args == "OkPromotor") {
     funIrIntranetPromotor();
-  } else {
+  } else if (args == "INH"){
+    funIrIntranetInhabilitado();
+  }else{
     $.alert({
       title: "Información",
       content: args,
