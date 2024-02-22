@@ -29,7 +29,10 @@ window.addEventListener("load", (event) => {
             }
         }
     } else if (pagina == 'usuarios') {
-        GetUsuarios('', '',0).then(x => {
+        var divTitle = document.getElementById("divTitle");
+        divTitle.innerHTML = "Usuarios";
+        
+        GetUsuarios('', '', 0).then(x => {
             l_usuarios = x;
             paginaMax = l_usuarios.length;
 
@@ -107,7 +110,7 @@ async function fetchSignOff() {
     return text;
 }
 
-async function GetUsuarios(sortExpression, pFiltro,pAvanzar) {
+async function GetUsuarios(sortExpression, pFiltro, pAvanzar) {
     const parametros = {
         sortExpression: sortExpression,
         pFiltro: pFiltro,
@@ -126,14 +129,14 @@ async function GetUsuarios(sortExpression, pFiltro,pAvanzar) {
 function htmlUsuarios() {
     //paginaActual = pagina;
     if (l_usuarios != null) {
-     /*   const inicio = (paginaActual - 1) * itemsPorPagina;
-        const fin = inicio + itemsPorPagina;
-
-        const l_grilla = l_usuarios.slice(inicio, fin);
-        if (fin < l_usuarios.length) {
-            // if (l_grilla.length > 0) {}
-        }
-*/
+        /*   const inicio = (paginaActual - 1) * itemsPorPagina;
+           const fin = inicio + itemsPorPagina;
+   
+           const l_grilla = l_usuarios.slice(inicio, fin);
+           if (fin < l_usuarios.length) {
+               // if (l_grilla.length > 0) {}
+           }
+   */
 
 
         var strHtml = '';
@@ -146,6 +149,7 @@ function htmlUsuarios() {
         strHtml += '<th scope="col">Nombre</th>';
         strHtml += '<th scope="col">Apellido</th>';
         strHtml += '<th scope="col">Correo Electrónico</th>';
+        strHtml += '<th scope="col"></th>';
         strHtml += '</tr>';
         //
         strHtml += '</thead>';
@@ -156,6 +160,7 @@ function htmlUsuarios() {
             strHtml += '<td>' + elt.usu_nombre + '</td>';
             strHtml += '<td>' + elt.usu_apellido + '</td>';
             strHtml += '<td>' + elt.usu_mail + '</td>';
+            strHtml += '<td>' + "<button type=\"button\" class=\"btn btn-warning\" onclick=\"return EditarSlide(" + "5" + ");\">Modificar</button>&nbsp;&nbsp;" + '</td>';
             strHtml += '</tr>';
         });
         strHtml += '</tbody>';
@@ -179,24 +184,24 @@ function htmlPaginador() {
 }
 function onclickPaginador(accion) {
 
-   /* var pagina = paginaActual + accion;
-    if (pagina < 1) {
-        pagina = 1;
-    }
-    const inicio = (pagina - 1) * itemsPorPagina;
-    const fin = inicio + itemsPorPagina;
-    if (paginaMax  < fin){
-        pagina = paginaMax;
-    }*/
+    /* var pagina = paginaActual + accion;
+     if (pagina < 1) {
+         pagina = 1;
+     }
+     const inicio = (pagina - 1) * itemsPorPagina;
+     const fin = inicio + itemsPorPagina;
+     if (paginaMax  < fin){
+         pagina = paginaMax;
+     }*/
 
-    GetUsuarios('', '',accion).then(x => {
+    GetUsuarios('', '', accion).then(x => {
         l_usuarios = x;
         paginaMax = l_usuarios.length;
 
 
     }).then(x => { htmlUsuarios(); })
 
-    
+
 
     //htmlUsuarios(pagina);
 
