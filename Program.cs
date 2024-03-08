@@ -1,9 +1,33 @@
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
-// Hola mundo
-// Add services to the container.
+
+///
+builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.MaxDepth = Int32.MaxValue;
+            });
+builder.Services.AddMvc(options =>
+{
+    options.MaxModelBindingCollectionSize = int.MaxValue;
+});
+builder.Services.Configure<FormOptions>(opt =>
+{
+    opt.ValueLengthLimit = int.MaxValue;
+    opt.MultipartBodyLengthLimit = int.MaxValue;
+
+});
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(5);
+    serverOptions.Limits.MaxRequestBodySize = int.MaxValue;
+});
+///        
 builder.Services.AddControllersWithViews();//.AddRazorRuntimeCompilation();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
@@ -30,6 +54,24 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     option.ExpireTimeSpan = TimeSpan.FromHours(23);
     option.AccessDeniedPath = "/config/sinpermiso";
 });
+// inicio admin
+builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("RequiereAdmin", policy =>
+            policy.Requirements.Add(new DKweb.AuthorizationHandlers.AdminRequisito(DKbase.generales.Constantes.cROL_ADMINISTRADOR)));//
+    });
+builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.AdminRequisitoHandler>();
+// fin admin
+
+// inicio hablitacion clientes
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequiereClienteHabilitado", policy =>
+        policy.Requirements.Add(new DKweb.AuthorizationHandlers.ClientePedidos(DKbase.generales.Constantes.cESTADO_HAB)));
+});
+
+builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.ClientePedidosHandler>();
+// fin habilitacion clientes
 
 var app = builder.Build();
 DKweb.Helper.app = builder.Configuration.GetSection("appSettings")["getTipoApp"];
@@ -49,8 +91,10 @@ DKbase.Helper.getMail_ctacte = builder.Configuration.GetSection("appSettings")["
 DKbase.Helper.getMailContacto = builder.Configuration.GetSection("appSettings")["mailContacto"];
 DKbase.Helper.getArchivo_ImpresionesComprobante = builder.Configuration.GetSection("appSettings")["ImpresionesComprobante"];
 DKbase.Helper.getConnectionStringSQL = builder.Configuration.GetConnectionString("ConnectionSQL");
-DKbase.Helper.getMail_reclamos =builder.Configuration.GetSection("appSettings")["mail_reclamos"];// System.Configuration.ConfigurationManager.AppSettings["mail_reclamos"].ToString();
+DKbase.Helper.getMail_reclamos = builder.Configuration.GetSection("appSettings")["mail_reclamos"];// System.Configuration.ConfigurationManager.AppSettings["mail_reclamos"].ToString();
 DKbase.Helper.getReCAPTCHA_ClaveSecreta = builder.Configuration.GetSection("appSettings")["reCAPTCHA_ClaveSecreta"];
+DKbase.Helper.getSMTP_SERVER = builder.Configuration.GetSection("appSettings")["SMTP_SERVER"];
+DKbase.Helper.getSMTP_PORT = Convert.ToInt32(builder.Configuration.GetSection("appSettings")["SMTP_PORT"]);
 
 var optionsRewrite = new RewriteOptions()
 .AddRedirect("home/index.aspx", "home/index")
@@ -74,9 +118,9 @@ if (!app.Environment.IsDevelopment())
     //app.UseExceptionHandler("/config/Error");
     app.UseExceptionHandler(exceptionHandlerApp =>
  {
-    
-    //exceptionHandlerApp.ex
-    //"/Home/Error"
+
+     //exceptionHandlerApp.ex
+     //"/Home/Error"
      exceptionHandlerApp.Run(async context =>
      {
 
@@ -102,7 +146,7 @@ if (!app.Environment.IsDevelopment())
 
          if (exceptionHandlerPathFeature?.Path == "/")
          {
-            
+
              await context.Response.WriteAsync(" Page: Home.");
          }
      });
@@ -128,4 +172,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}");
 
+app.MapGet("/cerrar", async (Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor) =>
+{
+    await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);  //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    _httpContextAccessor.HttpContext.Session.Clear();
+    _httpContextAccessor.HttpContext.Response.Redirect("/Home/Index");
+    return System.Threading.Tasks.Task.CompletedTask;// "Ok"; 
+});
 app.Run();

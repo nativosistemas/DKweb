@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using DocumentFormat.OpenXml.Bibliography;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DKweb.Controllers;
+
 
 public class HomeController : Controller
 {
@@ -260,7 +262,7 @@ public class HomeController : Controller
         DKbase.Models.AuthenticateRequest pAuthenticateRequest = new DKbase.Models.AuthenticateRequest() { login = pLogin, pass = pPass, token = pToken };
         return await login_general(pAuthenticateRequest);
     }
-    private async Task<string> login_general(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
+    public async Task<string> login_general(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
     {
         string result = "!Ok";
         if (pAuthenticateRequest != null && !string.IsNullOrEmpty(pAuthenticateRequest.login) && pAuthenticateRequest.login.Equals("farmacity", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
@@ -287,16 +289,23 @@ public class HomeController : Controller
             if (!string.IsNullOrEmpty(result) && (result == "Ok" || result == "OkPromotor"))
             {
                 DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+                DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
                 if (oUsuario != null)
                 {
                     var claims = new List<Claim>{
                     new Claim(ClaimTypes.Name, oUsuario.NombreYApellido),
                     new Claim("dk_login"  as string, oUsuario.usu_login),
+                    new Claim("cli_estado" as string, oCliente.cli_estado),
                     new Claim(ClaimTypes.Role, oUsuario.idRol.ToString())};
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-                    return result;
+                    if (oCliente.cli_estado == DKbase.generales.Constantes.cESTADO_INH){
+                        return result = DKbase.generales.Constantes.cESTADO_INH;
+                    }else{
+                        return result;
+                    }
+                    
+        
                 }
             }
         }
@@ -308,10 +317,10 @@ public class HomeController : Controller
         return await login_general(pAuthenticateRequest);
     }
     [HttpPost]
-    public async Task<string> loginCarrito(string pName, string pPass, int pIdOferta)
+    public async Task<string> loginCarrito(string pName, string pPass, int pIdOferta, string pToken)
     {
         string resultado = null;
-        resultado = await login(new DKbase.Models.AuthenticateRequest() { login = pName, pass = pPass });
+        resultado = await login(new DKbase.Models.AuthenticateRequest() { login = pName, pass = pPass, token = pToken });
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         if (resultado == "Ok" && oCliente != null)
         {
@@ -326,6 +335,28 @@ public class HomeController : Controller
                 }
             }
             DKweb.Codigo.Util.set_home_IdOferta(_httpContextAccessor, pIdOferta);
+        }
+        return resultado;
+    }
+    [HttpPost]
+    public async Task<string> loginCarrito_model([FromBody]DKweb.Models.LoginModel pLoginModel)
+    {
+        string resultado = null;
+        resultado = await login(new DKbase.Models.AuthenticateRequest() { login = pLoginModel.pName, pass = pLoginModel.pPass, token = pLoginModel.pToken });
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (resultado == "Ok" && oCliente != null)
+        {
+            DKbase.Util.InsertarOfertaRating(pLoginModel.pIdOferta, oCliente.cli_codigo, true);
+            DKbase.web.capaDatos.cOferta o = DKbase.Util.RecuperarOfertaPorId(pLoginModel.pIdOferta);
+            if (o != null)
+            {
+                DKweb.Codigo.Util.set_home_Tipo(_httpContextAccessor, o.ofe_tipo);
+                if (o.tfr_codigo != null)
+                {
+                    DKweb.Codigo.Util.set_home_IdTransfer(_httpContextAccessor, o.tfr_codigo.Value);
+                }
+            }
+            DKweb.Codigo.Util.set_home_IdOferta(_httpContextAccessor, pLoginModel.pIdOferta);
         }
         return resultado;
     }

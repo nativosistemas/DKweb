@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace DKweb.Controllers;
 
 [Authorize]
+[Authorize(Policy = "RequiereClienteHabilitado")]
 public class mvcController : Controller
 {
     private readonly ILogger<mvcController> _logger;
@@ -274,7 +275,9 @@ public class mvcController : Controller
         }
         return null;
     }
-    public async Task<string> ActualizarProductoCarritoSubirArchivo(List<DKbase.web.capaDatos.cProductosAndCantidad> pListaValor)
+    //[FromBody]
+    [HttpPost]
+    public async Task<string> ActualizarProductoCarritoSubirArchivo([FromBody] List<DKbase.web.capaDatos.cProductosAndCantidad> pListaValor)
     {
         DKbase.web.Usuario user = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
         bool isOk = DKbase.web.capaDatos.capaCAR_WebService_base.ActualizarProductoCarritoSubirArchivo(pListaValor, user.usu_codCliente.Value, user.id);
@@ -440,8 +443,12 @@ public class mvcController : Controller
         //Usuario oUsuario, cClientes oCliente, IFormFile pFileUpload, string pSucursal
     }*/
     [HttpPost]
-    public async Task<IActionResult> subirpedidoUpload()//List<IFormFile> files
+    public async Task<IActionResult> subirpedidoUpload(IFormFile fileUpload)//List<IFormFile> files
     {
+        if (fileUpload == null || fileUpload.Length == 0)
+        {
+            return BadRequest("Archivo no válido");
+        }
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         if (oCliente.cli_estado.ToUpper() == DKbase.generales.Constantes.cESTADO_INH)
         {
@@ -449,9 +456,9 @@ public class mvcController : Controller
         }
         else
         {
-            if (Request.Form.Files.Count > 0)
+            if (fileUpload != null)//(Request.Form.Files.Count > 0)
             {
-                var file = Request.Form.Files[0];
+                var file = fileUpload; //Request.Form.Files[0];
                 if (file != null)//&& file.ContentLength > 0
                 {
                     //Request.Form["HiddenFieldSucursalEleginda"] != null && 
@@ -461,7 +468,7 @@ public class mvcController : Controller
                         string sucursal = Request.Form["HiddenFieldSucursalEleginda"];
                         //Boolean? isNotRepetido = true;
                         // Boolean? isNotRepetido = cSubirpedido.LeerArchivoPedido(file, sucursal);
-                        DKbase.web.cSubirPedido_return oResult = DKbase.web.cSubirpedido_base.LeerArchivoPedido(oUsuario, oCliente, file, sucursal);
+                        DKbase.web.cSubirPedido_return oResult = await DKbase.web.cSubirpedido_base.LeerArchivoPedido(oUsuario, oCliente, file, sucursal);
                         if (oResult == null)
                         {
                             return RedirectToAction("subirpedido");
@@ -711,8 +718,8 @@ public class mvcController : Controller
     }
     public async Task<IActionResult> reservavacunas(string t)
     {
-        return RedirectToAction("reservavacunas_mis");
-        /*bool resultado = false;
+        //return RedirectToAction("reservavacunas_mis");
+        bool resultado = false;
         if (!string.IsNullOrEmpty(t) && t == "1")
         {
             resultado = true;
@@ -723,7 +730,7 @@ public class mvcController : Controller
         {
             return RedirectToAction("reservavacunas_mis");
         }
-        return View();*/
+        return View();
     }
     public async Task<IActionResult> reservavacunas_mis()
     {

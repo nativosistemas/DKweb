@@ -23,11 +23,28 @@ function ajaxLogin(name, pass, token) {
 }
 
 function ajaxLoginCarrito(name, pass, pIdOferta) {
+  // 
+  grecaptcha
+    .execute("6LeVNeQoAAAAAB8BX4-pJCSwCfdS7iWes-JQWhJe", {
+      action: "iniciar_sesion",
+    })
+    .then(function (tokenResponse) {
+      token = tokenResponse;
+
+      ajaxLoginCarrito_base(name, pass, pIdOferta, token);
+    });
+}
+function ajaxLoginCarrito_base(name, pass, pIdOferta, token) {
+
   if (isNotNullEmpty(name) && isNotNullEmpty(pass)) {
-    $.ajax({
+    loginCarrito_fetch(name, pass, pIdOferta, token).then(response => {
+      OnCallBackLoginCarrito(response);
+
+    })
+    /*$.ajax({
       type: "POST",
       url: "../Home/loginCarrito",
-      data: { pName: name, pPass: pass, pIdOferta: pIdOferta },
+      data: { pName: name, pPass: pass, pIdOferta: pIdOferta, pToken: token },
       success: function (response) {
         OnCallBackLoginCarrito(response);
       },
@@ -37,8 +54,25 @@ function ajaxLoginCarrito(name, pass, pIdOferta) {
       error: function (response) {
         OnFail(response);
       },
-    });
+    });*/
   }
+}
+async function loginCarrito_fetch(name, pass, pIdOferta, token) {
+  var datos = { pName: name, pPass: pass, pIdOferta: pIdOferta, pToken: token };
+
+
+  const response = await fetch('../Home/loginCarrito_model', {
+    method: 'POST',
+   headers: {
+      'Content-Type': 'application/json', 
+   },
+    body: JSON.stringify(datos) // Convierte los datos a formato JSON
+  });
+
+
+
+  const text = await response.text();
+  return text;
 }
 function onkeypressIngresar(e) {
   if (!e) e = window.event;
@@ -102,7 +136,7 @@ function onclickIngresarAbajo() {
         token = tokenResponse;
 
         ajaxLogin(name, pass, token);
-    });
+      });
   }
   return false;
 }
@@ -141,6 +175,9 @@ function funIrIntranet() {
 function funIrIntranetPromotor() {
   location.href = "../ctacte/composicionsaldo";
 }
+function funIrIntranetInhabilitado(){
+  location.href = "../ctacte/composicionsaldo";
+}
 
 function OnCallBackLogin(args) {
   isIngresarPageMethods = false;
@@ -149,7 +186,9 @@ function OnCallBackLogin(args) {
     funIrIntranet();
   } else if (args == "OkPromotor") {
     funIrIntranetPromotor();
-  } else {
+  } else if (args == "INH"){
+    funIrIntranetInhabilitado();
+  }else{
     $.alert({
       title: "Información",
       content: args,

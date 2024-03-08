@@ -1,7 +1,8 @@
 namespace DKweb.Codigo;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
-
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 public class Util
 {
     public static bool IsUsuariosDK(IHttpContextAccessor pHttpContextAccessor)
@@ -272,8 +273,12 @@ public class Util
             DateTime? fechaGuarda = DKbase.web.FuncionesPersonalizadas_base.getFecha_Horario(result);
             if (fechaGuarda != null && fechaGuarda.Value < DateTime.Now)
             {
-                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierre(oCliente, oCliente.cli_codsuc, pSucursal, oCliente.cli_codrep));
-                result = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
+                string strObtenerHorarioCierre_2 = DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierre(oCliente, oCliente.cli_codsuc, pSucursal, oCliente.cli_codrep);
+                if (strObtenerHorarioCierre_2 != null)
+                {
+                    pHttpContextAccessor.HttpContext.Session.SetString(nameSession, strObtenerHorarioCierre_2);
+                    result = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
+                }
             }
         }
         return result;
@@ -507,8 +512,14 @@ public class Util
                     }
                 }
                 else
-                {
-                    if (user.usu_codCliente == null)
+                {/////////////////////
+
+                    if (user.idRol == DKbase.generales.Constantes.cROL_ADMINISTRADOR)
+                    {
+                        pHttpContextAccessor.HttpContext.Session.Set<DKbase.web.Usuario>("clientesDefault_Usuario", user);
+                        resultado = "Ok_ADMINISTRADOR";
+                    }
+                    else if (user.usu_codCliente == null)
                     {
                         resultado = "Usuario no asigando cliente";
                     }
@@ -543,38 +554,43 @@ public class Util
     public static DKbase.web.cjSonBuscadorProductos RecuperarProductosBase_V3(IHttpContextAccessor pHttpContextAccessor, int? pIdOferta, string pTxtBuscador, List<string> pListaColumna, bool pIsBuscarConOferta, bool pIsBuscarConTransfer)
     {
         DKbase.web.cjSonBuscadorProductos resultado = null;
-        if (!string.IsNullOrEmpty(pTxtBuscador) || pIdOferta != null)
+        try
         {
-            DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
-            DKbase.web.Usuario user = getSessionUsuario(pHttpContextAccessor);
-            if (!string.IsNullOrEmpty(pTxtBuscador) && pTxtBuscador.Trim() != string.Empty && oCliente != null)
+            if (!string.IsNullOrEmpty(pTxtBuscador) || pIdOferta != null)
             {
-                DKbase.Util.InsertarPalabraBuscada(pTxtBuscador.ToUpper(), user.id, DKbase.generales.Constantes.cTABLA_PRODUCTO);
-            }
-            resultado = RecuperarProductosGeneral_V3(pHttpContextAccessor, pIdOferta, pTxtBuscador, pListaColumna, oCliente.cli_tomaOfertas, oCliente.cli_tomaTransfers);
-            if (pIsBuscarConOferta || pIsBuscarConTransfer)
-            {
-                if (resultado != null)
+                DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
+                DKbase.web.Usuario user = getSessionUsuario(pHttpContextAccessor);
+                if (!string.IsNullOrEmpty(pTxtBuscador) && pTxtBuscador.Trim() != string.Empty && oCliente != null)
                 {
-                    if (pIsBuscarConOferta && pIsBuscarConTransfer)
+                    DKbase.Util.InsertarPalabraBuscada(pTxtBuscador.ToUpper(), user.id, DKbase.generales.Constantes.cTABLA_PRODUCTO);
+                }
+                resultado = RecuperarProductosGeneral_V3(pHttpContextAccessor, pIdOferta, pTxtBuscador, pListaColumna, oCliente.cli_tomaOfertas, oCliente.cli_tomaTransfers);
+                if (pIsBuscarConOferta || pIsBuscarConTransfer)
+                {
+                    if (resultado != null)
                     {
-                        resultado.listaProductos = resultado.listaProductos.Where(x => x.pro_ofeporcentaje > 0 || x.isTieneTransfer || x.isProductoFacturacionDirecta).ToList();
-                    }
-                    else
-                    {
-                        if (pIsBuscarConOferta)
+                        if (pIsBuscarConOferta && pIsBuscarConTransfer)
                         {
-                            resultado.listaProductos = resultado.listaProductos.Where(x => x.pro_ofeporcentaje > 0).ToList();
+                            resultado.listaProductos = resultado.listaProductos.Where(x => x.pro_ofeporcentaje > 0 || x.isTieneTransfer || x.isProductoFacturacionDirecta).ToList();
                         }
-                        else if (pIsBuscarConTransfer)
+                        else
                         {
-                            resultado.listaProductos = resultado.listaProductos.Where(x => x.isTieneTransfer || x.isProductoFacturacionDirecta).ToList();
+                            if (pIsBuscarConOferta)
+                            {
+                                resultado.listaProductos = resultado.listaProductos.Where(x => x.pro_ofeporcentaje > 0).ToList();
+                            }
+                            else if (pIsBuscarConTransfer)
+                            {
+                                resultado.listaProductos = resultado.listaProductos.Where(x => x.isTieneTransfer || x.isProductoFacturacionDirecta).ToList();
+                            }
                         }
                     }
                 }
             }
-
-
+        }
+        catch (Exception ex)
+        {
+            DKbase.generales.Log.LogError(System.Reflection.MethodBase.GetCurrentMethod(), ex, DateTime.Now);
         }
         return resultado;
     }
@@ -631,7 +647,11 @@ public class Util
 
         if (horario_siguiente == null)
         {
-            pHttpContextAccessor.HttpContext.Session.SetString(nameSession, DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierreAnterior(oCliente, pSucursalDependiente, pHorarioCierre));
+            string horarioCierre = DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierreAnterior(oCliente, pSucursalDependiente, pHorarioCierre);
+            if (!string.IsNullOrEmpty(horarioCierre))
+            {
+                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, horarioCierre);
+            }
         }
         horario_siguiente = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
         if (horario_siguiente != null)
@@ -641,8 +661,12 @@ public class Util
             DateTime? fechaGuarda = DKbase.web.FuncionesPersonalizadas_base.getFecha_Horario(result);
             if (fechaHorarioCierre != null && fechaGuarda != null && fechaGuarda.Value < fechaHorarioCierre.Value)
             {
-                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierreAnterior(oCliente, pSucursalDependiente, pHorarioCierre));
-                result = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
+                string horarioCierre_2 = DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierreAnterior(oCliente, pSucursalDependiente, pHorarioCierre);
+                if (!string.IsNullOrEmpty(horarioCierre_2))
+                {
+                    pHttpContextAccessor.HttpContext.Session.SetString(nameSession, horarioCierre_2);
+                    result = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
+                }
             }
         }
         return result;
@@ -1269,5 +1293,227 @@ public class Util
     public static void Cliente_CartelImprimir_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
     {
         pHttpContextAccessor.HttpContext.Session.SetString("Cliente_CartelImprimir", pValue);
+    }
+    public static async Task<string> login_general_reutilizar(IHttpContextAccessor pHttpContextAccessor, DKbase.Models.AuthenticateRequest pAuthenticateRequest)
+    {
+        string result = "!Ok";
+        if (pAuthenticateRequest != null && !string.IsNullOrEmpty(pAuthenticateRequest.login) && !string.IsNullOrEmpty(pAuthenticateRequest.pass))
+        {
+            result = DKweb.Codigo.Util.login(pHttpContextAccessor, pAuthenticateRequest.login, pAuthenticateRequest.pass);
+            if (!string.IsNullOrEmpty(result) && (result == "Ok" || result == "OkPromotor" || result == "Ok_ADMINISTRADOR"))
+            {
+                DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(pHttpContextAccessor);
+                if (oUsuario != null)
+                {
+                    var claims = new List<Claim>{
+                    new Claim(ClaimTypes.Name, oUsuario.NombreYApellido),
+                    new Claim("dk_login"  as string, oUsuario.usu_login),
+                    new Claim(ClaimTypes.Role, oUsuario.idRol.ToString())};
+                    var claimsIdentity = new ClaimsIdentity(claims, Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme);
+                    await pHttpContextAccessor.HttpContext.SignInAsync(Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+                    return result;
+                }
+            }
+        }
+        return result;
+    }
+    public static string admin_msg(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.GetString("admin_msg") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.GetString("admin_msg");
+        }
+        return resultado;
+    }
+    public static void admin_msg_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.SetString("admin_msg", pValue);
+    }
+    public static List<object> ConsultaDeComprobantes_NumerosDeComprobantes(IHttpContextAccessor pHttpContextAccessor)
+    {
+        List<object> resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.Get<List<object>>("ConsultaDeComprobantes_NumerosDeComprobantes") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.Get<List<object>>("ConsultaDeComprobantes_NumerosDeComprobantes");
+        }
+        return resultado;
+    }
+    public static void ConsultaDeComprobantes_NumerosDeComprobantes_Set(IHttpContextAccessor pHttpContextAccessor, List<object> pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<List<object>>("ConsultaDeComprobantes_NumerosDeComprobantes", pValue);
+    }
+    public static string RespuestaConsultaDeComprobantes_TIPO(IHttpContextAccessor pHttpContextAccessor)
+    {
+        string resultado = null;
+        if (pHttpContextAccessor.HttpContext?.Session.GetString("RespuestaConsultaDeComprobantes_TIPO") != null)
+        {
+            resultado = pHttpContextAccessor.HttpContext.Session.GetString("RespuestaConsultaDeComprobantes_TIPO");
+        }
+        return resultado;
+    }
+    public static void RespuestaConsultaDeComprobantes_TIPO_Set(IHttpContextAccessor pHttpContextAccessor, string pValue)
+    {
+        pHttpContextAccessor.HttpContext.Session.SetString("RespuestaConsultaDeComprobantes_TIPO", pValue);
+    }
+    public static string grabarComprobastesTXT(IHttpContextAccessor pHttpContextAccessor, List<object> pLista, List<DKbase.dll.cComprobanteDiscriminado> pLista2)
+    {
+        string resultado = string.Empty;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(pHttpContextAccessor);
+
+        if (pLista != null && oCliente != null)
+        {
+            string ruta = System.IO.Path.Combine(DKbase.Helper.getFolder, "archivos", "comprobantes");
+            DirectoryInfo DIR = new DirectoryInfo(ruta);
+            if (!DIR.Exists)
+            {
+                DIR.Create();
+            }
+            string nombreArchivoCSV = string.Empty;
+            DateTime? fechaDesde = comprobantescompleto_FechaDesde(pHttpContextAccessor);
+            DateTime? fechaHasta = comprobantescompleto_FechaHasta(pHttpContextAccessor);
+            string fechaArchivoCSV = fechaDesde.Value.Year.ToString().Substring(2, 2) + fechaDesde.Value.Month.ToString("00") + fechaDesde.Value.Day.ToString("00") + "A" + fechaHasta.Value.Year.ToString().Substring(2, 2) + fechaHasta.Value.Month.ToString("00") + fechaHasta.Value.Day.ToString("00");
+            nombreArchivoCSV = oCliente.cli_login + "-Comprobantes" + fechaArchivoCSV + ".txt";
+            resultado = nombreArchivoCSV;
+            System.IO.StreamWriter FAC_txt = new System.IO.StreamWriter(System.IO.Path.Combine(ruta, nombreArchivoCSV), false, System.Text.Encoding.UTF8);
+
+            for (int i = 0; i < pLista.Count; i++)
+            {
+                DKbase.dll.cFactura objFactura = DKbase.Util.ObtenerFactura(pLista[i].ToString(), oCliente.cli_login);
+                string strCabeceraFAC = string.Empty;
+                // identificación cabecera
+                strCabeceraFAC += "C-";
+                // número C(13) 
+                strCabeceraFAC += objFactura.Numero.PadRight(13, ' ');
+                // Fecha
+                if (objFactura.Fecha != null)
+                {
+                    strCabeceraFAC += ((DateTime)objFactura.Fecha).Day.ToString("00") + ((DateTime)objFactura.Fecha).Month.ToString("00") + ((DateTime)objFactura.Fecha).Year.ToString("0000");
+                }
+                else
+                {
+                    strCabeceraFAC += "00" + "00" + "0000";
+                }
+                // fin fecha
+                //monto total N(10) [1]        
+                string montoTotal = string.Empty;
+                montoTotal += DKbase.generales.Numerica.toString_NumeroTXT_N10(objFactura.MontoTotal);
+                strCabeceraFAC += montoTotal;
+                // fin monto total N(10) [1] 
+
+                //4 monto exento N(10) [1] 
+                strCabeceraFAC += DKbase.generales.Numerica.toString_NumeroTXT_N10(objFactura.MontoExento);
+                //5 monto gravado N(10) [1] 
+                strCabeceraFAC += DKbase.generales.Numerica.toString_NumeroTXT_N10(objFactura.MontoGravado);
+                //6 monto IVA inscripto N(10) [1] 
+                strCabeceraFAC += DKbase.generales.Numerica.toString_NumeroTXT_N10(objFactura.MontoIvaInscripto);
+                //7 monto IVA no inscripto N(10) [1] 
+                strCabeceraFAC += DKbase.generales.Numerica.toString_NumeroTXT_N10(objFactura.MontoIvaNoInscripto);
+                //8 monto percepción DGR N(10) [1] 
+                strCabeceraFAC += DKbase.generales.Numerica.toString_NumeroTXT_N10(objFactura.MontoPercepcionDGR);
+                //9 descuento especial N(10) [1] 
+                strCabeceraFAC += DKbase.generales.Numerica.toString_NumeroTXT_N10(objFactura.DescuentoEspecial);
+                //10 descuento netos N(10) [1] 
+                strCabeceraFAC += DKbase.generales.Numerica.toString_NumeroTXT_N10(objFactura.DescuentoNetos);
+                //11 descuento perfumería N(10) [1] 
+                strCabeceraFAC += DKbase.generales.Numerica.toString_NumeroTXT_N10(objFactura.DescuentoPerfumeria);
+                //12 descuento web N(10) [1] 
+                strCabeceraFAC += DKbase.generales.Numerica.toString_NumeroTXT_N10(objFactura.DescuentoWeb);
+                //13 Monto Percepcion Municipal N(10) [1] 
+                strCabeceraFAC += DKbase.generales.Numerica.toString_NumeroTXT_N10(objFactura.MontoPercepcionMunicipal);
+
+                FAC_txt.WriteLine(strCabeceraFAC);
+                foreach (DKbase.dll.cFacturaDetalle item in objFactura.lista)
+                {
+                    if (item.Troquel != null)
+                    {
+                        if (item.Troquel != string.Empty)
+                        {
+                            //If NOT ISNULL(Importe)
+                            if (item.Importe != null)
+                            {
+                                if (item.Importe.Trim() != string.Empty)
+                                {
+                                    string detalleFAC = string.Empty;
+                                    //Identificador de item
+                                    detalleFAC += "I-";
+                                    //Nro. Campo Tipo Comentario
+                                    //1 código de barras producto C(13)
+                                    //2 descripción producto C(60)
+                                    //3 cantidad N(5)
+                                    //4 característica C(1)
+                                    //Espacio en blanco - Sin característica
+                                    //F - Farmabono
+                                    //D - Tarjeta D
+                                    //C - Colfacor
+                                    //B - Bonos CIL
+                                    //P - Bonos PAP
+                                    //$ - Ofertas
+                                    //T - Transfer
+                                    //5 neto N(1) 0 - Normail / 1 - Neto + IVA
+                                    //6 precio público N(10) [1]
+                                    //7 precio unitario N(10) [1]
+                                    //8 importe N(10) [1]   
+                                    DKbase.web.capaDatos.cProductos producto = DKbase.web.capaDatos.capaCAR_WebService_base.RecuperarProductoPorNombre(item.Descripcion);
+                                    bool isNoTieneCodigoBarra = true;//código de barras producto C(13)
+                                    if (producto != null)
+                                    {
+                                        if (producto.pro_codigobarra != null)
+                                        {
+                                            isNoTieneCodigoBarra = false;
+                                            detalleFAC += producto.pro_codigobarra.PadRight(13, ' ');
+                                        }
+                                    }
+                                    if (isNoTieneCodigoBarra)
+                                    {
+                                        detalleFAC += " ".PadRight(13, ' ');
+                                    }
+                                    detalleFAC += item.Descripcion.PadRight(60, ' ');
+                                    detalleFAC += item.Cantidad.PadLeft(5, '0');
+                                    if (item.Caracteristica == null)
+                                    {
+                                        detalleFAC += " ";
+                                    }
+                                    else
+                                    {
+                                        if (item.Caracteristica == string.Empty)
+                                        {
+                                            detalleFAC += " ";
+                                        }
+                                        else
+                                        {
+                                            detalleFAC += item.Caracteristica.PadLeft(1, ' ');
+                                        }
+                                    }
+                                    if (producto != null)
+                                    {
+                                        detalleFAC += producto.pro_neto ? "1" : "0"; // Neto --- neto N(1) 0 - Normail / 1 - Neto + IVA                            
+                                    }
+                                    else
+                                    {
+                                        detalleFAC += " ";
+                                    }
+                                    detalleFAC += DKbase.generales.Numerica.toString_NumeroTXT_N10(item.PrecioPublico);
+                                    detalleFAC += DKbase.generales.Numerica.toString_NumeroTXT_N10(item.PrecioUnitario);
+                                    detalleFAC += DKbase.generales.Numerica.toString_NumeroTXT_N10(item.Importe);
+
+                                    //resultado += detalleFAC + "\n";
+                                    FAC_txt.WriteLine(detalleFAC);
+                                    //listaResultado.Add(resultado);
+
+                                }//   if (item.Importe.Trim() != string.Empty) { 
+                            }//     if (item.Importe != null) { 
+
+                        }// fin if (item.Troquel != string.Empty)
+
+                    }// fin if (item.Troquel != null)
+                }
+            }
+            FAC_txt.Close();
+
+        }
+
+        return resultado;
     }
 }

@@ -2,25 +2,42 @@
 @Html.Partial("_nav_secundario")
 @Html.Partial("_nav_reservavacunas")
 
-@section Scripts{
+@section Scripts {
     @Html.Partial("_scripts_reservavacunas")
 }
 @{
 
     string resultado = string.Empty;
 
-    List<DKbase.web.capaDatos.cReservasVacunasBD> listaReservaVacunas = DKbase.web.acceso.ObtenerReservasVacunas(DKweb.Codigo.Util.clientes_pages_reservavacunas_SinTroquel( Accessor));
+    List<DKbase.web.capaDatos.cReservasVacunasBD> listaReservaVacunas =
+    DKbase.web.acceso.ObtenerReservasVacunas(DKweb.Codigo.Util.clientes_pages_reservavacunas_SinTroquel(Accessor));
     if (listaReservaVacunas != null)
     {
-        resultado += "<input type=\"hidden\" id=\"hiddenListaReservasVacunas\" value=\"" + System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(listaReservaVacunas)) + "\" />";
+        resultado += "<input type=\"hidden\" id=\"hiddenListaReservasVacunas\" value=\"" +
+        System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(listaReservaVacunas)) + "\" />";
     }
     WriteLiteral(resultado);
-}
 
-@*<h2>reservavacunas</h2>*@
+
+
+}
 
 <div class="row">
 
     <div class="col-xs-12" id="divGridReservaVacunas">
     </div>
+@*
+    <div class="col-xs-12"
+        style="margin-top: 30px;@{if (DKweb.Codigo.Util.clientes_pages_reservavacunas_SinTroquel(Accessor)){WriteLiteral("display: none;");}}">
+        <strong> COMBO ISTIVAC 4 + EFLUELDA</strong>
+        <br>
+        ISTIVAC 23% DESCUENTO 10 UNIDADES POR COMBO
+        <br>
+        EFLUELDA 15% DESCUENTO 1 UNIDAD POR COMBO
+        <br>
+        <div style="color:red;">
+            PARA RESERVAR ESTE COMBO POR FAVOR COMUNICARSE CON PROMOTOR O TELEFONISTA.
+        </div>
+    </div>
+    *@
 </div>
