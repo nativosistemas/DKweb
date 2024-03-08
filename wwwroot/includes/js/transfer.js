@@ -20,6 +20,7 @@ var productosTotal = 0;
 var contadorProductosTotal = 0;
 var contadorPrecioTotal = 0;
 var fijuniArray = [];
+var qInput = 0;
 
 function jcTransfersProductos() {
     this.PrecioFinalTransfer;
@@ -491,8 +492,8 @@ function AgregarTransferHtmlAlPopUp(pIndex) { //calcar y transformar
         strHtmlTransfer += '<div id="tdError' + pIndex + '_' + y + '"  class="errorFilaTransfer" ></div>';
 
     } 
-
-
+    
+    
 
     strHtmlTransfer += '<div class="style-bottom">';
     strHtmlTransfer += '<div class="clear10"></div>';
@@ -515,9 +516,9 @@ function AgregarTransferHtmlAlPopUp(pIndex) { //calcar y transformar
     strHtmlTransfer += '</div>';
     strHtmlTransfer += '</div>';
     strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total1">MONTO TOTAL:</div>&nbsp';
-    strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total2" id="monto-total">$&nbsp;' + precioTotal.toFixed(2) + '</div>&nbsp'; //Cambiar por precio total
+    strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total2" id="monto-total">$&nbsp;' + precioTotal.toFixed(2) + '</div>&nbsp'; 
     strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total1">CANTIDAD PRODUCTOS:</div>&nbsp';
-    strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total2" id="productos-total">' + productosTotal + '</div>&nbsp'; //Cambiar por precio total
+    strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total2" id="productos-total">' + productosTotal + '</div>&nbsp'; 
     strHtmlTransfer += '</div>';
     strHtmlTransfer += '</div>';
 
@@ -608,18 +609,20 @@ function Contador(pIndex) {
         var type = this.getAttribute("data-type");
         var input = document.querySelector("input[name='" + fieldName + "']");
         var currentValue = parseInt(input.value);
-
+        qInput = parseInt(input.value);
         if (!isNaN(currentValue)) {
           if (type === "minus" && currentValue > 1) {
             fijuniArray = [];
             input.value = currentValue - 1;
             contadorPrecioTotal -= valorInicial;
             contadorProductosTotal -= cantInicial;
+            qInput = parseInt(input.value);
           } else if (type === "plus") {
             fijuniArray = [];
             input.value = currentValue + 1;
             contadorPrecioTotal += valorInicial;
             contadorProductosTotal += cantInicial;
+            qInput = parseInt(input.value);
           }
   
           for (let x = 0; x < listaTransfer[pIndex].listaDetalle.length; x++) {
@@ -664,6 +667,7 @@ function Contador(pIndex) {
           fijuniArray = [];
           var input = this;
           var enteredValue = parseInt(input.value);
+          qInput = parseInt(input.value);
           if (!isNaN(enteredValue)) {
             contadorProductosTotal = enteredValue * cantInicial;
             contadorPrecioTotal = enteredValue * valorInicial;
@@ -711,6 +715,7 @@ function Contador(pIndex) {
         fijuniArray = [];
         var input = this;
         var enteredValue = parseInt(input.value);
+        qInput = parseInt(input.value);
         if (!isNaN(enteredValue)) {
             contadorProductosTotal = enteredValue * cantInicial;
             contadorPrecioTotal = enteredValue * valorInicial;
@@ -790,8 +795,10 @@ function ValidarTransferTotal_sucursal(pIndice, pIndiceSursal) {
             break;
         }
     }
-    if (isGrabar) {
+    if (isGrabar && qInput == 0) {
         AgregarProductosTransfersAlCarrito(tempListaProductos, listaTransfer[pIndice].tfr_codigo, listaSucursalesDependienteInfo[pIndiceSursal].sde_sucursal, 'OnCallBackAgregarProductosTransfersAlCarrito');
+    }else if (isGrabar && qInput > 0){
+        AgregarProductosTransfersAlCarritoComboCerrado(tempListaProductos, listaTransfer[pIndice].tfr_codigo, listaSucursalesDependienteInfo[pIndiceSursal].sde_sucursal, qInput , 'OnCallBackAgregarProductosTransfersAlCarrito');
     }
 }
 

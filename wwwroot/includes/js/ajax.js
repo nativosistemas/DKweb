@@ -96,6 +96,23 @@ function AgregarProductosTransfersAlCarrito(pListaProductosMasCantidad, pIdTrans
         }
     });
 }
+function AgregarProductosTransfersAlCarritoComboCerrado(pListaProductosMasCantidad, pIdTransfers, pCodSucursal, pQinput , pOnCallBack) {
+    $.ajax({
+        type: "POST",
+        url: "/mvc/AgregarProductosTransfersAlCarritoComboCerrado" + (isCarritoDiferido ? 'Diferido' : ''),
+        data: { pListaProductosMasCantidad: pListaProductosMasCantidad, pIdTransfers: pIdTransfers, pCodSucursal: pCodSucursal, pQinput: pQinput},
+        success:
+            function (response) {
+                eval(pOnCallBack + '(' + response + ')');
+            },
+        failure: function (response) {
+            OnFail(response);
+        },
+        error: function (response) {
+            OnFail(response);
+        }
+    });
+}
 function CargarCarritoDiferido(pIdSucursal, pIdProduco, pCantidadProducto) {
     $.ajax({
         type: "POST",

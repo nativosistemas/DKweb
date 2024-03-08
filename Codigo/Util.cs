@@ -661,6 +661,11 @@ public class Util
         System.Data.DataTable pTablaDetalle = DKbase.web.FuncionesPersonalizadas_base.ConvertProductosAndCantidadToDataTable_new(pListaProductosMasCantidad);
         return DKbase.web.capaDatos.capaCAR_base.spCargarCarrito(pTablaDetalle, pIdCliente, pIdUsuario, pCodSucursal, pTipo);
     }
+
+        public static bool AgregarProductosComboCerrado( int pIdCliente, int pIdUsuario, int pIdTransfers, int pQinput, string pCodSucursal, string pTipo)
+    {
+        return DKbase.web.capaDatos.capaCAR_base.spCargarCarritoComboCerrado(pIdCliente, pIdUsuario, pIdTransfers, pCodSucursal, pTipo, pQinput);
+    }
     public static List<DKbase.web.capaDatos.cSucursalCarritoTransfer> RecuperarCarritosTransfer_generico(IHttpContextAccessor pHttpContextAccessor, DKbase.web.capaDatos.cClientes pCliente, string pTipo)
     {
         List<DKbase.web.capaDatos.cSucursalCarritoTransfer> result = null;
