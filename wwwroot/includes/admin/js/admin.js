@@ -1,4 +1,5 @@
 var l_usuarios = null;
+var o_usuario = null;
 // paginador
 let itemsPorPagina = 10;
 let paginaActual = 1;
@@ -31,14 +32,14 @@ window.addEventListener("load", (event) => {
     } else if (pagina == 'usuarios') {
         var divTitle = document.getElementById("divTitle");
         divTitle.innerHTML = "Usuarios";
-        
+
         GetUsuarios('', '', 0).then(x => {
             l_usuarios = x;
             paginaMax = l_usuarios.length;
 
 
-        }).then(x => { htmlUsuarios(); })
-    }
+        }).then(x => { htmlUsuarios(); });
+    } 
 
 
 });
@@ -126,6 +127,19 @@ async function GetUsuarios(sortExpression, pFiltro, pAvanzar) {
     return resultJson;
 
 }
+async function GetUsuario(id) {
+    const parametros = {
+        id: id
+    };
+    const url = '/admin/GetUsuario?' + new URLSearchParams(parametros);
+
+    const response = await fetch(url, {
+        method: 'GET'
+    });
+    const resultJson = await response.json();
+    return resultJson;
+
+}
 function htmlUsuarios() {
     //paginaActual = pagina;
     if (l_usuarios != null) {
@@ -160,7 +174,7 @@ function htmlUsuarios() {
             strHtml += '<td>' + elt.usu_nombre + '</td>';
             strHtml += '<td>' + elt.usu_apellido + '</td>';
             strHtml += '<td>' + elt.usu_mail + '</td>';
-            strHtml += '<td>' + "<button type=\"button\" class=\"btn btn-warning\" onclick=\"return EditarSlide(" + "5" + ");\">Modificar</button>&nbsp;&nbsp;" + '</td>';
+            strHtml += '<td>' + "<button type=\"button\" class=\"btn btn-warning\" onclick=\"return EditarUsuaruo(" + elt.usu_codigo  + ");\">Modificar</button>&nbsp;&nbsp;" + '</td>';
             strHtml += '</tr>';
         });
         strHtml += '</tbody>';
@@ -170,7 +184,10 @@ function htmlUsuarios() {
 
     }
 }
-
+function EditarUsuaruo(id){
+    //window.location.href = "https://www.ejemplo.com";
+    location.href = '../admin/usuario?id=' + id;
+}
 function htmlPaginador() {
     var strHtml = '';
     strHtml += '<div class="container">';
@@ -205,4 +222,16 @@ function onclickPaginador(accion) {
 
     //htmlUsuarios(pagina);
 
+}
+
+function htmlCargarDatosCliente() {
+    if (o_usuario != null) {
+        document.getElementById('txt_nombre').value = o_usuario.usu_nombre;
+        document.getElementById('txt_apellido').value = o_usuario.usu_apellido;
+        document.getElementById('txt_mail').value = o_usuario.usu_mail;
+        document.getElementById('txt_login').value = o_usuario.usu_login;
+        document.getElementById('txt_cliente').value = o_usuario.usu_codCliente;
+        document.getElementById('txt_observaciones').value = o_usuario.usu_observacion;
+        document.getElementById('cmb_rol').value = o_usuario.usu_codRol;
+    }
 }
