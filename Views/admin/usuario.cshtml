@@ -1,0 +1,54 @@
+@inject IHttpContextAccessor Accessor
+@{
+  Layout = "_mainAdmin";
+}
+<script  type="text/javascript">
+  window.addEventListener("load", (event) => {
+
+
+
+
+    var divTitle = document.getElementById("divTitle");
+    divTitle.innerHTML = "Usuario";
+    var id = getUrlParameter('id');
+    GetUsuario(id).then(x => {
+      o_usuario = x;
+    }).then(x => { htmlCargarDatosCliente(); })
+
+
+
+  });
+</script>
+<div class="form-group">
+  <label for="txt_nombre">Nombre:</label>
+  <input type="text" class="form-control" id="txt_nombre" placeholder="Ingresa tu nombre">
+</div>
+<div class="form-group">
+  <label for="txt_apellido">Apellido:</label>
+  <input type="text" class="form-control" id="txt_apellido" placeholder="Ingresa tu apellido">
+</div>
+<div class="form-group">
+  <label for="txt_mail">Mail:</label>
+  <input type="email" class="form-control" id="txt_mail" placeholder="Ingresa tu correo electrónico">
+</div>
+<div class="form-group">
+  <label for="txt_login">Login:</label>
+  <input type="text" class="form-control" id="txt_login" placeholder="Ingresa tu nombre de usuario">
+</div>
+<div class="form-group">
+  <label for="cmb_rol">Rol:</label>
+  <select class="form-control" id="cmb_rol">
+    <option>Selecciona un rol</option>
+    <option>Administrador</option>
+    <option>Usuario</option>
+  </select>
+</div>
+<div class="form-group">
+  <label for="txt_cliente">Cliente:</label>
+  <input type="text" class="form-control" id="txt_cliente" placeholder="Ingresa el nombre del cliente">
+</div>
+<div class="form-group">
+  <label for="txt_observaciones">Observaciones:</label>
+  <textarea class="form-control" id="txt_observaciones" rows="3" placeholder="Ingresa observaciones"></textarea>
+</div>
+<button type="submit" class="btn btn-primary">Enviar</button>

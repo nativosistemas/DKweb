@@ -71,6 +71,16 @@ public class adminController : Controller
         // _httpContextAccessor?.HttpContext?.Session.SetString("url_type", "Buscador");
         return View();
     }
+    public async Task<IActionResult> usuario(int id)
+    {
+
+        return View();
+    }
+    public async Task<IActionResult> GetUsuario(int id)
+    {
+        cUsuario o = DKbase.web.capaDatos.capaSeguridad_base.RecuperarTodosUsuarios("").Where(x => x.usu_codigo == id).FirstOrDefault();
+        return Json(o);
+    }
     public static int grillaPagUsuario = 0;
     public async Task<IActionResult> GetUsuarios(string sortExpression, string pFiltro, int pAvanzar)
     {
