@@ -333,6 +333,30 @@ function OnFailBotonEnProceso(args) {
     hideCargando();
     isBotonNoEstaEnProceso = true;
 }
+function OnCallBackTomarPedidoCarrito_sap(args) {
+    isBotonNoEstaEnProceso = true;
+    /// mostrar faltantes y problema crediticio
+    if (!isNotNullEmpty(args)) {
+        args = null;
+    } else {
+        args = eval('(' + args + ')');
+    }
+    if (args == null) {
+        mensaje_alert_base(mensajeCuandoSeMuestraError, 'volverBuscador()');
+    } else {
+        // Error dsd dll pedido
+        if (args.tipo == 'mostrarMsg' ) {
+            var msgError = '';
+
+            mensaje_alert_base(args.msg, 'volverBuscador()');
+            // Fin Error dsd dll pedido
+        } else {
+            isHacerBorradoCarritos = true;
+            //CargarRespuestaDePedido(args);
+            mensaje_alert_base(args.msg, 'volverBuscador()');
+        }
+    }
+}
 function OnCallBackTomarPedidoCarrito(args) {
     isBotonNoEstaEnProceso = true;
     /// mostrar faltantes y problema crediticio

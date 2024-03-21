@@ -411,7 +411,7 @@ function TomarPedidoCarrito(pIdSucursal, pMensajeEnFactura, pMensajeEnRemito, pT
         data: { pIdSucursal: pIdSucursal, pMensajeEnFactura: pMensajeEnFactura, pMensajeEnRemito: pMensajeEnRemito, pTipoEnvio: pTipoEnvio, pIsUrgente: pIsUrgente },
         success:
             function (response) {
-                OnCallBackTomarPedidoCarrito(response);
+                OnCallBackTomarPedidoCarrito_sap(response);
                 hideCargando();
             },
         failure: function (response) {
@@ -431,7 +431,7 @@ function TomarPedidoCarritoDiferido(pIdSucursal, pMensajeEnFactura, pMensajeEnRe
         data: { pIdSucursal: pIdSucursal, pMensajeEnFactura: pMensajeEnFactura, pMensajeEnRemito: pMensajeEnRemito, pTipoEnvio: pTipoEnvio, pIsUrgente: pIsUrgente },
         success:
             function (response) {
-                OnCallBackTomarPedidoCarrito(response);
+                OnCallBackTomarPedidoCarrito_sap(response);
                 hideCargando();
             },
         failure: function (response) {
