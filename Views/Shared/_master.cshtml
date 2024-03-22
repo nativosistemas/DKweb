@@ -30,7 +30,7 @@
     <link href="../includes/home/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
     <link href="../includes/home/css/main.css?n=10" rel="stylesheet" />
-    <link href="../includes/home/css/main-overwrite.css?n=4" rel="stylesheet" />
+    <link href="../includes/home/css/main-overwrite.css?n=6" rel="stylesheet" />
 
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet" />
 
@@ -475,8 +475,8 @@
             </div>
         </div>
 
-        <div class="overlay"></div>
-            <div class="popup">
+        <div class="overlay-tyc"></div>
+            <div class="popup-tyc">
                 <h2 class="titulo-popup">Términos y Condiciones</h2>
                 <p class="titulo-popup"><strong>Aviso de privacidad</strong></p>
                 <p>El fin del presente es que usted pueda comprender la información que 
@@ -717,19 +717,19 @@
             <script>
             // Función para abrir el popup
             function abrirPopup() {
-                document.querySelector('.overlay').style.display = 'block';
-                document.querySelector('.popup').style.display = 'block';
+                document.querySelector('.overlay-tyc').style.display = 'block';
+                document.querySelector('.popup-tyc').style.display = 'block';
             }
 
             // Función para cerrar el popup
             function cerrarPopup() {
-                document.querySelector('.overlay').style.display = 'none';
-                document.querySelector('.popup').style.display = 'none';
+                document.querySelector('.overlay-tyc').style.display = 'none';
+                document.querySelector('.popup-tyc').style.display = 'none';
             }
 
             // Agregar el evento clic al botón
             document.querySelector('.popup-button').addEventListener('click', abrirPopup);
-            document.querySelector('.overlay').addEventListener('click', function(event) {
+            document.querySelector('.overlay-tyc').addEventListener('click', function(event) {
         if (event.target === this) {
             cerrarPopup();
         }

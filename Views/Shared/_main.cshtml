@@ -38,7 +38,7 @@
     @RenderSection("head", required: false)
     <link href="../includes/css/main.css?n=22" rel="stylesheet">
     <link href="../includes/css/select2.min.css?n=3" rel="stylesheet">
-    <link href="../includes/css/main-overwrite.css?n=57" rel="stylesheet">
+    <link href="../includes/css/main-overwrite.css?n=59" rel="stylesheet">
 </head>
 @{
     if (DKweb.Codigo.Util.IsUsuariosDK(Accessor))
@@ -525,8 +525,8 @@
             <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12"><a class="buttonontop" title="Subir" href="#"><i class="fa fa-caret-up"></i></a></div>
         </div>
     </div>
-     <div class="overlay"></div>
-            <div class="popup">
+     <div class="overlay-tyc"></div>
+            <div class="popup-tyc">
                 <h2 class="titulo-popup">Términos y Condiciones</h2>
                 <p class="titulo-popup"><strong>Aviso de privacidad</strong></p>
                 <p>El fin del presente es que usted pueda comprender la información que 
@@ -689,19 +689,19 @@
         <script>
             // Función para abrir el popup
             function abrirPopup() {
-                document.querySelector('.overlay').style.display = 'block';
-                document.querySelector('.popup').style.display = 'block';
+                document.querySelector('.overlay-tyc').style.display = 'block';
+                document.querySelector('.popup-tyc').style.display = 'block';
             }
 
             // Función para cerrar el popup
             function cerrarPopup() {
-                document.querySelector('.overlay').style.display = 'none';
-                document.querySelector('.popup').style.display = 'none';
+                document.querySelector('.overlay-tyc').style.display = 'none';
+                document.querySelector('.popup-tyc').style.display = 'none';
             }
 
             // Agregar el evento clic al botón
             document.querySelector('.popup-button').addEventListener('click', abrirPopup);
-            document.querySelector('.overlay').addEventListener('click', function(event) {
+            document.querySelector('.overlay-tyc').addEventListener('click', function(event) {
         if (event.target === this) {
             cerrarPopup();
         }
@@ -756,7 +756,7 @@
     <script src="~/includes/js/libreria.js?n=22" type="text/javascript"></script>
     <script src="~/includes/js/oferta.js?n=19" type="text/javascript"></script>
     <script src="~/includes/js/kellerhoff.js?n=55" type="text/javascript"></script>
-    <script src="~/includes/js/ajax.js?n=49" type="text/javascript"></script>
+    <script src="~/includes/js/ajax.js?n=50" type="text/javascript"></script>
     <script src="~/includes/js/mensaje.js?n=40" type="text/javascript"></script>
     <script src="~/includes/js/promotores.js?n=4" type="text/javascript"></script>
 

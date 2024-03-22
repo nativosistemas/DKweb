@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using DKweb.Models;
 using DKweb.Codigo;
 using Microsoft.AspNetCore.Authorization;
+using DKbase.generales;
 
 namespace DKweb.Controllers;
 
@@ -86,7 +87,6 @@ public class mvcController : Controller
     //[Authorize]
     public async Task<IActionResult> Buscador()
     {
-
         _httpContextAccessor?.HttpContext?.Session.SetString("url_type", "Buscador");
         return View();
     }
@@ -620,7 +620,8 @@ public class mvcController : Controller
         string horarioCierre = DKweb.Codigo.Util.getObtenerHorarioCierre(_httpContextAccessor, pIdSucursal);
         pMensajeEnFactura = pMensajeEnFactura == null ? "" : pMensajeEnFactura;
         pMensajeEnRemito = pMensajeEnRemito == null ? "" : pMensajeEnRemito;
-        var resultPedido = DKbase.web.capaDatos.capaCAR_WebService_base.TomarPedidoCarrito_generico(oUsuario, oCliente, listaCarrito, horarioCierre, DKbase.generales.Constantes.cTipo_Carrito, pIdSucursal, pMensajeEnFactura, pMensajeEnRemito, pTipoEnvio, pIsUrgente);
+        //var resultPedido = DKbase.web.capaDatos.capaCAR_WebService_base.TomarPedidoCarrito_generico(oUsuario, oCliente, listaCarrito, horarioCierre, DKbase.generales.Constantes.cTipo_Carrito, pIdSucursal, pMensajeEnFactura, pMensajeEnRemito, pTipoEnvio, pIsUrgente);
+        DKbase.Models.TomarPedidoResponse resultPedido = await DKbase.capaSAP.TomarPedidoCarrito(oUsuario, oCliente, DKbase.generales.Constantes.cTipo_Carrito, pIdSucursal);
         if (resultPedido == null)
         {
             return null;
@@ -638,7 +639,8 @@ public class mvcController : Controller
         string horarioCierre = DKweb.Codigo.Util.getObtenerHorarioCierre(_httpContextAccessor, pIdSucursal);
         pMensajeEnFactura = pMensajeEnFactura == null ? "" : pMensajeEnFactura;
         pMensajeEnRemito = pMensajeEnRemito == null ? "" : pMensajeEnRemito;
-        DKbase.dll.cDllPedido resultadoPedido = DKbase.web.capaDatos.capaCAR_WebService_base.TomarPedidoCarrito_generico(oUsuario, oCliente, listaCarrito, horarioCierre, DKbase.generales.Constantes.cTipo_CarritoDiferido, pIdSucursal, pMensajeEnFactura, pMensajeEnRemito, pTipoEnvio, pIsUrgente);
+        //DKbase.dll.cDllPedido resultadoPedido = DKbase.web.capaDatos.capaCAR_WebService_base.TomarPedidoCarrito_generico(oUsuario, oCliente, listaCarrito, horarioCierre, DKbase.generales.Constantes.cTipo_CarritoDiferido, pIdSucursal, pMensajeEnFactura, pMensajeEnRemito, pTipoEnvio, pIsUrgente);
+        DKbase.Models.TomarPedidoResponse resultadoPedido = await DKbase.capaSAP.TomarPedidoCarrito(oUsuario, oCliente, DKbase.generales.Constantes.cTipo_CarritoDiferido, pIdSucursal);
         if (resultadoPedido == null)
         {
             return null;
