@@ -644,7 +644,7 @@ a.mtz {
     }
 
     /* Estilos para el botón del popup */
-    .popup .close-popup {
+    .popup-tyc .close-popup {
         display: inline-block;
         padding: 5px 10px;
         background-color: #007bff;
@@ -657,12 +657,12 @@ a.mtz {
     }
 
     /* Estilos para el botón del popup al pasar el cursor */
-    .popup .close-popup:hover {
+    .popup-tyc .close-popup:hover {
         background-color: #0056b3;
     }
 
     /* Estilos para el popup */
-    .popup {
+    .popup-tyc {
         display: none;
         position: fixed;
         top: 50%;
@@ -686,7 +686,7 @@ a.mtz {
     }
 
     /* Estilos para el fondo oscuro detrás del popup */
-    .overlay {
+    .overlay-tyc {
         display: none;
         position: fixed;
         top: 0;
