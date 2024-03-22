@@ -180,8 +180,5 @@ app.MapGet("/cerrar", async (Microsoft.AspNetCore.Http.IHttpContextAccessor _htt
     _httpContextAccessor.HttpContext.Response.Redirect("/Home/Index");
     return System.Threading.Tasks.Task.CompletedTask;// "Ok"; 
 });
-app.MapGet("/test", async (Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContextAccessor) =>
-{
-    return await DKbase.capaSAP.CRED_DISP(1000000030);// "Ok"; 
-});
+DKbase.Util.spInsertSessionApp(DKweb.Helper.app);
 app.Run();
