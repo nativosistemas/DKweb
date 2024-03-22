@@ -22,21 +22,8 @@
             //    return response.json()
             //})
             var params = { pAuthenticateRequest: { login: name, pass: pass } };//    var parameter = { login: name, pass: pass }
-            const options = {
-                method: 'POST',
-                body: params// params //,//JSON.stringify(params),
-                /*headers: {
-                    'Content-type': 'application/json; charset=UTF-8',
-                }*/
-            };
-            const options_1 = {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8'
-                },
-                body: JSON.stringify(params)
-            };
-            var url = "../Home/login?";
+
+            var url = "../Home/loginbot?";
             fetch(url + new URLSearchParams({
                 pLogin: name,
                 pPass: pass
