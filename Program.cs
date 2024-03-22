@@ -170,4 +170,5 @@ app.MapGet("/cerrar", async (Microsoft.AspNetCore.Http.IHttpContextAccessor _htt
     _httpContextAccessor.HttpContext.Response.Redirect("/Home/Index");
     return System.Threading.Tasks.Task.CompletedTask;// "Ok"; 
 });
+DKbase.Util.spInsertSessionApp(DKweb.Helper.app);
 app.Run();

@@ -280,6 +280,11 @@ public class HomeController : Controller
         }
         return result;
     }
+    public async Task<string> loginbot(string pLogin, string pPass)
+    {
+        DKbase.Models.AuthenticateRequest pAuthenticateRequest = new DKbase.Models.AuthenticateRequest() { login = pLogin, pass = pPass };
+        return await login_general_reutilizar(pAuthenticateRequest);
+    }
     public async Task<string> login_general_reutilizar(DKbase.Models.AuthenticateRequest pAuthenticateRequest)
     {
         string result = "!Ok";
@@ -299,13 +304,16 @@ public class HomeController : Controller
                     new Claim(ClaimTypes.Role, oUsuario.idRol.ToString())};
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                    if (oCliente.cli_estado == DKbase.generales.Constantes.cESTADO_INH){
+                    if (oCliente.cli_estado == DKbase.generales.Constantes.cESTADO_INH)
+                    {
                         return result = DKbase.generales.Constantes.cESTADO_INH;
-                    }else{
+                    }
+                    else
+                    {
                         return result;
                     }
-                    
-        
+
+
                 }
             }
         }
@@ -339,7 +347,7 @@ public class HomeController : Controller
         return resultado;
     }
     [HttpPost]
-    public async Task<string> loginCarrito_model([FromBody]DKweb.Models.LoginModel pLoginModel)
+    public async Task<string> loginCarrito_model([FromBody] DKweb.Models.LoginModel pLoginModel)
     {
         string resultado = null;
         resultado = await login(new DKbase.Models.AuthenticateRequest() { login = pLoginModel.pName, pass = pLoginModel.pPass, token = pLoginModel.pToken });
