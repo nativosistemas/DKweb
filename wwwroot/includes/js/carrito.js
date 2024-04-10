@@ -333,30 +333,6 @@ function OnFailBotonEnProceso(args) {
     hideCargando();
     isBotonNoEstaEnProceso = true;
 }
-function OnCallBackTomarPedidoCarrito_sap(args) {
-    isBotonNoEstaEnProceso = true;
-    /// mostrar faltantes y problema crediticio
-    if (!isNotNullEmpty(args)) {
-        args = null;
-    } else {
-        args = eval('(' + args + ')');
-    }
-    if (args == null) {
-        mensaje_alert_base(mensajeCuandoSeMuestraError, 'volverBuscador()');
-    } else {
-        // Error dsd dll pedido
-        if (args.tipo == 'mostrarMsg' ) {
-            var msgError = '';
-
-            mensaje_alert_base(args.msg, 'volverBuscador()');
-            // Fin Error dsd dll pedido
-        } else {
-            isHacerBorradoCarritos = true;
-            //CargarRespuestaDePedido(args);
-            mensaje_alert_base(args.msg, 'volverBuscador()');
-        }
-    }
-}
 function OnCallBackTomarPedidoCarrito(args) {
     isBotonNoEstaEnProceso = true;
     /// mostrar faltantes y problema crediticio
@@ -368,21 +344,48 @@ function OnCallBackTomarPedidoCarrito(args) {
     if (args == null) {
         mensaje_alert_base(mensajeCuandoSeMuestraError, 'volverBuscador()');
     } else {
-        // Error dsd dll pedido
-        if (args.Error != '' || args.web_Error != '') {
-            var msgError = '';
-            if (args.Error != '') {
-                msgError = args.Error;
-            } else if (args.web_Error != '') {
-                msgError = args.web_Error;
-            }
-            mensaje_alert_base(msgError, 'volverBuscador()');
-            // Fin Error dsd dll pedido
-        } else {
-            isHacerBorradoCarritos = true;
-            CargarRespuestaDePedido(args);
+
+        if (args.tipo == "mostrarMsg") {
+            mensaje_alert_base(args.msg, 'volverBuscador()');
+        } else if (args.tipo == "seProceso_dll") {//
+            // Error dsd dll pedido
+            OnCallBackTomarPedidoCarrito_dll(args.result_dll);
         }
+        else if (args.tipo == "seProceso") {//seProceso_dll
+            // Error dsd dll pedido
+            OnCallBackTomarPedidoCarrito_sap(args);
+        }
+
+
+
+
     }
+}
+function OnCallBackTomarPedidoCarrito_sap(args) {
+    mensaje_alert_base(args.msg, 'volverBuscador()');
+    /*if (args.tipo == "seProceso_mostrarMsg") {
+        mensaje_alert_base(args.msg, 'volverBuscador()');
+    }*/
+
+    isHacerBorradoCarritos = true;
+    HacerLimpiezaDeCarritosDspDeConfirmarPedido() ;
+}
+function OnCallBackTomarPedidoCarrito_dll(args) {
+    // Error dsd dll pedido
+    if (args.Error != '' || args.web_Error != '') {
+        var msgError = '';
+        if (args.Error != '') {
+            msgError = args.Error;
+        } else if (args.web_Error != '') {
+            msgError = args.web_Error;
+        }
+        mensaje_alert_base(msgError, 'volverBuscador()');
+        // Fin Error dsd dll pedido
+    } else {
+        isHacerBorradoCarritos = true;
+        CargarRespuestaDePedido(args);
+    }
+
 }
 function getHtml_ProductosFacturados(pValor) {
     var listaFaltantes = pValor.Items;
@@ -946,7 +949,7 @@ function CargarProductoCantidadDependiendoTransferCarrito(pFila, pColumna, pCant
                         var tempListaProductos = [];
                         var objProducto = new jcTransfersProductos();
                         objProducto.codProductoNombre = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
-                        objProducto.codProducto= listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
+                        objProducto.codProducto = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                         objProducto.tde_codpro = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                         objProducto.cantidad = 0;
                         tempListaProductos.push(objProducto);
@@ -970,7 +973,7 @@ function CargarProductoCantidadDependiendoTransferCarrito(pFila, pColumna, pCant
                     var tempListaProductos = [];
                     var objProducto = new jcTransfersProductos();
                     objProducto.codProductoNombre = listaCarritos[pColumna].listaProductos[pFila].tde_codpro; // Para la funcion en el servidor
-                    objProducto.codProducto= listaCarritos[pColumna].listaProductos[pFila].tde_codpro; 
+                    objProducto.codProducto = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                     objProducto.tde_codpro = listaCarritos[pColumna].listaProductos[pFila].tde_codpro;
                     objProducto.cantidad = cantidadCarritoTransfer;
                     tempListaProductos.push(objProducto);
