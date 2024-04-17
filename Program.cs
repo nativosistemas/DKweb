@@ -98,8 +98,8 @@ DKbase.Helper.getSMTP_PORT = Convert.ToInt32(builder.Configuration.GetSection("a
 DKbase.Helper.getUrl_SAP = builder.Configuration.GetSection("appSettings")["getUrl_SAP"];
 DKbase.Helper.getSAP_user = builder.Configuration.GetSection("appSettings")["getSAP_user"];
 DKbase.Helper.getSAP_pass = builder.Configuration.GetSection("appSettings")["getSAP_pass"];
-DKbase.Helper.isSAP= true;
-DKbase.Helper.isModoDev= true;
+DKbase.Helper.isSAP = true;
+DKbase.Helper.isModoDev = Convert.ToBoolean(builder.Configuration.GetSection("appSettings")["isModoDev"]);
 
 var optionsRewrite = new RewriteOptions()
 .AddRedirect("home/index.aspx", "home/index")
