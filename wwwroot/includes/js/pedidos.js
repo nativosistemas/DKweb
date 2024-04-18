@@ -431,7 +431,7 @@ function onclickDescartarRecuperador(pIndexCarrito) {
     for (var iProductos = 0; iProductos < listaRecuperardor[pIndexCarrito].listaProductos.length; iProductos++) {
         if ($('#checkRecuperador_' + pIndexCarrito + '_' + iProductos).is(":checked")) {
             contadorArray++;
-            ArrayProductos[contadorArray] = listaRecuperardor[pIndexCarrito].listaProductos[iProductos].fpc_nombreProducto;
+            ArrayProductos[contadorArray] = String( listaRecuperardor[pIndexCarrito].listaProductos[iProductos].pro_codigo);
         }
     }
     if (contadorArray != -1) {

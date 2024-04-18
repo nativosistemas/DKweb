@@ -853,11 +853,11 @@ function AgregarProductosDelRecuperardorAlCarrito(pSucursal, pArrayNombreProduct
         }
     });
 }
-function BorrarPorProductosFaltasProblemasCrediticios(pSucursal, pArrayNombreProducto) {
+function BorrarPorProductosFaltasProblemasCrediticios(pSucursal, pArrayCodigoProducto) {
     $.ajax({
         type: "POST",
         url: "/mvc/BorrarPorProductosFaltasProblemasCrediticios",
-        data: { pSucursal: pSucursal, pArrayNombreProducto: pArrayNombreProducto },
+        data: { pSucursal: pSucursal, pArrayCodigoProducto: pArrayCodigoProducto },
         success:
             function (response) {
                 OnCallBackBorrarPorProductosFaltasProblemasCrediticios(response);
