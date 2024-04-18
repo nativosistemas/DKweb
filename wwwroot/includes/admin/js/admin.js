@@ -174,13 +174,13 @@ function htmlUsuarios() {
             strHtml += '<td>' + elt.usu_nombre + '</td>';
             strHtml += '<td>' + elt.usu_apellido + '</td>';
             strHtml += '<td>' + elt.usu_mail + '</td>';
-            strHtml += '<td>' + "<button type=\"button\" class=\"btn btn-warning\" onclick=\"return EditarUsuaruo(" + elt.usu_codigo  + ");\">Modificar</button>&nbsp;&nbsp;" + '</td>';
+            strHtml += '<td>' + "<button type=\"button\" class=\"btn btn-outline-success\" onclick=\"return EditarUsuaruo(" + elt.usu_codigo  + ");\">Modificar</button>&nbsp;&nbsp;" + '</td>';
             strHtml += '</tr>';
         });
         strHtml += '</tbody>';
         strHtml += '</table>';
         strHtml += htmlPaginador();
-        document.querySelector("#divContainer").innerHTML = strHtml;
+        document.querySelector("#divContainerGrid").innerHTML = strHtml;
 
     }
 }
