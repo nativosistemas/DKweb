@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace DKweb.Controllers;
 [Authorize]
+[Authorize(Policy = "PermisoCuentasCorrientes")]
 public class ctacteController : Controller
 {
 

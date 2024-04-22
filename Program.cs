@@ -15,6 +15,7 @@ builder.Services.AddControllers()
 builder.Services.AddMvc(options =>
 {
     options.MaxModelBindingCollectionSize = int.MaxValue;
+    //options.EnableEndpointRouting = false;
 });
 builder.Services.Configure<FormOptions>(opt =>
 {
@@ -59,19 +60,18 @@ builder.Services.AddAuthorization(options =>
     {
         options.AddPolicy("RequiereAdmin", policy =>
             policy.Requirements.Add(new DKweb.AuthorizationHandlers.AdminRequisito(DKbase.generales.Constantes.cROL_ADMINISTRADOR)));//
+        options.AddPolicy("RequiereClienteHabilitado", policy =>
+policy.Requirements.Add(new DKweb.AuthorizationHandlers.ClientePedidos(DKbase.generales.Constantes.cESTADO_HAB)));
+        options.AddPolicy("PermisoPedidos", policy =>
+ policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("PEDIDOS")));//
+         options.AddPolicy("PermisoCuentasCorrientes", policy =>
+ policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("CUENTASCORRIENTES")));//
+          options.AddPolicy("PermisoCuentDescargas", policy =>
+ policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("DESCARGAS")));//
     });
 builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.AdminRequisitoHandler>();
-// fin admin
-
-// inicio hablitacion clientes
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("RequiereClienteHabilitado", policy =>
-        policy.Requirements.Add(new DKweb.AuthorizationHandlers.ClientePedidos(DKbase.generales.Constantes.cESTADO_HAB)));
-});
-
 builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.ClientePedidosHandler>();
-// fin habilitacion clientes
+builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.PermisoRequisitoHandler>();
 
 var app = builder.Build();
 DKweb.Helper.app = builder.Configuration.GetSection("appSettings")["getTipoApp"];
@@ -170,7 +170,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSession();
-
+//app.UseMvc();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}");

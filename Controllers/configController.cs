@@ -138,11 +138,12 @@ public class configController : Controller
     {
         return View();
     }
+    [Authorize(Policy = "PermisoCuentDescargas")]
     public async Task<IActionResult> catalogo()
     {
         return View();
     }
-
+    [Authorize(Policy = "PermisoCuentDescargas")]
     public async Task<IActionResult> descarga()
     {
         return View();
