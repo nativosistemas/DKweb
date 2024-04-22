@@ -9,6 +9,7 @@ namespace DKweb.Controllers;
 
 [Authorize]
 [Authorize(Policy = "RequiereClienteHabilitado")]
+[Authorize(Policy = "PermisoPedidos")]
 public class mvcController : Controller
 {
     private readonly ILogger<mvcController> _logger;
