@@ -310,11 +310,14 @@ public class HomeController : Controller
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                     if (oCliente.cli_estado == DKbase.generales.Constantes.cESTADO_INH)
                     {
-                        return result = DKbase.generales.Constantes.cESTADO_INH;
+                         result = DKbase.generales.Constantes.cESTADO_INH;
                     }
-                    else
+                    else if ( !DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor,DKbase.generales.Constantes.cSECCION_PEDIDOS) && DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor,DKbase.generales.Constantes.cSECCION_CUENTASCORRIENTES))
                     {
-                        return result;
+                        result = "Ok_CUENTASCORRIENTES";
+                    }  else if ( !DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor,DKbase.generales.Constantes.cSECCION_PEDIDOS) && !DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor,DKbase.generales.Constantes.cSECCION_CUENTASCORRIENTES) &&  DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor,DKbase.generales.Constantes.cSECCION_DESCARGAS))
+                    {
+                        result = "Ok_DESCARGAS";
                     }
 
 
