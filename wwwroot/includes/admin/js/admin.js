@@ -199,7 +199,7 @@ async function GrabarUsuario() {
     var mail = document.getElementById('txt_mail').value;//  = o_usuario.usu_mail;
     var login = document.getElementById('txt_login').value;//  = o_usuario.usu_login;
     var pass = document.getElementById('txt_pass').value;//  = o_usuario.usu_login;
-    var cliente = document.getElementById('txt_cliente').value;//  = o_usuario.usu_codCliente;
+    var cliente = document.getElementById('cmb_cliente').value;//  = o_usuario.usu_codCliente;
     var observaciones = document.getElementById('txt_observaciones').value;//  = o_usuario.usu_observacion;
     var rol = document.getElementById('cmb_rol').value;//  = o_usuario.usu_codRol;
     var url = new URL(window.location.href);
@@ -266,6 +266,19 @@ function onclickPaginador(accion) {
 
 }
 
+function onclickBuscarUsuario() {
+
+   var valueBuscar =  document.getElementById('txt_buscador').value ;
+    GetUsuarios('', valueBuscar, 0).then(x => {
+        l_usuarios = x;
+        paginaMax = l_usuarios.length;
+
+
+    }).then(x => { htmlUsuarios(); })
+
+
+}
+
 function htmlCargarDatosCliente() {
     if (o_usuario != null) {
         document.getElementById('txt_nombre').value = o_usuario.usu_nombre;
@@ -273,7 +286,7 @@ function htmlCargarDatosCliente() {
         document.getElementById('txt_mail').value = o_usuario.usu_mail;
         document.getElementById('txt_login').value = o_usuario.usu_login;
         document.getElementById("form_group_pass").style.display = "none";
-        document.getElementById('txt_cliente').value = o_usuario.usu_codCliente;
+        document.getElementById('cmb_cliente').value = o_usuario.usu_codCliente;
         document.getElementById('txt_observaciones').value = o_usuario.usu_observacion;
         document.getElementById('cmb_rol').value = o_usuario.usu_codRol;
     }
