@@ -340,7 +340,7 @@ function generarListaADescargar() {
     $.ajax({
         type: "POST",
         url: "/ctacte/ActualizarFacturasDescarga",
-        data: { NrosComprobantes: JSON.stringify(checks) },
+        data: { NrosComprobantes: checks },
         success:
             function (response) {
                 //hideCargandoBuscador();

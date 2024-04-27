@@ -221,6 +221,28 @@ public class ctacteController : Controller
 
         return "";
     }
+    [HttpPost]
+    public async Task ActualizarFacturasDescarga(string NrosComprobantes)
+    {
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        if (oCliente != null && !string.IsNullOrEmpty( NrosComprobantes) )
+        {
+            object NroComprobante = null;
+            List<object> NrosDeComprobante = new List<object>();
+            string listado = NrosComprobantes;
+            listado = listado.Replace('n', ' ');
+            listado = listado.Replace('o', ' ');
+            listado = listado.Replace('=', ' ');
+            listado = listado.Replace('\"', ' ');
+            var ncomp = listado.Split('&');
+            for (var i = 0; i < ncomp.Length; i++)
+            {
+                NroComprobante = ncomp[i].ToString().Trim();
+                NrosDeComprobante.Add(NroComprobante);
+            }
+            DKweb.Codigo.Util.ConsultaDeComprobantes_NumerosDeComprobantes_Set(_httpContextAccessor, NrosDeComprobante);
+        }
+    }
     public async Task AgregarVariableSessionConsultaDeComprobantes(string pTipo, int diaDesde, int mesDesde, int añoDesde, int diaHasta, int mesHasta, int añoHasta)
     {
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
@@ -250,7 +272,7 @@ public class ctacteController : Controller
     {
         if (t != null) //Request.QueryString["t"]
         {
-            DKweb.Codigo.Util.RespuestaConsultaDeComprobantes_TIPO_Set(_httpContextAccessor,t.ToUpper());
+            DKweb.Codigo.Util.RespuestaConsultaDeComprobantes_TIPO_Set(_httpContextAccessor, t.ToUpper());
         }
         return View();
     }
