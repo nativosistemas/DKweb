@@ -556,9 +556,10 @@ public class Util
         DKbase.web.cjSonBuscadorProductos resultado = null;
         try
         {
-            if (!string.IsNullOrEmpty(pTxtBuscador) || pIdOferta != null)
+            DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
+            if (!string.IsNullOrEmpty(pTxtBuscador) || pIdOferta != null || oCliente != null)
             {
-                DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
+
                 DKbase.web.Usuario user = getSessionUsuario(pHttpContextAccessor);
                 if (!string.IsNullOrEmpty(pTxtBuscador) && pTxtBuscador.Trim() != string.Empty && oCliente != null)
                 {
