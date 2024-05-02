@@ -2,15 +2,68 @@
 @{
   Layout = "_mainAdmin";
 }
-<script  type="text/javascript">
+@{
+  string resultado = string.Empty;
+  List<DKbase.web.capaDatos.cClientes> l_Clientes = DKbase.Util.RecuperarTodosClientes();
+
+  if (l_Clientes != null)
+  {
+    resultado += "<input type=\"hidden\" id=\"hiddenListClientes\" value=\"" +
+    System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(l_Clientes)) + "\" />";
+  }
+  List<DKbase.web.cRol> l_roles = DKbase.web.capaDatos.capaSeguridad_base.RecuperarTodasRoles_Combo();
+  if (l_roles != null)
+  {
+    resultado += "<input type=\"hidden\" id=\"hiddenListRoles\" value=\"" +
+    System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(l_roles)) + "\" />";
+  }
+
+  WriteLiteral(resultado);
+}
+
+<script type="text/javascript">
+  var l_clientes = null;
+  var l_roles = null;
   window.addEventListener("load", (event) => {
-
-
-
 
     var divTitle = document.getElementById("divTitle");
     divTitle.innerHTML = "Usuario";
     var id = getUrlParameter('id');
+
+    if (l_clientes == null) {
+      l_clientes = eval('(' + document.getElementById("hiddenListClientes").value + ')');
+      if (typeof l_clientes == 'undefined') {
+        l_clientes = null;
+      }
+    }
+    if (l_clientes != null) {
+      var select = document.getElementById("cmb_cliente");
+      for (var i = 0; i < l_clientes.length; i++) {
+        var option = document.createElement("option");
+        option.value = l_clientes[i].cli_codigo;
+        option.text = l_clientes[i].cli_nombre;
+        select.add(option);
+      }
+
+    }
+    //
+    if (l_roles == null) {
+      l_roles = eval('(' +document.getElementById("hiddenListRoles").value  + ')');
+      if (typeof l_roles == 'undefined') {
+        l_roles = null;
+      }
+    }
+    if (l_roles != null) {
+      var select_roles = document.getElementById("cmb_rol");
+      for (var i = 0; i < l_roles.length; i++) {
+        var option = document.createElement("option");
+        option.value = l_roles[i].rol_codRol;
+        option.text = l_roles[i].rol_Nombre;
+        select_roles.add(option);
+      }
+
+    }
+
     GetUsuario(id).then(x => {
       o_usuario = x;
     }).then(x => { htmlCargarDatosCliente(); })
@@ -21,34 +74,37 @@
 </script>
 <div class="form-group">
   <label for="txt_nombre">Nombre:</label>
-  <input type="text" class="form-control" id="txt_nombre" placeholder="Ingresa tu nombre">
+  <input type="text" class="form-control" id="txt_nombre" placeholder="Ingresa nombre">
 </div>
 <div class="form-group">
   <label for="txt_apellido">Apellido:</label>
-  <input type="text" class="form-control" id="txt_apellido" placeholder="Ingresa tu apellido">
+  <input type="text" class="form-control" id="txt_apellido" placeholder="Ingresa apellido">
 </div>
 <div class="form-group">
   <label for="txt_mail">Mail:</label>
-  <input type="email" class="form-control" id="txt_mail" placeholder="Ingresa tu correo electrónico">
+  <input type="email" class="form-control" id="txt_mail" placeholder="Ingresa correo electrónico">
 </div>
 <div class="form-group">
   <label for="txt_login">Login:</label>
-  <input type="text" class="form-control" id="txt_login" placeholder="Ingresa tu nombre de usuario">
+  <input type="text" class="form-control" id="txt_login" placeholder="Ingresa login">
+</div>
+<div class="form-group" id="form_group_pass">
+  <label for="txt_pass">Pass:</label>
+  <input type="password" class="form-control" id="txt_pass" placeholder="Ingresa pass">
 </div>
 <div class="form-group">
   <label for="cmb_rol">Rol:</label>
   <select class="form-control" id="cmb_rol">
-    <option>Selecciona un rol</option>
-    <option>Administrador</option>
-    <option>Usuario</option>
   </select>
 </div>
 <div class="form-group">
-  <label for="txt_cliente">Cliente:</label>
-  <input type="text" class="form-control" id="txt_cliente" placeholder="Ingresa el nombre del cliente">
+  <label for="cmb_cliente">Cliente:</label>
+  <select class="form-control" id="cmb_cliente">
+  </select>
 </div>
 <div class="form-group">
   <label for="txt_observaciones">Observaciones:</label>
   <textarea class="form-control" id="txt_observaciones" rows="3" placeholder="Ingresa observaciones"></textarea>
 </div>
-<button type="submit" class="btn btn-primary">Enviar</button>
+<button type="button" class="btn " onclick="return GrabarUsuario();">Grabar</button>
+<button type="button" class="btn " onclick="return VolverUsuario();">Volver</button>

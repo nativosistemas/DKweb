@@ -63,9 +63,9 @@ async function loginCarrito_fetch(name, pass, pIdOferta, token) {
 
   const response = await fetch('../Home/loginCarrito_model', {
     method: 'POST',
-   headers: {
-      'Content-Type': 'application/json', 
-   },
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(datos) // Convierte los datos a formato JSON
   });
 
@@ -175,7 +175,7 @@ function funIrIntranet() {
 function funIrIntranetPromotor() {
   location.href = "../ctacte/composicionsaldo";
 }
-function funIrIntranetInhabilitado(){
+function funIrIntranetInhabilitado() {
   location.href = "../ctacte/composicionsaldo";
 }
 
@@ -186,9 +186,14 @@ function OnCallBackLogin(args) {
     funIrIntranet();
   } else if (args == "OkPromotor") {
     funIrIntranetPromotor();
-  } else if (args == "INH"){
+  } else if (args == "INH") {
     funIrIntranetInhabilitado();
-  }else{
+  } else if (args == 'Ok_CUENTASCORRIENTES') {
+    location.href = "../ctacte/composicionsaldo";
+  } else if (args == 'Ok_DESCARGAS') {
+    location.href = "../config/catalogo";
+  }
+  else {
     $.alert({
       title: "Información",
       content: args,

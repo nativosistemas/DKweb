@@ -10,6 +10,7 @@ namespace DKweb.Controllers;
 
 [Authorize]
 [Authorize(Policy = "RequiereClienteHabilitado")]
+[Authorize(Policy = "PermisoPedidos")]
 public class mvcController : Controller
 {
     private readonly ILogger<mvcController> _logger;
@@ -564,7 +565,7 @@ public class mvcController : Controller
         {
             //System.Web.HttpContext.Current.Session["clientes_pages_Recuperador_CantidadDia"] = pDia;
             DKweb.Codigo.Util.clientes_pages_Recuperador_CantidadDia_Set(_httpContextAccessor, pDia);
-            listaRecuperador = DKbase.Util.RecuperarFaltasProblemasCrediticios(oCliente, tipo.Value, pDia, oCliente.cli_codsuc);
+            listaRecuperador = DKbase.capaSAP.RecuperarFaltasProblemasCrediticios(oCliente, tipo.Value, pDia, oCliente.cli_codsuc);
         }
         if (listaRecuperador != null)
             return DKbase.generales.Serializador_base.SerializarAJson(listaRecuperador);
@@ -579,7 +580,7 @@ public class mvcController : Controller
         if (tipo != null && oCliente != null)
         {
             DKweb.Codigo.Util.clientes_pages_Recuperador_CantidadDia_Set(_httpContextAccessor, pDia);
-            listaRecuperador = DKbase.Util.RecuperarFaltasProblemasCrediticios_TodosEstados(oCliente, tipo.Value, pDia, oCliente.cli_codsuc);
+            listaRecuperador = DKbase.capaSAP.RecuperarFaltasProblemasCrediticios_TodosEstados(oCliente, tipo.Value, pDia, oCliente.cli_codsuc);
         }
         if (listaRecuperador != null)
             return DKbase.generales.Serializador_base.SerializarAJson(listaRecuperador);
@@ -598,18 +599,19 @@ public class mvcController : Controller
         }
         return false;
     }
-    public async Task<string> BorrarPorProductosFaltasProblemasCrediticios(string pSucursal, string[] pArrayNombreProducto)
+    public async Task<string> BorrarPorProductosFaltasProblemasCrediticios(string pSucursal, string[] pArrayCodigoProducto)
     {
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
         int? tipo = DKweb.Codigo.Util.clientes_pages_Recuperador_Tipo(_httpContextAccessor);
         if (oCliente != null && tipo != null)
         {
-            for (int i = 0; i < pArrayNombreProducto.Count(); i++)
+            bool result = DKbase.capaSAP.BorrarPorProductosFaltasProblemasCrediticios(oCliente, oUsuario, tipo.Value, pSucursal, pArrayCodigoProducto);
+            /*for (int i = 0; i < pArrayCodigoProducto.Count(); i++)
             {
-                DKbase.web.capaDatos.capaLogRegistro_base.BorrarPorProductosFaltasProblemasCrediticios(pSucursal, oCliente.cli_codigo, tipo.Value, pArrayNombreProducto[i]);
-            }
+                DKbase.web.capaDatos.capaLogRegistro_base.BorrarPorProductosFaltasProblemasCrediticios(pSucursal, oCliente.cli_codigo, tipo.Value, pArrayCodigoProducto[i]);
+            }*/
         }
-        //System.Web.HttpContext.Current.Session["clientesDefault_CantRecuperadorFaltaFechaHora"] = null;
         return "Ok";
     }
     public async Task<string> TomarPedidoCarrito(string pIdSucursal, string pMensajeEnFactura, string pMensajeEnRemito, string pTipoEnvio, bool pIsUrgente)

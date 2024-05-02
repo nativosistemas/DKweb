@@ -93,6 +93,16 @@ public class adminController : Controller
 
         return Json(resultFiltro);
     }
+    public async Task<IActionResult> InsertarActualizarUsuario(int usu_codigo, int usu_codRol, int? usu_codCliente, string usu_nombre, string usu_apellido, string usu_mail, string usu_login, string usu_psw, string usu_observacion)
+    {
+        DKbase.web.Usuario user = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+        if (user != null)
+        {
+            int? codigoUsuarioEnSession = user.id;
+            DKbase.Util.InsertarActualizarUsuario(usu_codigo, usu_codRol, usu_codCliente, usu_nombre, usu_apellido, usu_mail, usu_login, usu_psw, usu_observacion, codigoUsuarioEnSession);
+        }
+        return Ok("Ok");
+    }
     public List<int> desdeHastaRefe(int listCount, int pAvanzar, int grillaPagRefe)
     {
 

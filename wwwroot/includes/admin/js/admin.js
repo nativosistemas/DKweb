@@ -39,7 +39,7 @@ window.addEventListener("load", (event) => {
 
 
         }).then(x => { htmlUsuarios(); });
-    } 
+    }
 
 
 });
@@ -174,19 +174,61 @@ function htmlUsuarios() {
             strHtml += '<td>' + elt.usu_nombre + '</td>';
             strHtml += '<td>' + elt.usu_apellido + '</td>';
             strHtml += '<td>' + elt.usu_mail + '</td>';
-            strHtml += '<td>' + "<button type=\"button\" class=\"btn btn-warning\" onclick=\"return EditarUsuaruo(" + elt.usu_codigo  + ");\">Modificar</button>&nbsp;&nbsp;" + '</td>';
+            strHtml += '<td>' + "<button type=\"button\" class=\"btn btn-outline-success\" onclick=\"return EditarUsuaruo(" + elt.usu_codigo + ");\">Modificar</button>&nbsp;&nbsp;" + '</td>';
             strHtml += '</tr>';
         });
         strHtml += '</tbody>';
         strHtml += '</table>';
         strHtml += htmlPaginador();
-        document.querySelector("#divContainer").innerHTML = strHtml;
+        document.querySelector("#divContainerGrid").innerHTML = strHtml;
 
     }
 }
-function EditarUsuaruo(id){
+function EditarUsuaruo(id) {
     //window.location.href = "https://www.ejemplo.com";
     location.href = '../admin/usuario?id=' + id;
+}
+function VolverUsuario() {
+    location.href = '../admin/usuarios';
+    return false;
+}
+async function GrabarUsuario() {
+    // if (o_usuario != null) {
+    var nombre = document.getElementById('txt_nombre').value;// = o_usuario.usu_nombre;
+    var apellido = document.getElementById('txt_apellido').value;//  = o_usuario.usu_apellido;
+    var mail = document.getElementById('txt_mail').value;//  = o_usuario.usu_mail;
+    var login = document.getElementById('txt_login').value;//  = o_usuario.usu_login;
+    var pass = document.getElementById('txt_pass').value;//  = o_usuario.usu_login;
+    var cliente = document.getElementById('cmb_cliente').value;//  = o_usuario.usu_codCliente;
+    var observaciones = document.getElementById('txt_observaciones').value;//  = o_usuario.usu_observacion;
+    var rol = document.getElementById('cmb_rol').value;//  = o_usuario.usu_codRol;
+    var url = new URL(window.location.href);
+    var usu_codigo = url.searchParams.get("id");
+    var resultInsertarActualizarUsuario = await InsertarActualizarUsuario(usu_codigo, rol, cliente, nombre, apellido, mail, login, pass, observaciones);
+    if (resultInsertarActualizarUsuario == 'Ok') { location.href = '../admin/usuarios'; }
+    //}
+}
+async function InsertarActualizarUsuario(usu_codigo, usu_codRol, usu_codCliente, usu_nombre, usu_apellido, usu_mail, usu_login, usu_psw, usu_observacion) {
+    const parametros = {
+        usu_codigo: usu_codigo,
+        usu_codRol: usu_codRol,
+        usu_codCliente: usu_codCliente,
+        usu_nombre: usu_nombre,
+        usu_apellido: usu_apellido,
+        usu_mail: usu_mail,
+        usu_login: usu_login,
+        usu_psw: usu_psw,
+        usu_observacion: usu_observacion
+    };
+    const url = '/admin/InsertarActualizarUsuario?' + new URLSearchParams(parametros);
+
+    const response = await fetch(url, {
+        method: 'GET'
+    });
+    const resultJson = await response.text();
+
+    return resultJson;
+
 }
 function htmlPaginador() {
     var strHtml = '';
@@ -224,13 +266,27 @@ function onclickPaginador(accion) {
 
 }
 
+function onclickBuscarUsuario() {
+
+   var valueBuscar =  document.getElementById('txt_buscador').value ;
+    GetUsuarios('', valueBuscar, 0).then(x => {
+        l_usuarios = x;
+        paginaMax = l_usuarios.length;
+
+
+    }).then(x => { htmlUsuarios(); })
+
+
+}
+
 function htmlCargarDatosCliente() {
     if (o_usuario != null) {
         document.getElementById('txt_nombre').value = o_usuario.usu_nombre;
         document.getElementById('txt_apellido').value = o_usuario.usu_apellido;
         document.getElementById('txt_mail').value = o_usuario.usu_mail;
         document.getElementById('txt_login').value = o_usuario.usu_login;
-        document.getElementById('txt_cliente').value = o_usuario.usu_codCliente;
+        document.getElementById("form_group_pass").style.display = "none";
+        document.getElementById('cmb_cliente').value = o_usuario.usu_codCliente;
         document.getElementById('txt_observaciones').value = o_usuario.usu_observacion;
         document.getElementById('cmb_rol').value = o_usuario.usu_codRol;
     }

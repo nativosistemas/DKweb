@@ -3,3 +3,16 @@
     background-color: #1b82c5 !important;
 
 }
+.contenedorBarraMenu {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .lista-izquierda {
+    /* Estilos para tu lista de la izquierda */
+  }
+  
+  .lista-derecha {
+    /* Estilos para tu lista de la derecha */
+  }
+  
