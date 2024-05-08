@@ -372,7 +372,6 @@ function mensaje_CreditoDisponible(pCreditoSemanal, pCreditoTotal) {
     strHtml += '<div class="row">';
     strHtml += '<div class="col-lg-12">';
     strHtml += '<div class="modulo_icon usd"></div>';
-    strHtml += '<h4>Cr&eacute;dito Disponible</h4>';
     strHtml += '</div>';
     strHtml += '</div>';
     strHtml += '<div class="close-modal" data-dismiss="modal"><i class="fa fa-times"></i></div>';
@@ -382,7 +381,7 @@ function mensaje_CreditoDisponible(pCreditoSemanal, pCreditoTotal) {
         strHtml += '<div class="col-xs-8 text-left"><p><b>CREDITO SEMANAL:</b></p></div>';
         strHtml += '<div class="col-xs-4 text-right"><p>' + pCreditoSemanal + '</p></div>';
     }
-    strHtml += '<div class="col-xs-8 text-left"><p>CREDITO TOTAL:</p></div>';
+    strHtml += '<div class="col-xs-8 text-left"><h3 style="color: #1b82c5;">CREDITO TOTAL:</h3></div>';
     strHtml += '<div class="col-xs-4 text-right"><p>' + pCreditoTotal + '</p></div>';
     strHtml += '<div class="clear10"></div>';
     strHtml += '<div class="clear20"></div>';

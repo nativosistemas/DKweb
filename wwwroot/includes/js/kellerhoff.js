@@ -1,6 +1,6 @@
 ﻿var objMensajeNoEncontrado = "No se han encontrado resultados.";
-var objMensajeDllNoDisponible =
-  "En este momento estamos realizando tareas de mantenimiento, por favor intente más tarde.";
+var objMensajeDllNoDisponible = 
+"En este momento estamos realizando tareas de mantenimiento, por favor intente más tarde.";
 var objMensajeSeProdujoErrorIntentaMasTarde =
   "Se produjo un error. Por favor intenta más tarde.";
 var objMensajeIntentaMasTarde = "Por favor intenta más tarde.";
@@ -501,29 +501,24 @@ $(function () {
 });
 
 function onclickCreditoDisponible() {
-  ObtenerCreditoDisponible(cli_login());
+  ObtenerCreditoDisponible(cli_codigo());
 }
 function OnCallBackObtenerCreditoDisponible(args) {
-  args = eval("(" + args + ")");
+  var creditoTotal = parseFloat(args.CREDITO_DISP);
 
-  var creditoTotal = args.CreditoDisponibleTotal;
-  var creditoSemanal = args.CreditoDisponibleSemanal;
-
-  var strCreditoSemanal = "&nbsp;";
-  if (isNotNullEmpty(creditoSemanal)) {
-    strCreditoSemanal =
-      "$&nbsp;" + FormatoDecimalConDivisorMiles(creditoSemanal.toFixed(2));
-  }
   var strCreditoTotal = "&nbsp;";
-  if (isNotNullEmpty(creditoTotal)) {
+  if (!isNaN(creditoTotal)) { 
     strCreditoTotal =
       "$&nbsp;" + FormatoDecimalConDivisorMiles(creditoTotal.toFixed(2));
   }
-  if (args.CreditoDisponibleSemanal == null) {
-    strCreditoSemanal = null;
-  }
+  
+  var strCreditoSemanal = null; 
+
   mensaje_CreditoDisponible(strCreditoSemanal, strCreditoTotal);
 }
+
+
+
 function onclickObtenerSaldoFinalADiciembrePorCliente() {
   ObtenerSaldoFinalADiciembrePorCliente(cli_login());
 }

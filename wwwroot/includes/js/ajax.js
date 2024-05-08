@@ -1152,17 +1152,16 @@ function ControlarSesion() {
         }
     });
 }
-function ObtenerCreditoDisponible(pCli_login) {
+function ObtenerCreditoDisponible(pValue) {
     showCargandoBuscador();
     $.ajax({
         type: "POST",
-        url: "/ctacte/ObtenerCreditoDisponible",
-        data: { pCli_login: pCli_login },
-        success:
-            function (response) {
-                hideCargandoBuscador();
-                OnCallBackObtenerCreditoDisponible(response);
-            },
+        url: "/apisap/ZFI_WS_CRED_DISP_SET",
+        data: {CLIENTE: pValue},
+        success: function (response) {
+            hideCargandoBuscador();
+            OnCallBackObtenerCreditoDisponible(response);
+        },
         failure: function (response) {
             hideCargandoBuscador();
             OnFail(response);
@@ -1173,6 +1172,7 @@ function ObtenerCreditoDisponible(pCli_login) {
         }
     });
 }
+
 function ObtenerComprobantesObrasSocialesDePuntoDeVentaEntreFechas(pLoginWeb, pPlan, diaDesde, mesDesde, añoDesde, diaHasta, mesHasta, añoHasta) {
     showCargandoBuscador();
     $.ajax({

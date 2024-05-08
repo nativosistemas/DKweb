@@ -27,7 +27,9 @@ public class apisapController : Controller
     [HttpPost]
     public async Task<IActionResult> ZFI_WS_CRED_DISP_SET(DKbase.Models.SAP_RES_CRED_DISP pValue)
     {
-        DKbase.Models.SAP_REQ_CRES_DISP result = new DKbase.Models.SAP_REQ_CRES_DISP() { CREDITO_DISP = "20050" };
+        int idCliente = Int32.Parse(pValue.CLIENTE);
+        decimal? creditoDisp = await DKbase.capaSAP.CRED_DISP(idCliente);
+        DKbase.Models.SAP_REQ_CRES_DISP result = new DKbase.Models.SAP_REQ_CRES_DISP() { CREDITO_DISP = creditoDisp.ToString() };
         return Json(result);
     }
 }
