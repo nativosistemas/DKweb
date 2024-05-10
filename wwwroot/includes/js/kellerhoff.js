@@ -504,7 +504,7 @@ function onclickCreditoDisponible() {
   ObtenerCreditoDisponible(cli_codigo());
 }
 function OnCallBackObtenerCreditoDisponible(args) {
-  var creditoTotal = parseFloat(args.CREDITO_DISP);
+  var creditoTotal = parseFloat(args.CREDITO_DISP.replace(',', '.'));
 
   var strCreditoTotal = "&nbsp;";
   if (!isNaN(creditoTotal)) { 

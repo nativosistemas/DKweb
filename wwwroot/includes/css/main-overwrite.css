@@ -824,3 +824,11 @@ a.mtz {
       -moz-appearance: textfield !important; /* Firefox */
     }
     
+    .col-lg-12.con-padding {
+        padding-top: 20px;
+    }
+
+    .modal-content.cred-total{
+        padding-bottom: 10px !important;
+    }
+    

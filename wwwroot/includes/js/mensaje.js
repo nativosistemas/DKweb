@@ -367,10 +367,10 @@ function mensaje_CambiarContraseñaUsuario() {
 function mensaje_CreditoDisponible(pCreditoSemanal, pCreditoTotal) {
     var strHtml = '';
     strHtml += '<div class="modal-background">&nbsp;</div>';
-    strHtml += '<div class="modal-dialog modal-md"><div class="modal-content">';
+    strHtml += '<div class="modal-dialog modal-md"><div class="modal-content cred-total">';
     strHtml += '<div class="modal-header no-padding-bottom">';
     strHtml += '<div class="row">';
-    strHtml += '<div class="col-lg-12">';
+    strHtml += '<div class="col-lg-12 con-padding">';
     strHtml += '<div class="modulo_icon usd"></div>';
     strHtml += '</div>';
     strHtml += '</div>';
@@ -382,7 +382,7 @@ function mensaje_CreditoDisponible(pCreditoSemanal, pCreditoTotal) {
         strHtml += '<div class="col-xs-4 text-right"><p>' + pCreditoSemanal + '</p></div>';
     }
     strHtml += '<div class="col-xs-8 text-left"><h3 style="color: #1b82c5;">CREDITO TOTAL:</h3></div>';
-    strHtml += '<div class="col-xs-4 text-right"><p>' + pCreditoTotal + '</p></div>';
+    strHtml += '<div class="col-xs-4 text-right"><h3 style="color: #1b82c5;">' + pCreditoTotal + '</h3></div>';
     strHtml += '<div class="clear10"></div>';
     strHtml += '<div class="clear20"></div>';
     strHtml += '<a class="btn_vaciar float-left" href="#" data-dismiss="modal">CERRAR</a>';
