@@ -14,7 +14,7 @@ function getHtmlReCall(pValue,pTipo) {
     strHtml += '<div class="date ' + css_sec + '">' + pValue.rec_FechaNoticiaToString + '</div>';
     strHtml += '<div class="title ' + css_sec + '">' + pValue.rec_titulo + '</div>';
     strHtml += '<div class="dsc ' + css_sec + '">' + desc + '</div>';
-    strHtml += '<a class="btn_emp" href="recall?id=' + pValue.rec_id + '">AMPLIAR</a>';
+    strHtml += '<a class="btn_emp" href="/Home/recall?id=' + pValue.rec_id + '">AMPLIAR</a>';
     strHtml += '</div>';
     return strHtml;
 

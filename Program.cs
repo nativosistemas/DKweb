@@ -103,6 +103,7 @@ DKbase.Helper.isModoDev = Convert.ToBoolean(builder.Configuration.GetSection("ap
 
 var optionsRewrite = new RewriteOptions()
 .AddRedirect("home/index.aspx", "home/index")
+.AddRedirect("Home/index.aspx", "home/index")
 .AddRedirect("home/empresa.aspx", "home/empresa")
 .AddRedirect("home/contacto.aspx", "home/contacto")
 .AddRedirect("home/contactocv.aspx", "home/contactocv")
@@ -111,10 +112,12 @@ var optionsRewrite = new RewriteOptions()
 .AddRedirect("home/recalls.aspx", "home/recalls")
 .AddRedirect("home/contactoCtaCte.aspx", "home/contactoCtaCte")
 .AddRedirect("home/registracion.aspx", "home/registracion")
+.AddRedirect("home/lanzamiento.aspx", "home/lanzamiento")
 .AddRedirect("servicios/generar_archivo.aspx", "servicios/generar_archivo")
 .AddRedirect("servicios/generarCSV.aspx", "servicios/generarCSV")
 .AddRedirect("servicios/generar_archivoPdf.aspx", "servicios/generar_archivoPdf")
-.AddRedirect("servicios/generar_comprobantes_discriminado.aspx", "servicios/generar_comprobantes_discriminado");
+.AddRedirect("servicios/generar_comprobantes_discriminado.aspx", "servicios/generar_comprobantes_discriminado")
+.AddRedirect("servicios/descargarArchivo.aspx", "servicios/descargarArchivo");
 
 app.UseRewriter(optionsRewrite);
 // Configure the HTTP request pipeline.
