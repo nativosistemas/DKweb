@@ -91,6 +91,7 @@ DKbase.Helper.getSMTP_PORT = Convert.ToInt32(builder.Configuration.GetSection("a
 
 var optionsRewrite = new RewriteOptions()
 .AddRedirect("home/index.aspx", "home/index")
+.AddRedirect("Home/index.aspx", "home/index")
 .AddRedirect("home/empresa.aspx", "home/empresa")
 .AddRedirect("home/contacto.aspx", "home/contacto")
 .AddRedirect("home/contactocv.aspx", "home/contactocv")
