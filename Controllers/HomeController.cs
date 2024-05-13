@@ -44,6 +44,18 @@ public class HomeController : Controller
         DKweb.Codigo.Util.promociones_isNuevoLanzamiento_Set(_httpContextAccessor, params_isNuevoLanzamiento);
         return View();
     }
+    [HttpGet]
+    public async Task<IActionResult> lanzamiento(int id)
+    {
+        DKweb.Codigo.Util.htmlCssBodySet(_httpContextAccessor, "bd_sec");
+        //bool params_isNuevoLanzamiento = false;
+        /*  if (isNuevoLanzamiento == 1)
+          {
+              params_isNuevoLanzamiento = true;
+          }*/
+        DKweb.Codigo.Util.lanzamiento_idOferta_Set(_httpContextAccessor, id);
+        return View();
+    }
     public async Task<IActionResult> recall(int id)
     {
         DKweb.Codigo.Util.htmlCssBodySet(_httpContextAccessor, "bd_sec");
@@ -310,12 +322,13 @@ public class HomeController : Controller
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                     if (oCliente.cli_estado == DKbase.generales.Constantes.cESTADO_INH)
                     {
-                         result = DKbase.generales.Constantes.cESTADO_INH;
+                        result = DKbase.generales.Constantes.cESTADO_INH;
                     }
-                    else if ( !DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor,DKbase.generales.Constantes.cSECCION_PEDIDOS) && DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor,DKbase.generales.Constantes.cSECCION_CUENTASCORRIENTES))
+                    else if (!DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor, DKbase.generales.Constantes.cSECCION_PEDIDOS) && DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor, DKbase.generales.Constantes.cSECCION_CUENTASCORRIENTES))
                     {
                         result = "Ok_CUENTASCORRIENTES";
-                    }  else if ( !DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor,DKbase.generales.Constantes.cSECCION_PEDIDOS) && !DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor,DKbase.generales.Constantes.cSECCION_CUENTASCORRIENTES) &&  DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor,DKbase.generales.Constantes.cSECCION_DESCARGAS))
+                    }
+                    else if (!DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor, DKbase.generales.Constantes.cSECCION_PEDIDOS) && !DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor, DKbase.generales.Constantes.cSECCION_CUENTASCORRIENTES) && DKweb.Codigo.Util.IsPermisoSeccion(_httpContextAccessor, DKbase.generales.Constantes.cSECCION_DESCARGAS))
                     {
                         result = "Ok_DESCARGAS";
                     }
