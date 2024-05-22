@@ -28,6 +28,7 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(5);
     serverOptions.Limits.MaxRequestBodySize = int.MaxValue;
 });
+builder.Services.AddHostedService<DKweb.BackgroundServiceDK>();
 ///        
 builder.Services.AddControllersWithViews();//.AddRazorRuntimeCompilation();
 builder.Services.AddHttpContextAccessor();
@@ -174,4 +175,5 @@ app.MapGet("/cerrar", async (Microsoft.AspNetCore.Http.IHttpContextAccessor _htt
     return System.Threading.Tasks.Task.CompletedTask;// "Ok"; 
 });
 DKbase.Util.spInsertSessionApp(DKweb.Helper.app);
+
 app.Run();
