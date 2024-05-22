@@ -88,6 +88,7 @@ DKbase.Helper.getMail_reclamos = builder.Configuration.GetSection("appSettings")
 DKbase.Helper.getReCAPTCHA_ClaveSecreta = builder.Configuration.GetSection("appSettings")["reCAPTCHA_ClaveSecreta"];
 DKbase.Helper.getSMTP_SERVER = builder.Configuration.GetSection("appSettings")["SMTP_SERVER"];
 DKbase.Helper.getSMTP_PORT = Convert.ToInt32(builder.Configuration.GetSection("appSettings")["SMTP_PORT"]);
+DKbase.Helper.isModoDev = Convert.ToBoolean(builder.Configuration.GetSection("appSettings")["isModoDev"]);
 
 var optionsRewrite = new RewriteOptions()
 .AddRedirect("home/index.aspx", "home/index")
