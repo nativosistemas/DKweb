@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,7 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(5);
     serverOptions.Limits.MaxRequestBodySize = int.MaxValue;
 });
+builder.Services.AddWindowsService();
 builder.Services.AddHostedService<DKweb.BackgroundServiceDK>();
 ///        
 builder.Services.AddControllersWithViews();//.AddRazorRuntimeCompilation();
