@@ -17,7 +17,7 @@ public class BackgroundServiceDK : BackgroundService
         {
             Logger.LogInformation("BackgroundServiceDK is doing background work.");
 
-            await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+            await Task.Delay(TimeSpan.FromSeconds(600), stoppingToken);
         } //este bucle deja un registro en el Visor de Eventos cada 5 segundos al establecer el nivel de “Logging” en “Information”. Ajustar a lo requerido.
         Logger.LogInformation("BackgroundServiceDK has stopped.");
     }
