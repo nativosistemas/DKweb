@@ -1152,6 +1152,27 @@ function ControlarSesion() {
         }
     });
 }
+function ObtenerComprobanteCuentaCorriente(pValue, formattedFechaDesde, formattedFechaHasta){
+    showCargandoBuscador();
+    $.ajax({
+        type: "POST",
+        url: "/apisap/ZFI_WS_RFC_CTA_CTE",
+        data: {CLIENTE: pValue, FECHA_DESDE: formattedFechaDesde, FECHA_HASTA: formattedFechaHasta},
+        success: function (response) {
+            hideCargandoBuscador();
+            generarTablaComprobantes(response);
+        },
+        failure: function (response) {
+            hideCargandoBuscador();
+            OnFail(response);
+        },
+        error: function (response) {
+            hideCargandoBuscador();
+            OnFail(response);
+        }
+    });
+}
+
 function ObtenerCreditoDisponible(pValue) {
     showCargandoBuscador();
     $.ajax({

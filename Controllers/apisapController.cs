@@ -42,17 +42,16 @@ public class apisapController : Controller
         string fechaDesde = pValue.FECHA_DESDE;
         string fechaHasta = pValue.FECHA_HASTA;
         
-        // Llamar a la función CTA_CTE con los parámetros
+        
         List<DKbase.Models.SAP_REQ_CTA_CTE> CTA_CTE_LISTA = await DKbase.capaSAP.CTA_CTE(
             idCliente, claseDoc, documento, ejercicio, fechaDesde, fechaHasta);
         
-        // Crear el objeto de respuesta
+        
         DKbase.Models.SAP_REQ_CTA_CTE_LIST result = new DKbase.Models.SAP_REQ_CTA_CTE_LIST()
         {
             item = CTA_CTE_LISTA
         };
         
-        // Devolver la respuesta como JSON
         return Json(result);
     }
 
