@@ -600,7 +600,7 @@ public class mvcController : Controller
     {
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
-        List<DKbase.web.capaDatos.cCarrito> listaCarrito = DKbase.web.capaDatos.capaCAR_WebService_base.RecuperarCarritosPorSucursalYProductos_generica(oCliente, DKbase.generales.Constantes.cTipo_Carrito);
+      //  List<DKbase.web.capaDatos.cCarrito> listaCarrito = DKbase.web.capaDatos.capaCAR_WebService_base.RecuperarCarritosPorSucursalYProductos_generica(oCliente, DKbase.generales.Constantes.cTipo_Carrito);
         string horarioCierre = DKweb.Codigo.Util.getObtenerHorarioCierre(_httpContextAccessor, pIdSucursal);
         pMensajeEnFactura = pMensajeEnFactura == null ? "" : pMensajeEnFactura;
         pMensajeEnRemito = pMensajeEnRemito == null ? "" : pMensajeEnRemito;
