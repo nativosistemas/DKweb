@@ -351,8 +351,7 @@ function OnCallBackTomarPedidoCarrito(args) {
             // Error dsd dll pedido
             OnCallBackTomarPedidoCarrito_dll(args.result_dll);
         }
-        else if (args.tipo == "seProceso") {//seProceso_dll
-            // Error dsd dll pedido
+        else  {// SAP   
             OnCallBackTomarPedidoCarrito_sap(args);
         }
 
