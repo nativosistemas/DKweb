@@ -38,7 +38,7 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.MaxValue;
+    options.IdleTimeout = TimeSpan.FromDays(14);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -48,7 +48,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 .AddCookie(option =>
 {
     option.LoginPath = "/Home/Index";
-    option.ExpireTimeSpan = TimeSpan.FromHours(23);
+    option.ExpireTimeSpan = TimeSpan.FromDays(14);
     option.AccessDeniedPath = "/config/sinpermiso";
 });
 // inicio admin
@@ -60,10 +60,10 @@ builder.Services.AddAuthorization(options =>
 policy.Requirements.Add(new DKweb.AuthorizationHandlers.ClientePedidos(DKbase.generales.Constantes.cESTADO_HAB)));
         options.AddPolicy("PermisoPedidos", policy =>
  policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("PEDIDOS")));//
-         options.AddPolicy("PermisoCuentasCorrientes", policy =>
- policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("CUENTASCORRIENTES")));//
-          options.AddPolicy("PermisoCuentDescargas", policy =>
- policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("DESCARGAS")));//
+        options.AddPolicy("PermisoCuentasCorrientes", policy =>
+policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("CUENTASCORRIENTES")));//
+        options.AddPolicy("PermisoCuentDescargas", policy =>
+policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("DESCARGAS")));//
     });
 builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.AdminRequisitoHandler>();
 builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.ClientePedidosHandler>();
