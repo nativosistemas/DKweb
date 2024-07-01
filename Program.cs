@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,8 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(5);
     serverOptions.Limits.MaxRequestBodySize = int.MaxValue;
 });
+builder.Services.AddWindowsService();
+builder.Services.AddHostedService<DKweb.BackgroundServiceDK>();
 ///        
 builder.Services.AddControllersWithViews();//.AddRazorRuntimeCompilation();
 builder.Services.AddHttpContextAccessor();
@@ -35,7 +38,7 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.MaxValue;
+    options.IdleTimeout = TimeSpan.FromDays(14);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -52,7 +55,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 .AddCookie(option =>
 {
     option.LoginPath = "/Home/Index";
-    option.ExpireTimeSpan = TimeSpan.FromHours(23);
+    option.ExpireTimeSpan = TimeSpan.FromDays(14);
     option.AccessDeniedPath = "/config/sinpermiso";
 });
 // inicio admin
@@ -64,10 +67,10 @@ builder.Services.AddAuthorization(options =>
 policy.Requirements.Add(new DKweb.AuthorizationHandlers.ClientePedidos(DKbase.generales.Constantes.cESTADO_HAB)));
         options.AddPolicy("PermisoPedidos", policy =>
  policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("PEDIDOS")));//
-         options.AddPolicy("PermisoCuentasCorrientes", policy =>
- policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("CUENTASCORRIENTES")));//
-          options.AddPolicy("PermisoCuentDescargas", policy =>
- policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("DESCARGAS")));//
+        options.AddPolicy("PermisoCuentasCorrientes", policy =>
+policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("CUENTASCORRIENTES")));//
+        options.AddPolicy("PermisoCuentDescargas", policy =>
+policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("DESCARGAS")));//
     });
 builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.AdminRequisitoHandler>();
 builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.ClientePedidosHandler>();
@@ -186,4 +189,5 @@ app.MapGet("/cerrar", async (Microsoft.AspNetCore.Http.IHttpContextAccessor _htt
     return System.Threading.Tasks.Task.CompletedTask;// "Ok"; 
 });
 DKbase.Util.spInsertSessionApp(DKweb.Helper.app);
+
 app.Run();
