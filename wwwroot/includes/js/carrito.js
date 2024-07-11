@@ -351,7 +351,7 @@ function OnCallBackTomarPedidoCarrito(args) {
             // Error dsd dll pedido
             OnCallBackTomarPedidoCarrito_dll(args.result_dll);
         }
-        else  {// SAP   
+        else {// SAP   
             OnCallBackTomarPedidoCarrito_sap(args);
         }
 
@@ -361,13 +361,43 @@ function OnCallBackTomarPedidoCarrito(args) {
     }
 }
 function OnCallBackTomarPedidoCarrito_sap(args) {
-    mensaje_alert_base(args.msg, 'volverBuscador()');
+
+    var l_result = args.result_sap;
+
+    var html = '';
+    html += '<table>';
+    html += '<thead>';
+    html += '<tr>';
+    html += '<th>PEDIDO_SAP</th>';
+    html += '<th>ID_CARRITO</th>';
+    html += '<th>MOTIVO_RECHAZO</th>';
+    html += '<th>MATERIAL</th>';
+    html += '</tr>';
+    html += '</thead>';
+    html += '<tbody>';
+    l_result.forEach(item => {
+        //  const row = document.createElement('tr');
+        html += `<tr>
+            <td>${item.PEDIDO_SAP}</td>
+            <td>${item.ID_CARRITO}</td>
+            <td>${item.MOTIVO_RECHAZO}</td>
+            <td>${item.MATERIAL}</td>
+           </tr>
+        `;
+    });
+    html += '</tbody>';
+    html += '</table >';
+
+
+
+
+    mensaje_alert_base(html, 'volverBuscador()');
     /*if (args.tipo == "seProceso_mostrarMsg") {
         mensaje_alert_base(args.msg, 'volverBuscador()');
     }*/
 
     isHacerBorradoCarritos = true;
-    HacerLimpiezaDeCarritosDspDeConfirmarPedido() ;
+    HacerLimpiezaDeCarritosDspDeConfirmarPedido();
 }
 function OnCallBackTomarPedidoCarrito_dll(args) {
     // Error dsd dll pedido
