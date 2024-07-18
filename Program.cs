@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,8 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(5);
     serverOptions.Limits.MaxRequestBodySize = int.MaxValue;
 });
+builder.Services.AddWindowsService();
+builder.Services.AddHostedService<DKweb.BackgroundServiceDK>();
 ///        
 builder.Services.AddControllersWithViews();//.AddRazorRuntimeCompilation();
 builder.Services.AddHttpContextAccessor();
@@ -35,7 +38,7 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.MaxValue;
+    options.IdleTimeout = TimeSpan.FromDays(14);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -52,7 +55,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 .AddCookie(option =>
 {
     option.LoginPath = "/Home/Index";
-    option.ExpireTimeSpan = TimeSpan.FromHours(23);
+    option.ExpireTimeSpan = TimeSpan.FromDays(14);
     option.AccessDeniedPath = "/config/sinpermiso";
 });
 // inicio admin
@@ -64,10 +67,10 @@ builder.Services.AddAuthorization(options =>
 policy.Requirements.Add(new DKweb.AuthorizationHandlers.ClientePedidos(DKbase.generales.Constantes.cESTADO_HAB)));
         options.AddPolicy("PermisoPedidos", policy =>
  policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("PEDIDOS")));//
-         options.AddPolicy("PermisoCuentasCorrientes", policy =>
- policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("CUENTASCORRIENTES")));//
-          options.AddPolicy("PermisoCuentDescargas", policy =>
- policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("DESCARGAS")));//
+        options.AddPolicy("PermisoCuentasCorrientes", policy =>
+policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("CUENTASCORRIENTES")));//
+        options.AddPolicy("PermisoCuentDescargas", policy =>
+policy.Requirements.Add(new DKweb.AuthorizationHandlers.PermisoRequisito("DESCARGAS")));//
     });
 builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.AdminRequisitoHandler>();
 builder.Services.AddSingleton<Microsoft.AspNetCore.Authorization.IAuthorizationHandler, DKweb.AuthorizationHandlers.ClientePedidosHandler>();
@@ -103,6 +106,7 @@ DKbase.Helper.isModoDev = Convert.ToBoolean(builder.Configuration.GetSection("ap
 
 var optionsRewrite = new RewriteOptions()
 .AddRedirect("home/index.aspx", "home/index")
+.AddRedirect("Home/index.aspx", "home/index")
 .AddRedirect("home/empresa.aspx", "home/empresa")
 .AddRedirect("home/contacto.aspx", "home/contacto")
 .AddRedirect("home/contactocv.aspx", "home/contactocv")
@@ -111,10 +115,12 @@ var optionsRewrite = new RewriteOptions()
 .AddRedirect("home/recalls.aspx", "home/recalls")
 .AddRedirect("home/contactoCtaCte.aspx", "home/contactoCtaCte")
 .AddRedirect("home/registracion.aspx", "home/registracion")
+.AddRedirect("home/lanzamiento.aspx", "home/lanzamiento")
 .AddRedirect("servicios/generar_archivo.aspx", "servicios/generar_archivo")
 .AddRedirect("servicios/generarCSV.aspx", "servicios/generarCSV")
 .AddRedirect("servicios/generar_archivoPdf.aspx", "servicios/generar_archivoPdf")
-.AddRedirect("servicios/generar_comprobantes_discriminado.aspx", "servicios/generar_comprobantes_discriminado");
+.AddRedirect("servicios/generar_comprobantes_discriminado.aspx", "servicios/generar_comprobantes_discriminado")
+.AddRedirect("servicios/descargarArchivo.aspx", "servicios/descargarArchivo");
 
 app.UseRewriter(optionsRewrite);
 // Configure the HTTP request pipeline.
@@ -185,4 +191,5 @@ app.MapGet("/cerrar", async (Microsoft.AspNetCore.Http.IHttpContextAccessor _htt
     return System.Threading.Tasks.Task.CompletedTask;// "Ok"; 
 });
 DKbase.Util.spInsertSessionApp(DKweb.Helper.app);
+
 app.Run();

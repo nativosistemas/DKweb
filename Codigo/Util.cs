@@ -912,6 +912,19 @@ public class Util
         }
         return result;
     }
+    public static void lanzamiento_idOferta_Set(IHttpContextAccessor pHttpContextAccessor, int pId)
+    {
+        pHttpContextAccessor.HttpContext.Session.Set<int>("lanzamiento_idOferta", pId);
+    }
+    public static int lanzamiento_idOferta(IHttpContextAccessor pHttpContextAccessor)
+    {
+        int result = 0;
+        if (pHttpContextAccessor.HttpContext.Session.Get<int>("lanzamiento_idOferta") != null)
+        {
+            result = pHttpContextAccessor.HttpContext.Session.Get<int>("lanzamiento_idOferta");
+        }
+        return result;
+    }
     public static string hrefLinkSucursales(IHttpContextAccessor pHttpContextAccessor)
     {
         string result = string.Empty;//, string name
