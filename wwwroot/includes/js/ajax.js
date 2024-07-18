@@ -1152,12 +1152,12 @@ function ControlarSesion() {
         }
     });
 }
-function ObtenerComprobanteCuentaCorriente(pValue, formattedFechaDesde, formattedFechaHasta){
+function ObtenerComprobanteCuentaCorriente(pValue, formattedFechaDesde, formattedFechaHasta, claseDoc){
     showCargandoBuscador();
     $.ajax({
         type: "POST",
         url: "/apisap/ZFI_WS_RFC_CTA_CTE",
-        data: {CLIENTE: pValue, FECHA_DESDE: formattedFechaDesde, FECHA_HASTA: formattedFechaHasta},
+        data: {CLIENTE: pValue, FECHA_DESDE: formattedFechaDesde, FECHA_HASTA: formattedFechaHasta, CLASE_DOC: claseDoc},
         success: function (response) {
             hideCargandoBuscador();
             generarTablaComprobantes(response);

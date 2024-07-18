@@ -2,7 +2,7 @@
 var dateComprobanteHasta = null;
 var objListaComprobante = null;
 var listaComprobantesEntreFecha = null;
-
+var claseDocumento = null;
 function funSetarFechaComprobante(pDesde, pHasta) {
     dateComprobanteDesde = new Date(pDesde);
     dateComprobanteHasta = new Date(pHasta);
@@ -29,7 +29,7 @@ function consultarComprobantesCtaCte(pValue) {
         var formattedFechaDesde = formatDateToYYYYMMDD(fechaDesde);
         var formattedFechaHasta = formatDateToYYYYMMDD(fechaHasta);
 
-        ObtenerComprobanteCuentaCorriente(pValue, formattedFechaDesde, formattedFechaHasta);
+        ObtenerComprobanteCuentaCorriente(pValue, formattedFechaDesde, formattedFechaHasta, claseDocumento);
     } else {
         mensaje_informacion_generico(objMensajeDllNoDisponible);
     }
@@ -43,13 +43,13 @@ function OnCallBackAgregarVariableSessionConsultaDeComprobantes(args) {
 function OnCallBackObtenerComprobantesDiscriminadosDePuntoDeVentaEntreFechas(args) {
     location.href = 'comprobantescompleto';
 }
-function onclickComprobanteNro() {
+function onclickComasdprobanteNro() {
     IsBanderaUsarDll('OnCallBackIsBanderaUsarDll_ComprobanteNro');
     return false;
 }
-function OnCallBackIsBanderaUsarDll_ComprobanteNro(args) {
-    if (args) {
+function onclickComprobanteNro() {
         var nro = $('#txtNroComprobante').val();
+        if (nro != null) {
         var parteAdelante = '';
         parteAdelante = $("#cmbTipoComprobante option:selected").text().substring(4);
         location.href = 'Documento?t=' + $('#cmbTipoComprobante').val().substring(0, 3) + '&id=' + String(parteAdelante) + String(nro);
@@ -59,33 +59,28 @@ function OnCallBackIsBanderaUsarDll_ComprobanteNro(args) {
     }
 }
 function onchangeTipoComprobanteElejido(pValor) {
-    if (pValor == 1) {
-        $('#hiddenTipoComprobanteSeleccionado').val($("#cmbTipoComprobante option:selected").index());
-    } else if (pValor == 2) {
-        $('#hiddenTipoComprobanteSeleccionado').val($('#cmbTipoComprobanteFecha option:selected').index());
-    }
+        claseDocumento = pValor;
 }
-
 function generarTablaComprobantes(response) {
     var objListaComprobante = response.item;
 
     var strHtml = '';
 
     if (Array.isArray(objListaComprobante) && objListaComprobante.length > 0) {
-        strHtml += '<table class="footable table tbl_ch table-stripped" data-empty="No hay informacion disponible" width="100%" align="center" cellspacing="1" cellpadding="5" border="0">';
-        strHtml += '<thead>';
+        strHtml += '<table class="table table-striped table-bordered table-hover">';
+        strHtml += '<thead class="thead-dark">';
         strHtml += '<tr>';
-        strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-5 text-center no-padding">Fecha</th>';
-        strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-1 text-center no-padding">Clase Doc</th>';
-        strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-4 text-center no-padding">N° Documento</th>';
-        strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-1 text-center no-padding">N° Comprobante</th>';
-        strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-1 text-center no-padding">Monto Gravado</th>';
-        strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-1 text-center no-padding">IVA</th>';
-        strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-1 text-center no-padding">Percepción DGR</th>';
-        strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-1 text-center no-padding">Percepción Municipal</th>';
-        strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-1 text-center no-padding">Total</th>';
-        strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-1 text-center no-padding">Monto Exento</th>';
-        strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-1 text-center no-padding">Percepción IVA</th>';
+        strHtml += '<th class="custom-padding">Fecha</th>';
+        strHtml += '<th class="custom-padding">Clase Doc</th>';
+        strHtml += '<th class="custom-padding">N° Documento</th>';
+        strHtml += '<th class="custom-padding">N° Comprobante</th>';
+        strHtml += '<th class="custom-padding">Monto Gravado</th>';
+        strHtml += '<th class="custom-padding">IVA</th>';
+        strHtml += '<th class="custom-padding">Percepción DGR</th>';
+        strHtml += '<th class="custom-padding">Percepción Municipal</th>';
+        strHtml += '<th class="custom-padding">Total</th>';
+        strHtml += '<th class="custom-padding">Monto Exento</th>';
+        strHtml += '<th class="custom-padding">Percepción IVA</th>';
         strHtml += '</tr>';
         strHtml += '</thead>';
 
@@ -109,11 +104,9 @@ function generarTablaComprobantes(response) {
         strHtml += '</tbody>';
         strHtml += '</table>';
     } else {
-        strHtml += '<table class="footable table table-stripped" data-empty="No hay informacion disponible" width="100%" align="center" cellspacing="1" cellpadding="5" border="0">';
-        strHtml += '<tbody>';
-        strHtml += '<tr><td class="text-center"><p class="color_red">No hay información disponible</p></td></tr>';
-        strHtml += '</tbody>';
-        strHtml += '</table>';
+        strHtml += '<div class="alert alert-warning text-center" role="alert">';
+        strHtml += 'No hay información disponible';
+        strHtml += '</div>';
     }
 
     $('#divResultadoComprobanteCompleto').html(strHtml);
