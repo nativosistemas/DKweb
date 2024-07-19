@@ -365,23 +365,28 @@ function OnCallBackTomarPedidoCarrito_sap(args) {
     var l_result = args.result_sap;
 
     var html = '';
-    html += '<table>';
-    html += '<thead>';
+    html += '<table  class="table table-striped">';
+    html += '<thead class="justify-content-between">';
     html += '<tr>';
-    html += '<th>PEDIDO_SAP</th>';
-    html += '<th>ID_CARRITO</th>';
-    html += '<th>MOTIVO_RECHAZO</th>';
-    html += '<th>MATERIAL</th>';
+    html += '<th class="text-center">MATERIAL</th>';
+    //  html += '<th>PEDIDO_SAP</th>';
+    //html += '<th>ID_CARRITO</th>';
+    html += '<th class="text-center">CANTIDAD PEDIDA</th>';
+    html += '<th class="text-center">CANTIDAD ACEPTADA</th>';
+    html += '<th class="text-center">MOTIVO RECHAZO</th>';
+
     html += '</tr>';
     html += '</thead>';
     html += '<tbody>';
     l_result.forEach(item => {
-        //  const row = document.createElement('tr');
+        //       <td>${item.ID_CARRITO}</td>
+        //  <td>${item.PEDIDO_SAP}</td>
         html += `<tr>
-            <td>${item.PEDIDO_SAP}</td>
-            <td>${item.ID_CARRITO}</td>
+           
+            <td>${item.MATERIAL}</td>        
+            <td>${item.CANTIDAD_PEDIDA}</td>
+            <td>${item.CANTIDAD_ACEPTADA}</td>
             <td>${item.MOTIVO_RECHAZO}</td>
-            <td>${item.MATERIAL}</td>
            </tr>
         `;
     });
