@@ -2,7 +2,7 @@
 var dateComprobanteHasta = null;
 var objListaComprobante = null;
 var listaComprobantesEntreFecha = null;
-
+var claseDocumento = null;
 function funSetarFechaComprobante(pDesde, pHasta) {
     dateComprobanteDesde = new Date(pDesde);
     dateComprobanteHasta = new Date(pHasta);
@@ -10,33 +10,31 @@ function funSetarFechaComprobante(pDesde, pHasta) {
 }
 
 function onclickConsultar() {
-    IsBanderaUsarDll('OnCallBackIsBanderaUsarDll_Consultar');
+    consultarComprobantesCtaCte(cli_codigo());
     return false;
 }
-function OnCallBackIsBanderaUsarDll_Consultar(args) {
-    if (args) {
-        var fechaDesde = dateComprobanteDesde;// $('#datepickerDesde').datepicker("getDate");
-        var fechaHasta = dateComprobanteHasta;//$('#datepickerHasta').datepicker("getDate");
+function formatDateToYYYYMMDD(date) {
+    var year = date.getFullYear();
+    var month = (date.getMonth() + 1).toString().padStart(2, '0');
+    var day = date.getDate().toString().padStart(2, '0');
+    return year + '-' + month + '-' + day;
+}
 
-        var intAñoDesde = fechaDesde.getFullYear();
-        var intMesDesde = fechaDesde.getMonth() + 1;
-        var intDiaDesde = fechaDesde.getDate();
-        var intAñoHasta = fechaHasta.getFullYear();
-        var intMesHasta = fechaHasta.getMonth() + 1;
-        var intDiaHasta = fechaHasta.getDate();
 
-        if ($('#cmbTipoComprobanteFecha').val() == 'TODOS') {
-            ObtenerComprobantesDiscriminadosDePuntoDeVentaEntreFechas(intDiaDesde, intMesDesde, intAñoDesde, intDiaHasta, intMesHasta, intAñoHasta);
-        } else {
-            var tipo = $('#cmbTipoComprobanteFecha').val().substring(0, 3);
-            AgregarVariableSessionConsultaDeComprobantes(tipo, intDiaDesde, intMesDesde, intAñoDesde, intDiaHasta, intMesHasta, intAñoHasta);
-        }
-        // $('#divCargandoContenedorGeneralFondo').css('display', 'block');
+function consultarComprobantesCtaCte(pValue) {
+    if (pValue != null) {
+        var fechaDesde = dateComprobanteDesde;
+        var fechaHasta = dateComprobanteHasta;
+
+        var formattedFechaDesde = formatDateToYYYYMMDD(fechaDesde);
+        var formattedFechaHasta = formatDateToYYYYMMDD(fechaHasta);
+
+        ObtenerComprobanteCuentaCorriente(pValue, formattedFechaDesde, formattedFechaHasta, claseDocumento);
     } else {
-        //alert(objMensajeDllNoDisponible);
         mensaje_informacion_generico(objMensajeDllNoDisponible);
     }
 }
+
 function OnCallBackAgregarVariableSessionConsultaDeComprobantes(args) {
     var tipo = $('#cmbTipoComprobanteFecha').val().substring(0, 3);
     location.href = 'RespuestaConsultaDeComprobantes?t=' + tipo;
@@ -45,13 +43,13 @@ function OnCallBackAgregarVariableSessionConsultaDeComprobantes(args) {
 function OnCallBackObtenerComprobantesDiscriminadosDePuntoDeVentaEntreFechas(args) {
     location.href = 'comprobantescompleto';
 }
-function onclickComprobanteNro() {
+function onclickComasdprobanteNro() {
     IsBanderaUsarDll('OnCallBackIsBanderaUsarDll_ComprobanteNro');
     return false;
 }
-function OnCallBackIsBanderaUsarDll_ComprobanteNro(args) {
-    if (args) {
+function onclickComprobanteNro() {
         var nro = $('#txtNroComprobante').val();
+        if (nro != null) {
         var parteAdelante = '';
         parteAdelante = $("#cmbTipoComprobante option:selected").text().substring(4);
         location.href = 'Documento?t=' + $('#cmbTipoComprobante').val().substring(0, 3) + '&id=' + String(parteAdelante) + String(nro);
@@ -61,179 +59,67 @@ function OnCallBackIsBanderaUsarDll_ComprobanteNro(args) {
     }
 }
 function onchangeTipoComprobanteElejido(pValor) {
-    if (pValor == 1) {
-        $('#hiddenTipoComprobanteSeleccionado').val($("#cmbTipoComprobante option:selected").index());
-    } else if (pValor == 2) {
-        $('#hiddenTipoComprobanteSeleccionado').val($('#cmbTipoComprobanteFecha option:selected').index());
-    }
+        claseDocumento = pValor;
 }
+function generarTablaComprobantes(response) {
+    var objListaComprobante = response.item;
 
-function CargarListaComprobanteCompleto() {
     var strHtml = '';
-    if (objListaComprobante != null) {
-        if (objListaComprobante.length > 0) {
-            strHtml += '<table class="footable table tbl_ch table-stripped" data-empty="No hay informacion disponible" width="100%" align="center" cellspacing="1" cellpadding="5" border="0">';
-            strHtml += '<thead>';
-            strHtml += '<tr>';
-            strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-5 text-center no-padding">';
-            strHtml += '<table width="100%" cellpadding="0" cellspacing="0">';
-            strHtml += '<tr><td class="col-lg-12 text-center">&nbsp;<div class="clear5"></div></td></tr>';
-            strHtml += '<tr class="tr_thead"><td class="col-lg-12 text-center">Fecha</td></tr>';
-            strHtml += '</table>';
-            strHtml += '</th>';
-            strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-1 text-center no-padding" data-breakpoints="xs">';
-            strHtml += '<table class="hidden-xs" width="100%" cellpadding="0" cellspacing="0">';
-            strHtml += '<tr><td class="col-lg-12 text-center">&nbsp;<div class="clear5"></div></td></tr>';
-            strHtml += '<tr class="tr_thead"><td class="col-lg-12 text-center">Comprobante</td></tr>';
-            strHtml += '</table>';
-            strHtml += '<span class="thd_letra_chica visible-xs">Comprobante</span>';
-            strHtml += '</th>';
-            strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-4 text-center no-padding">';
-            strHtml += '<table width="100%" cellpadding="0" cellspacing="0">';
-            strHtml += '<tr><td class="col-lg-12 text-center">&nbsp;<div class="clear5"></div></td></tr>';
-            strHtml += '<tr class="tr_thead"><td class="col-lg-12 text-center">N&deg; Comprobante</td></tr>';
-            strHtml += '</table>';
-            strHtml += '</th>';
-            strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-1 text-center no-padding" data-breakpoints="xs sm">';
-            strHtml += '<table class="hidden-xs hidden-sm" width="100%" cellpadding="0" cellspacing="0">';
-            strHtml += '<tr><td class="col-lg-12 text-center">&nbsp;<div class="clear5"></div></td></tr>';
-            strHtml += '<tr class="tr_thead"><td class="col-lg-12 text-center">Monto Exento</td></tr>';
-            strHtml += '</table>';
-            strHtml += '<span class="thd_letra_chica visible-sm visible-xs">Monto Exento</span>';
-            strHtml += '</th>';
-            strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-2 text-center no-padding" data-breakpoints="xs sm">';
-            strHtml += '<table class="hidden-xs hidden-sm" width="100%" cellpadding="0" cellspacing="0">';
-            strHtml += '<tr><td class="col-lg-12 text-center">&nbsp;<div class="clear5"></div></td></tr>';
-            strHtml += '<tr class="tr_thead"><td class="col-lg-12 text-center">Monto Gravado</td></tr>';
-            strHtml += '</table>';
-            strHtml += '<span class="thd_letra_chica visible-sm visible-xs">Monto Gravado</span>';
-            strHtml += '</th>';
-            strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-2 text-center no-padding" data-breakpoints="xs sm">';
-            strHtml += '<table class="hidden-xs hidden-sm" width="100%" cellpadding="0" cellspacing="0">';
-            strHtml += '<tr><td class="col-lg-12 text-center">&nbsp;<div class="clear5"></div></td></tr>';
-            strHtml += '<tr class="tr_thead"><td class="col-lg-12 text-center">IVA Inscripto</td></tr>';
-            strHtml += '</table>';
-            strHtml += '<span class="thd_letra_chica visible-sm visible-xs">IVA Inscripto</span>';
-            strHtml += '</th>';
-            strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-2 text-center no-padding" data-breakpoints="xs sm">';
-            strHtml += '<table class="hidden-xs hidden-sm" width="100%" cellpadding="0" cellspacing="0">';
-            strHtml += '<tr><td class="col-lg-12 text-center">&nbsp;<div class="clear5"></div></td></tr>';
-            strHtml += '<tr class="tr_thead"><td class="col-lg-12 text-center">IVA No Inscripto</td></tr>';
-            strHtml += '</table>';
-            strHtml += '<span class="thd_letra_chica visible-sm visible-xs">IVA No Inscripto</span>';
-            strHtml += '</th>';
-            strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-1 text-center no-padding" data-breakpoints="xs sm">';
-            strHtml += '<table class="hidden-xs hidden-sm" width="100%" cellpadding="0" cellspacing="0">';
-            strHtml += '<tr><td class="col-lg-12 text-center">&nbsp;<div class="clear5"></div></td></tr>';
-            strHtml += '<tr class="tr_thead"><td class="col-lg-12 text-center">Percepci&oacute;n DGR</td></tr>';
-            strHtml += '</table>';
-            strHtml += '<span class="thd_letra_chica visible-sm visible-xs">Percepci&oacute;n DGR</span>';
-            strHtml += '</th>';
-            strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-1 text-center no-padding" data-breakpoints="xs sm">';
-            strHtml += '<table class="hidden-xs hidden-sm" width="100%" cellpadding="0" cellspacing="0">';
-            strHtml += '<tr><td class="col-lg-12 text-center">&nbsp;<div class="clear5"></div></td></tr>';
-            strHtml += '<tr class="tr_thead"><td class="col-lg-12 text-center">Percepci&oacute;n Municipal</td></tr>';
-            strHtml += '</table>';
-            strHtml += '<span class="thd_letra_chica visible-sm visible-xs">Percepci&oacute;n Municipal</span>';
-            strHtml += '</th>';
-            strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-3 text-center no-padding">';
-            strHtml += '<table width="100%" cellpadding="0" cellspacing="0">';
-            strHtml += '<tr><td class="col-lg-12 text-center">&nbsp;<div class="clear5"></div></td></tr>';
-            strHtml += '<tr class="tr_thead"><td class="col-lg-12 text-center no_brd-r">Total</td></tr>';
-            strHtml += '</table>';
-            strHtml += '</th>';
-            strHtml += '</tr>';
-            strHtml += '</thead>';
 
-            //////////////
-            //strHtml += '<div>'; 
-            //strHtml += '<table style="width:100%;"><tr><td align="left">';
-            //strHtml += '</td><td >';
-            //strHtml += '<input type="button" onclick="volver()" value="VOLVER" class="btn_gral" />';
-            //strHtml += '</td> </tr></table>';
-            //strHtml += '</div>';
-            //strHtml += '<table class="tbl-ComposicionSaldo" border="0" cellspacing="0" cellpadding="0"  width="100%">';
-            //strHtml += '<tr>';
-            //strHtml += '<th  width="15%" ><div class="bp-top-left">Fecha</div></th>'; // class="bp-off-top-left bp-med-ancho"
-            //strHtml += '<th >Comprobante</th>';
-            //strHtml += '<th >Número Comprobante</th>';
-            //strHtml += '<th >Monto Exento</th>';
-            //strHtml += '<th >Monto Gravado</th>';
-            //strHtml += '<th >Monto Iva Inscripto</th>';
-            //strHtml += '<th >Monto Iva No Inscripto</th>';
-            //strHtml += '<th >Monto Percepciones DGR</th>';
-            //strHtml += '<th >Monto Percepciones Municipal</th>';//MontoPercepcionesMunicipal
-            //strHtml += '<th >Monto Total</th>';
-            //strHtml += '</tr>';
-            strHtml += '<tbody>';
-            for (var i = 0; i < objListaComprobante.length; i++) {
-                var strHtmlColorFondo = 'wht';
-                if (i % 2 != 0) {
-                    strHtmlColorFondo = 'grs';
-                }
-                strHtml += '<tr class="' + strHtmlColorFondo + '">';
-                strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 col-xs-5 text-center">' + objListaComprobante[i].FechaToString + '</td>';
-                strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 c_to_l-xs">' + objListaComprobante[i].Comprobante + '</td>';
-                strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 col-xs-4 text-center">';
-                if (isDetalleComprobante(objListaComprobante[i].Comprobante)) {
-                    strHtml += '<a href="../ctacte/Documento?t=' + objListaComprobante[i].Comprobante + '&id=' + objListaComprobante[i].NumeroComprobante + '" >' + objListaComprobante[i].NumeroComprobante + '</a>';
-                } else {
-                    strHtml += listaFicha[i].Comprobante;
-                }
-                strHtml += '</td>';
-                //                strHtml += '<td class="' + strHtmlColorFondo + '">' + objListaComprobante[i].NumeroComprobante + '</td>';
-                strHtml += '<td class="col-lg-1 col-md-1 col-sm-12 r_to_l-sm">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(objListaComprobante[i].MontoExento.toFixed(2)) + '</td>';
-                strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 r_to_l-sm">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(objListaComprobante[i].MontoGravado.toFixed(2)) + '</td>';
-                strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 r_to_l-sm">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(objListaComprobante[i].MontoIvaInscripto.toFixed(2)) + '</td>';
-                strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 r_to_l-sm">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(objListaComprobante[i].MontoIvaNoInscripto.toFixed(2)) + '</td>';
-                strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 r_to_l-sm">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(objListaComprobante[i].MontoPercepcionesDGR.toFixed(2)) + '</td>';
-                strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 r_to_l-sm">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(objListaComprobante[i].MontoPercepcionesMunicipal.toFixed(2)) + '</td>';
-                strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 col-xs-3 text-right">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(objListaComprobante[i].MontoTotal.toFixed(2)) + '</td>';
-                strHtml += '</tr>';
-            } // fin for (var i = 0; i < objListaComprobante.length; i++) {
-            strHtml += '</tbody>';
-            strHtml += '</table>';
+    if (Array.isArray(objListaComprobante) && objListaComprobante.length > 0) {
+        strHtml += '<table class="table table-striped table-bordered table-hover">';
+        strHtml += '<thead class="thead-dark">';
+        strHtml += '<tr>';
+        strHtml += '<th class="custom-padding">Fecha</th>';
+        strHtml += '<th class="custom-padding">Clase Doc</th>';
+        strHtml += '<th class="custom-padding">N° Documento</th>';
+        strHtml += '<th class="custom-padding">N° Comprobante</th>';
+        strHtml += '<th class="custom-padding">Monto Gravado</th>';
+        strHtml += '<th class="custom-padding">IVA</th>';
+        strHtml += '<th class="custom-padding">Percepción DGR</th>';
+        strHtml += '<th class="custom-padding">Percepción Municipal</th>';
+        strHtml += '<th class="custom-padding">Total</th>';
+        strHtml += '<th class="custom-padding">Monto Exento</th>';
+        strHtml += '<th class="custom-padding">Percepción IVA</th>';
+        strHtml += '</tr>';
+        strHtml += '</thead>';
 
-            //var httpRaiz = $('#hiddenRaiz').val();
-            //strHtml += '<div style="text-align:right;margin-top:10px;">' + '<a  href="../../servicios/generar_comprobantes_discriminado.aspx"  >' + '<img src="../../img/iconos/disk.png" alt="txt" title="Descarga csv" />' + '</a></div>';
-            //+ '&nbsp;&nbsp;&nbsp;' + 
-            //strHtml += '</br>';
-
-            if (objListaComprobante.length > cantFilaParaEnCabezado) {
-                //strHtml += '<br/>';
-                //strHtml += '<input type="button" onclick="volver()" value="VOLVER" class="btn_gral" />';
-                strHtml += '<a class="btn_volver float-left" href="#" onclick="volver(); return false;"><i class="fa fa-play"></i> VOLVER</a>';
-            }
-
-
-            ///
-            var strHtmlDescarga = '';
-            strHtmlDescarga += '<a class="btn_download float-right" href="../../servicios/generar_comprobantes_discriminado.aspx" data-toggle="tooltip" data-placement="bottom" title="Descarga csv" data-original-title="Descarga csv">CSV</a>';
-            strHtmlDescarga += '<div class="float-right pad_7 hidden-xs">Descargas: </div>';
-            $('#divContenedorDescarga').append(strHtmlDescarga);
-            //strHtml += '<div style="text-align:right;margin-top:10px;">' + '<a  href="../../servicios/generar_comprobantes_discriminado.aspx"  >' + '<img src="../../img/iconos/disk.png" alt="txt" title="Descarga csv" />' + '</a></div>';
-
-        } // fin  if (objListaComprobante.length > 0) 
-        else {
-            strHtml += '<table class="footable table table-stripped" data-empty="No hay informacion disponible" width="100%" align="center" cellspacing="1" cellpadding="5" border="0">';
-            strHtml += '<tbody>';
-            strHtml += '<tr><td  class="text-center"><p class="color_red">' + objMensajeNoEncontrado + '</p></td></tr>';
-            strHtml += '</tbody>';
-            strHtml += '</table>';
-        }
-
-    } // fin  if (objListaComprobante != null) 
-    else {
-        strHtml += '<table class="footable table table-stripped" data-empty="No hay informacion disponible" width="100%" align="center" cellspacing="1" cellpadding="5" border="0">';
         strHtml += '<tbody>';
-        strHtml += '<tr><td  class="text-center"><p class="color_red">' + objMensajeSeProdujoErrorIntentaMasTarde + '</p></td></tr>';
+        for (var i = 0; i < objListaComprobante.length; i++) {
+            var comprobante = objListaComprobante[i];
+            strHtml += '<tr>';
+            strHtml += '<td class="text-center">' + comprobante.fechA_DOC + '</td>';
+            strHtml += '<td class="text-center">' + comprobante.clasE_DOC + '</td>';
+            strHtml += '<td class="text-center">' + comprobante.nrO_DOCUMENTO + '</td>';
+            strHtml += '<td class="text-center">' + comprobante.nrO_COMP + '</td>';
+            strHtml += '<td class="text-right">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(parseFloat(comprobante.montO_GRAVADO).toFixed(2)) + '</td>';
+            strHtml += '<td class="text-right">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(parseFloat(comprobante.iva).toFixed(2)) + '</td>';
+            strHtml += '<td class="text-right">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(parseFloat(comprobante.percepcioN_DGR).toFixed(2)) + '</td>';
+            strHtml += '<td class="text-right">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(parseFloat(comprobante.percepcioN_MUNICIPAL).toFixed(2)) + '</td>';
+            strHtml += '<td class="text-right">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(parseFloat(comprobante.total).toFixed(2)) + '</td>';
+            strHtml += '<td class="text-right">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(parseFloat(comprobante.montO_EXENTO).toFixed(2)) + '</td>';
+            strHtml += '<td class="text-right">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(parseFloat(comprobante.percepcioN_IVA).toFixed(2)) + '</td>';
+            strHtml += '</tr>';
+        }
         strHtml += '</tbody>';
         strHtml += '</table>';
+    } else {
+        strHtml += '<div class="alert alert-warning text-center" role="alert">';
+        strHtml += 'No hay información disponible';
+        strHtml += '</div>';
     }
 
     $('#divResultadoComprobanteCompleto').html(strHtml);
     $('.footable').footable();
 }
+
+function FormatoDecimalConDivisorMiles(valor) {
+    return valor.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+
+
+
 function CargarHtmlComprobanteEntreFecha() {
     var strHtml = '';
     if (listaComprobantesEntreFecha != null) {

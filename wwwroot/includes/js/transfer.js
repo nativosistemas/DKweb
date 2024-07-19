@@ -7,6 +7,20 @@ var textFacturaPedidoTransfer = null;
 var textRemitoPedidoTransfer = null;
 var codSucursalPedidoTransfer = null;
 var listaResultadoPedidoTransfer = null;
+var precioUnitario = [];
+var tienePerfu = false;
+var precioAcumulado = 0;
+var cantProductosTotal = [];
+var cantProductosBonif = [];
+var precioInicial = 0;
+var productosTotalString = 0;
+var subProductosTotal = 0;
+var cantUnidadesConBonificadas = 0;
+var productosTotal = 0;
+var contadorProductosTotal = 0;
+var contadorPrecioTotal = 0;
+var fijuniArray = [];
+var qInput = 0;
 
 function jcTransfersProductos() {
     this.PrecioFinalTransfer;
@@ -190,7 +204,7 @@ function AgregarCarritoTransfersPorSucursalHtml(pIndice) {
             /* fin falta */
             strHTML += '<td class="col-lg-7 col-md-3 col-sm-3 text-left ' + htmlColor + ' tdProductoTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">' + listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].pro_nombre + '</td>';
             strHTML += '<td class="col-lg-2 col-md-1 col-sm-1 col-xs-1 text-center tdCantTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">';
-            strHTML += '<span>' + listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].cantidad + '</span>';
+            strHTML += '<span>' + listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].cantidad + '</span>'; //De prueba, hasta que se conecte en la DB
             strHTML += '</td>';
             /* falta */
             var strHtmlPrecioProducto = '';
@@ -340,6 +354,7 @@ function onclickVaciarCarritoTransfer_ButtonOK(pIndice) {
 function onclickVaciarCarritoTransfer(pIndice) {
     var clickButton = 'return onclickVaciarCarritoTransfer_ButtonOK(' + pIndice + ');';
     mensaje_vaciarCarrito(clickButton);
+    fijuniArray = [];
 }
 function OnCallBackBorrarCarritoTransfer(args) {
     if (args) {
@@ -349,10 +364,12 @@ function OnCallBackBorrarCarritoTransfer(args) {
             var sucur = listaCarritoTransferPorSucursal[indiceCarritoTransferBorrar].Sucursal;
             listaCarritoTransferPorSucursal[indiceCarritoTransferBorrar].Sucursal = '';
             modalModuloAlertHide();
+            limpiarTextBoxProductosBuscador(sucur);
             LimpiarTextBoxProductosBuscados(sucur);
         }
     }
 }
+
 function OnCallBackRecuperarTransfer(args) {
     if (isNotNullEmpty(args))
         listaTransfer = eval('(' + args + ')');
@@ -362,7 +379,8 @@ function OnCallBackRecuperarTransfer(args) {
     if (listaTransfer != null) {
         if (listaTransfer.length > 0) {
             if (listaTransfer.length == 1) {
-                onclickMostrarUnTransferDeVarios(0);
+                //onclickMostrarUnTransferDeVarios(0);
+                ComboCerrado(0);
                 //strHtmlTransfer += AgregarTransferHtmlAlPopUp(0);
             } else {
                 //strHtmlTransfer += '<div style="font-size:16px; margin-top: 10px;"  >' + 'Seleccione un transfer:' + '</div>';//Elija un transfer:
@@ -376,224 +394,138 @@ function OnCallBackRecuperarTransfer(args) {
         }
     }
 }
-function onclickMostrarUnTransferDeVarios(pValor) {
+function ComboCerrado(pValor) {
     //$('#modalModulo').modal('hide');
     $('#modalModulo').html(AgregarTransferHtmlAlPopUp(pValor));
     $('#modalModulo').modal();
+    Contador(pValor);
+
 }
 
-function htmlSeleccioneTransfer(pListaTransfer) {
+/* function onclickMostrarUnTransferDeVarios(pValor) {
+    //$('#modalModulo').modal('hide');
+    $('#modalModulo').html(AgregarTransferHtmlAlPopUp(pValor));
+    $('#modalModulo').modal();
+} */
+
+function AgregarTransferHtmlAlPopUp(pIndex) { //calcar y transformar
     var strHtmlTransfer = '';
     strHtmlTransfer += '<div class="modal-background">&nbsp;</div>';
-    strHtmlTransfer += '<div class="modal-dialog modal-md"><div class="modal-content">';
+    strHtmlTransfer += '<div class="modal-dialog modal-lg"><div class="modal-content border">';
     strHtmlTransfer += '<div class="modal-header">';
     strHtmlTransfer += '<div class="row">';
-    strHtmlTransfer += '<div class="col-lg-12">';
-    strHtmlTransfer += '<div class="modulo_icon atencion"></div>';
-    strHtmlTransfer += '<h4 class="color_gris">Seleccione un transfer</h4>';
-    strHtmlTransfer += '</div>'; // '<div class="col-lg-12">
-    strHtmlTransfer += '</div>'; // <div class="row">
-    strHtmlTransfer += '<div class="close-modal" data-dismiss="modal"><i class="fa fa-times"></i></div>';
-    strHtmlTransfer += '</div>'; // <div class="modal-header">
-    strHtmlTransfer += '<div class="modal-body"><div class="col-lg-12">';
-    for (var i = 0; i < pListaTransfer.length; i++) {
-        var nombreMostrarTransfer = pListaTransfer[i].tfr_nombre;
-        for (var iMostrarTransfer = 0; iMostrarTransfer < pListaTransfer[i].listaDetalle.length; iMostrarTransfer++) {
-            if (productoSeleccionado == pListaTransfer[i].listaDetalle[iMostrarTransfer].tde_codpro && isNotNullEmpty(pListaTransfer[i].listaDetalle[iMostrarTransfer].tde_DescripcionDeProducto)) {
-                nombreMostrarTransfer = pListaTransfer[i].listaDetalle[iMostrarTransfer].tde_DescripcionDeProducto;// pListaTransfer[i].tfr_nombre + ' - ' +
-                break;
-            }
-        }
-        strHtmlTransfer += '<div class="text-center"><a class="btn_emp" onclick="onclickMostrarUnTransferDeVarios(' + i + '); return false;">' + nombreMostrarTransfer + '</a></div>';
-        strHtmlTransfer += '<div class="clear15"></div>';
-    }
-    strHtmlTransfer += '</div></div>'; //'<div class="modal-body"><div class="col-lg-12">'
-    strHtmlTransfer += '<div class="clear"></div>';
-    strHtmlTransfer += '</div></div>'; // <div class="modal-dialog modal-md"><div class="modal-content"> 
-    return strHtmlTransfer;
-}
-
-function AgregarTransferHtmlAlPopUp(pIndex) {
-    var strHtmlTransfer = '';
-    strHtmlTransfer += '<div class="modal-background">&nbsp;</div>';
-    strHtmlTransfer += '<div class="modal-dialog modal-lg"><div class="modal-content">';
-    strHtmlTransfer += '<div class="modal-header no-padding-bottom">';
-    strHtmlTransfer += '<div class="row">';
-    strHtmlTransfer += '<div class="col-lg-12">';
+    strHtmlTransfer += '<div class="col-md-12" text-right>';
     // strHtmlTransfer += '<h4>' + listaTransfer[pIndex].tfr_nombre + '</h4>';
     strHtmlTransfer += '</div>';
     strHtmlTransfer += '</div>';
     strHtmlTransfer += '<div class="close-modal" data-dismiss="modal"><i class="fa fa-times"></i></div>';
     strHtmlTransfer += '</div>';
-    strHtmlTransfer += '<div class="modal-body"><div class="col-lg-12">';
+    strHtmlTransfer += '<div class="modal-body"><div class="col-md-12" text-right>';
     //
     if (listaTransfer[pIndex].tfr_descripcion != null) {
-        strHtmlTransfer += '<div class="col-md-6 col-sm-6 no-padding"><b>DESCRIPCIÓN Y CONDICIÓN</b>' + listaTransfer[pIndex].tfr_descripcion + '</div><div class="col-md-6 col-sm-6 col-xs-12 date_trasf_combo"></div>';
+        strHtmlTransfer += '<div class="col-lg-5 tit_trasf_combo"><b>' + listaTransfer[pIndex].tfr_nombre + '</b></div>'; //Nombre de combo
         strHtmlTransfer += '<div class="clear"></div>';
     }
-
-    var tituloTrfMinimoRenglon = 'Mínima Renglones:';
-    var valorTrfMinimoRenglon = '-';
-    if (listaTransfer[pIndex].tfr_minrenglones != null) {
-        tituloTrfMinimoRenglon = '<b>' + 'Mínima Renglones:' + '</b>';
-        valorTrfMinimoRenglon = '<b>' + listaTransfer[pIndex].tfr_minrenglones + '</b>';
-    }
-    strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloTrfMinimoRenglon + ' ' + valorTrfMinimoRenglon + '</div>';
-
-    var tituloTrfUnidadMinima = 'Unidad Mínima:';
-    var valorTrfUnidadMinima = '-';
-    if (listaTransfer[pIndex].tfr_minunidades != null) {
-        tituloTrfUnidadMinima = '<b>' + 'Unidad Mínima:' + '</b>';
-        valorTrfUnidadMinima = '<b>' + listaTransfer[pIndex].tfr_minunidades + '</b>';
-    }
-    strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloTrfUnidadMinima + ' ' + valorTrfUnidadMinima + '</div>';
-
-    var tituloTrfUnidadMaxima = 'Unidad Máxima:';
-    var valorTrfUnidadMaxima = '-';
-    if (listaTransfer[pIndex].tfr_maxunidades != null) {
-        tituloTrfUnidadMaxima = '<b>' + 'Unidad Máxima:' + '</b>';
-        valorTrfUnidadMaxima = '<b>' + listaTransfer[pIndex].tfr_maxunidades + '</b>';
-    }
-    strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloTrfUnidadMaxima + ' ' + valorTrfUnidadMaxima + '</div>';
-
-    var tituloTrfMultiploUnidades = 'Múltiplo unidades:';
-    var valorTrfMultiploUnidades = '-';
-    if (listaTransfer[pIndex].tfr_mulunidades != null) {
-        tituloTrfMultiploUnidades = '<b>' + 'Múltiplo unidades:' + '</b>';
-        valorTrfMultiploUnidades = '<b>' + listaTransfer[pIndex].tfr_mulunidades + '</b>';
-    }
-    strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloTrfMultiploUnidades + ' ' + valorTrfMultiploUnidades + '</div>';
-
-    var tituloTrfUnidadesFijas = 'Unidades Fijas:';
-    var valorTrfUnidadesFijas = '-';
-    if (listaTransfer[pIndex].tfr_fijunidades != null) {
-        tituloTrfUnidadesFijas = '<b>' + 'Unidades Fijas:' + '</b>';
-        valorTrfUnidadesFijas = '<b>' + listaTransfer[pIndex].tfr_fijunidades + '</b>';
-    }
-    strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloTrfUnidadesFijas + ' ' + valorTrfUnidadesFijas + '</div>';
-    strHtmlTransfer += '<div class="clear15"></div>';
+    //strHtmlTransfer += '<div class="row  style="display: flex; align-items: flex-start;">';
+    strHtmlTransfer += '<div class="rowComboCerrado">';
+    strHtmlTransfer += '<div class="producto"><b>Producto:</b></div>'; //nombre de producto
+    strHtmlTransfer += '<div class="descripcion"><b>Descripción:</b></div>'; //descripcion de producto
+    strHtmlTransfer += '<div class="precio"><b>Precio:</b></div>'; //precio sin descuento
+    strHtmlTransfer += '<div class="precio-descuento"><b>Precio <br> c/ Desc.:</b></div>'; //precio con descuento
+    strHtmlTransfer += '<div class="cant-unidadesCombo"><b>Cant. <br> Unid.</b></div>'; //cant. unidades combo
+    strHtmlTransfer += '<div class="cant-total-unidades"><b>Cant.Total <br> Facturada</b></div>'; //cant. total de unidades  
+    strHtmlTransfer += '<div class="producto-bonificado"><b>Prod.<br> Bonif.</b></div>'; //Producto Bonificado
+    strHtmlTransfer += '<div class="cant-bonificada"><b>Cant.<br> Bonif.</b></div>'; // Cantidad Bonificada
+    strHtmlTransfer += '<div class="cant-total-bonificada"><b>CANT.<br> TOTAL <br> Bonif.</b></div>'; //Precio Bonificado
+    strHtmlTransfer += '<div class="precio-total-descuento"><b>PRECIO <br> TOTAL<br> Facturado</b></div>'; //Total precio c./ Descuento
+    strHtmlTransfer += '<div class="precio-unidad"><b>Precio por<br> unidad</b></div>'; //Precio por Unidad
+    strHtmlTransfer += '</div>'; // Cierre de la fila de títulos
+    strHtmlTransfer += '<hr style="margin-top: 2px; margin-bottom: 2px; border-bottom: 2px solid #000; margin-left: 2px; margin-right: 2px; class="no-padding-left">';
     //
-    var tienePerfu = false;
+    //strHtmlTransfer += '<div class="row">';
+
     for (var y = 0; y < listaTransfer[pIndex].listaDetalle.length; y++) {
-        console.log(listaTransfer[pIndex].listaDetalle[y]);
-        if (listaTransfer[pIndex].listaDetalle[y].pro_codtpopro == "P") {
-            tienePerfu = true;
-        }
-        var cssDivContenedorProducto = '';
-        if (listaTransfer[pIndex].tfr_mospap) {// == 1
-            if (productoSeleccionado == listaTransfer[pIndex].listaDetalle[y].tde_codpro) {
-                cssDivContenedorProducto = '  class="cssMospapProductoVisible' + pIndex + '" ';
-            } else {
-                cssDivContenedorProducto = ' style="display:none;" class="cssMospapProductoOculto' + pIndex + '" ';
-            }
-        }
-        strHtmlTransfer += '<div ' + cssDivContenedorProducto + '>'; // contenedor general (no esta en el diseño)
-        strHtmlTransfer += '<div class="col-lg-12 tit_trasf_combo">' + listaTransfer[pIndex].listaDetalle[y].tde_codpro + '</div>';
-        if (listaTransfer[pIndex].listaDetalle[y].tde_descripcion != null) {
-            strHtmlTransfer += '<div class="col-lg-12 no-padding-left">' + '<b>Descripción: </b>&nbsp;' + listaTransfer[pIndex].listaDetalle[y].tde_descripcion + '</div>';
-        }
-        strHtmlTransfer += '<div class="col-md-3 col-sm-6 no-padding-left"><b>Precio Público:</b>&nbsp;$&nbsp;' + FormatoDecimalConDivisorMiles(listaTransfer[pIndex].listaDetalle[y].tde_prepublico) + '</div>';
-        strHtmlTransfer += '<div class="col-md-3 col-sm-6 no-padding-left"><b>Precio con descuento:</b>&nbsp;$&nbsp;' + FormatoDecimalConDivisorMiles(listaTransfer[pIndex].listaDetalle[y].PrecioFinalTransfer.toFixed(2)) + '</div>';
-        strHtmlTransfer += '<div class="clear"></div>';
-        var tituloDetalleUnidadMinima = 'Unidad Mínima:';
-        var valorDetalleUnidadMinima = '-';
-        if (listaTransfer[pIndex].listaDetalle[y].tde_minuni != null) {
-            tituloDetalleUnidadMinima = '<b>' + 'Unidad Mínima: ' + '</b>';
-            valorDetalleUnidadMinima = '<b>' + listaTransfer[pIndex].listaDetalle[y].tde_minuni + '</b>';
-        }
-        strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloDetalleUnidadMinima + ' ' + valorDetalleUnidadMinima + '</div>';
+        //Variables Precio total
+        precioInicial = listaTransfer[pIndex].listaDetalle[y].PrecioFinalTransfer * listaTransfer[pIndex].listaDetalle[y].tde_fijuni; //Precio inicial de "Total precio con descuento"
+        cantProductosBonif.push(listaTransfer[pIndex].listaDetalle[y].tde_unidadesbonificadas);
+        cantProductosTotal.push(listaTransfer[pIndex].listaDetalle[y].tde_fijuni);
+        precioUnitario.push(listaTransfer[pIndex].listaDetalle[y].PrecioFinalTransfer);
+        precioAcumulado = precioInicial + precioAcumulado;
+        precioTotal = parseFloat(precioAcumulado);
+        contadorPrecioTotal = precioTotal;
+        //Variables total de Productos
+        subProductosTotal = listaTransfer[pIndex].listaDetalle[y].tde_fijuni + listaTransfer[pIndex].listaDetalle[y].tde_unidadesbonificadas;
+        productosTotalString = subProductosTotal + productosTotalString;
+        productosTotal = parseFloat(productosTotalString);
+        contadorProductosTotal  = productosTotal;
+        //Variables precio total unitario
+        precioPorUnidad = parseFloat(precioTotal / productosTotal);
+        cantUnidadesConBonificadas = precioInicial / subProductosTotal;
 
-        var tituloDetalleUnidadMaxima = 'Unidad Máxima:';
-        var valorDetalleUnidadMaxima = '-';
-        if (listaTransfer[pIndex].listaDetalle[y].tde_maxuni != null) {
-            tituloDetalleUnidadMaxima = '<b>' + 'Unidad Máxima:' + '</b>';
-            valorDetalleUnidadMaxima = '<b>' + listaTransfer[pIndex].listaDetalle[y].tde_maxuni + '</b>';
+
+        strHtmlTransfer += '<div class="rowComboCerrado">';
+        strHtmlTransfer += '<div class="producto" id="producto_' + y + '">' + listaTransfer[pIndex].listaDetalle[y].tde_DescripcionDeProducto + '</div>'; //nombre de producto
+        strHtmlTransfer += '<div class="descripcion">' + listaTransfer[pIndex].listaDetalle[y].tde_descripcion + '</div>'; //descripcion de producto
+        strHtmlTransfer += '<div class="precio">$&nbsp;' + FormatoDecimalConDivisorMiles(listaTransfer[pIndex].listaDetalle[y].tde_prepublico) + '</div>'; //precio sin descuento
+        strHtmlTransfer += '<div class="precio-descuento">$&nbsp;' + FormatoDecimalConDivisorMiles(listaTransfer[pIndex].listaDetalle[y].PrecioFinalTransfer.toFixed(2)) + '</div>'; //precio con descuento
+        strHtmlTransfer += '<div class="cant-unidadesCombo" >' + listaTransfer[pIndex].listaDetalle[y].tde_fijuni + '</div>'; //cant. unidades 
+        strHtmlTransfer += '<div class="cant-total-unidades" id="total-uni_' + y + '">' + listaTransfer[pIndex].listaDetalle[y].tde_fijuni + '</div>'; //cant. total facturada
+        if (listaTransfer[pIndex].listaDetalle[y].tde_unidadesbonificadas > 0) {
+            
+        strHtmlTransfer += '<div class="producto-bonificado">' + listaTransfer[pIndex].listaDetalle[y].tde_unidadesbonificadasdescripcion + '</div>'; //Producto Bonificado
+        strHtmlTransfer += '<div class="cant-bonificada">' + listaTransfer[pIndex].listaDetalle[y].tde_unidadesbonificadas + '</div>'; // Cantidad Bonificada
+        strHtmlTransfer += '<div class="cant-total-bonificada" id="uni-bonif_' + y + '">' + listaTransfer[pIndex].listaDetalle[y].tde_unidadesbonificadas + '</div>'; //total Bonificado
+        }else{
+            strHtmlTransfer += '<div class="producto-bonificado"> - </div>'; //Producto Bonificado
+            strHtmlTransfer += '<div class="cant-bonificada"> - </div>'; // Cantidad Bonificada
+            strHtmlTransfer += '<div class="cant-total-bonificada" id="uni-bonif_' + y + '"> - </div>'; //cantidad total Bonificada
         }
-        strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloDetalleUnidadMaxima + ' ' + valorDetalleUnidadMaxima + '</div>';
+        strHtmlTransfer += '<div class="precio-total-descuento" id="total-desc_' + y + '">$&nbsp;' + FormatoDecimalConDivisorMiles(precioInicial.toFixed(2)) + '</div>'; //precio total facturado
+        strHtmlTransfer += '<div class="precio-unidad" id="precio-total-unidad_' + y + '">$&nbsp;'+ cantUnidadesConBonificadas.toFixed(2) + ' </div>'; //Precio final por unidad
+        strHtmlTransfer += '</div>'; // Cierre de la fila de datos
 
-        var tituloDetalleMultiploUnidades = 'Múltiplo Unidades:';
-        var valorDetalleMultiploUnidades = '-';
-        if (listaTransfer[pIndex].listaDetalle[y].tde_muluni != null) {
-            tituloDetalleMultiploUnidades = '<b>' + 'Múltiplo Unidades:' + '</b>';
-            valorDetalleMultiploUnidades = '<b>' + listaTransfer[pIndex].listaDetalle[y].tde_muluni + '</b>';
-        }
-        strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloDetalleMultiploUnidades + ' ' + valorDetalleMultiploUnidades + '</div>';
-
-        var tituloDetalleUnidadesFijas = 'Unidades Fijas:';
-        var valorDetalleUnidadesFijas = '-';
-        if (listaTransfer[pIndex].listaDetalle[y].tde_fijuni != null) {
-            tituloDetalleUnidadesFijas = '<b>' + 'Unidades Fijas:' + '</b>';
-            valorDetalleUnidadesFijas = '<b>' + listaTransfer[pIndex].listaDetalle[y].tde_fijuni + '</b>';
-        }
-        strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloDetalleUnidadesFijas + ' ' + valorDetalleUnidadesFijas + '</div>';
-
-        var valorDefaultCantidad = '';
-        var tituloDetalleObligatorio = 'Obligatorio:';
-        var valorDetalleObligatorio = '-';
-        if (listaTransfer[pIndex].listaDetalle[y].tde_proobligatorio) {
-            tituloDetalleObligatorio = '<b>' + 'Obligatorio:' + '</b>';
-            valorDetalleObligatorio = '<b>' + 'Si' + '</b>';
-            // Valor default
-            if (listaTransfer[pIndex].listaDetalle[y].tde_minuni != null) {
-                valorDefaultCantidad = listaTransfer[pIndex].listaDetalle[y].tde_minuni;
-            } else if (listaTransfer[pIndex].listaDetalle[y].tde_muluni != null) {
-                valorDefaultCantidad = listaTransfer[pIndex].listaDetalle[y].tde_muluni;
-            }
-        }
-        else {
-            valorDetalleObligatorio = 'No';
-        }
-        strHtmlTransfer += '<div class="col-md-2 col-xs-6 no-padding">' + tituloDetalleObligatorio + ' ' + valorDetalleObligatorio + '</div>';
-
-        strHtmlTransfer += '<div class="clear5"></div>';
-        var cssMostrarInput = '';
-        if (!isMostrarImput_AceptaPsicotropicos(listaTransfer[pIndex].listaDetalle[y].pro_codtpovta)) {
-            cssMostrarInput = ' cssInputNoMostrar ';
-        }
-        var typeInput = ' type="text" ';
-        if (isMobile())
-            typeInput = ' type="number" ';
-        strHtmlTransfer += '<div class="col-md-6 col-xs-6 cant_trasf_combo">CANTIDAD:<input id="txtProdTransf' + pIndex + '_' + y + '" ' + typeInput + ' class="form-shop ' + cssMostrarInput + '" onblur="onblurCantProductosTransfer(this)"  onfocus="onfocusInputTransfer(this)" onkeypress="return onKeypressCantProductos(event)" value="' + valorDefaultCantidad + '" ></input></div>';
-
-        strHtmlTransfer += '<div class="col-md-6 col-xs-6 pt_transf_combo">';
-
-        if (listaSucursalesDependienteInfo != null) {
-            for (var iSucursalNombre = 0; iSucursalNombre < listaSucursalesDependienteInfo.length; iSucursalNombre++) {
-                for (var iSucursal = 0; iSucursal < listaTransfer[pIndex].listaDetalle[y].listaSucursalStocks.length; iSucursal++) {
-                    if (listaSucursalesDependienteInfo[iSucursalNombre].sde_sucursal == listaTransfer[pIndex].listaDetalle[y].listaSucursalStocks[iSucursal].stk_codsuc) {
-                        // 25/02/2018
-                        var strOcultar = false;
-                        if (listaTransfer[pIndex].tfr_nombre == 'TRANSFER PAÑALES PAMI') {
-                            if ((cli_codsuc() == 'CO' || cli_codsuc() == 'CD' || cli_codsuc() == 'SF' || cli_codsuc() == 'CB' || cli_codsuc() == 'VM' || cli_codsuc() == 'RC')
-                                && listaSucursalesDependienteInfo[iSucursalNombre].sde_sucursal == 'CC') {
-                                strOcultar = true;
-                            }
-                        }
-                        // fin: 25/02/2018
-                        if (!strOcultar) {
-                            if (!(cli_codsuc() == 'CC' && cli_IdSucursalAlternativa() == null)) { // como esta en produccion ---> if (cli_codsuc() != 'CC') {
-                                strHtmlTransfer += '<div class="div-pt_popup">' + ConvertirSucursalParaColumna(listaSucursalesDependienteInfo[iSucursalNombre].sde_sucursal) + '</div>';
-                            }
-                            strHtmlTransfer += '<div class="pt_popup ' + getNameClassStock(listaTransfer[pIndex].listaDetalle[y].listaSucursalStocks[iSucursal].stk_stock) + '"></div>';
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-
-        //strHtmlTransfer += '<div class="div-pt_popup no-margin-r">CC</div><div class="pt_sin_stock pt_popup"></div><div class="div-pt_popup">CBA</div><div class="pt_critico pt_popup"></div><div class="div-pt_popup">AAA</div><div class="pt_stock pt_popup"></div>';
-        strHtmlTransfer += '</div>'; //'<div class="col-md-6 col-xs-6 pt_transf_combo">';
-
+        if (y === listaTransfer[pIndex].listaDetalle.length - 1) {
+        strHtmlTransfer += '<hr style="margin-top: 2px; margin-bottom: 2px; border-bottom: 2px solid #000; margin-left: 2px; margin-right: 2px; class="no-padding">';
+        }else{
+        strHtmlTransfer += '<hr style="margin-top: 2px; margin-bottom: 2px; margin-left: 2px; margin-right: 2px;">';
+        }; 
         strHtmlTransfer += '<div id="tdError' + pIndex + '_' + y + '"  class="errorFilaTransfer" ></div>';
 
-        strHtmlTransfer += '<div class="clear10"></div>';
+    } 
+    
+    
 
-        strHtmlTransfer += '</div>'; // fin contenedor general  (no esta en el diseño)
+    strHtmlTransfer += '<div class="style-bottom">';
+    strHtmlTransfer += '<div class="clear10"></div>';
+    strHtmlTransfer += '<div class="row">';
+    strHtmlTransfer += '<div class="col-md-3 col-sm-4 mx-auto d-flex justify-content-center align-items-center">';
+    strHtmlTransfer += '   <div class="button-modal">';
+    strHtmlTransfer += '  <div class="input-group input-group-sm text-center my-2 rounded">';
+    strHtmlTransfer += '    <span class="input-group-btn">';
+    strHtmlTransfer += '      <button type="button" class="btn btn-primary btn-number btn-sm rounded-circle" data-type="minus" data-field="qty">';
+    strHtmlTransfer += '        <span class="glyphicon glyphicon-minus"></span>';
+    strHtmlTransfer += '      </button>';
+    strHtmlTransfer += '    </span>';
+    strHtmlTransfer += '    <input type="number" oninput="validateNumberInput(this)" inputmode="numeric" name="qty" class="form-control input-number border border-dark rounded-pill text-center" value="1" min="1" id="quantityInput">';
+    strHtmlTransfer += '    <span class="input-group-btn">';
+    strHtmlTransfer += '      <button type of="button" class="btn btn-primary btn-number btn-sm rounded-circle" data-type="plus" data-field="qty">';
+    strHtmlTransfer += '        <span class="glyphicon glyphicon-plus"></span>';
+    strHtmlTransfer += '      </button>';
+    strHtmlTransfer += '    </span>';
+    strHtmlTransfer += '  </div>';
+    strHtmlTransfer += '</div>';
+    strHtmlTransfer += '</div>';
+    strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total1">MONTO TOTAL:</div>&nbsp';
+    strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total2" id="monto-total">$&nbsp;' + precioTotal.toFixed(2) + '</div>&nbsp'; 
+    strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total1">CANTIDAD PRODUCTOS:</div>&nbsp';
+    strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total2" id="productos-total">' + productosTotal + '</div>&nbsp'; 
+    strHtmlTransfer += '</div>';
+    strHtmlTransfer += '</div>';
 
-    }
-
-    //
+    productosTotalString = 0;
+    productosTotal = 0;
+    precioTotal = 0;
+    precioAcumulado = 0;
     var cantBotonesSucursales = 0;
     for (var iSucursalNombre = 0; iSucursalNombre < listaSucursalesDependienteInfo.length; iSucursalNombre++) {
         // 25/02/2018
@@ -622,73 +554,238 @@ function AgregarTransferHtmlAlPopUp(pIndex) {
             }
         }
     }
-    if (listaTransfer[pIndex].tfr_mospap == 1) {//class="carro-btn-confirmarTransfer"
 
-        //strHtmlTransfer += ' <a style="margin-left:5px;" id="btnVerTransferCompleto' + pIndex + '" onclick="onClickVerTransferCompleto(' + pIndex + '); return false;" href="#">Ver transfer completo</a>';
-        strHtmlTransfer += ' <a class="btn_transf_comp" id="btnVerTransferCompleto' + pIndex + '" onclick="onClickVerTransferCompleto(' + pIndex + '); return false;" href="#">VER TRANSFER COMPLETO</a>';
-        //strHtmlTransfer += '<div class="clear10"></div>';
-    }
-
-    //
     strHtmlTransfer += '</div></div>'; //'<div class="modal-body"><div class="col-lg-12">'
     strHtmlTransfer += '<div class="clear"></div>';
     strHtmlTransfer += '</div></div>'; // <div class="modal-dialog modal-lg"><div class="modal-content"> 
 
     return strHtmlTransfer;
 }
+
+function htmlSeleccioneTransfer(pListaTransfer) {
+    var strHtmlTransfer = '';
+    strHtmlTransfer += '<div class="modal-background">&nbsp;</div>';
+    strHtmlTransfer += '<div class="modal-dialog modal-md"><div class="modal-content">';
+    strHtmlTransfer += '<div class="modal-header">';
+    strHtmlTransfer += '<div class="row">';
+    strHtmlTransfer += '<div class="col-lg-12">';
+    strHtmlTransfer += '<div class="modulo_icon atencion"></div>';
+    strHtmlTransfer += '<h4 class="color_gris">Seleccione un transfer</h4>';
+    strHtmlTransfer += '</div>'; // '<div class="col-lg-12">
+    strHtmlTransfer += '</div>'; // <div class="row">
+    strHtmlTransfer += '<div class="close-modal" data-dismiss="modal"><i class="fa fa-times"></i></div>';
+    strHtmlTransfer += '</div>'; // <div class="modal-header">
+    strHtmlTransfer += '<div class="modal-body"><div class="col-lg-12">';
+    for (var i = 0; i < pListaTransfer.length; i++) {
+        var nombreMostrarTransfer = pListaTransfer[i].tfr_nombre;
+        for (var iMostrarTransfer = 0; iMostrarTransfer < pListaTransfer[i].listaDetalle.length; iMostrarTransfer++) {
+            if (productoSeleccionado == pListaTransfer[i].listaDetalle[iMostrarTransfer].tde_codpro && isNotNullEmpty(pListaTransfer[i].listaDetalle[iMostrarTransfer].tde_DescripcionDeProducto)) {
+                nombreMostrarTransfer = pListaTransfer[i].listaDetalle[iMostrarTransfer].tde_DescripcionDeProducto;// pListaTransfer[i].tfr_nombre + ' - ' +
+                break;
+            }
+        }
+        strHtmlTransfer += '<div class="text-center"><a class="btn_emp" onclick="ComboCerrado(' + i + '); return false;">' + nombreMostrarTransfer + '</a></div>';
+        strHtmlTransfer += '<div class="clear15"></div>';
+    }
+    strHtmlTransfer += '</div></div>'; //'<div class="modal-body"><div class="col-lg-12">'
+    strHtmlTransfer += '<div class="clear"></div>';
+    strHtmlTransfer += '</div></div>'; // <div class="modal-dialog modal-md"><div class="modal-content"> 
+
+
+    return strHtmlTransfer;
+}
+// INICIO CONTADOR <-------------
+function Contador(pIndex) {
+    for (let x = 0; x < listaTransfer[pIndex].listaDetalle.length; x++) {
+        fijuniArray.push(listaTransfer[pIndex].listaDetalle[x].tde_fijuni);
+    }
+    const cantInicial = contadorProductosTotal;
+    const valorInicial = contadorPrecioTotal;
+    var buttons = document.querySelectorAll(".btn-number");
+    buttons.forEach(function (button) {
+      button.addEventListener("click", function (e) {
+        e.preventDefault();
+        var fieldName = this.getAttribute("data-field");
+        var type = this.getAttribute("data-type");
+        var input = document.querySelector("input[name='" + fieldName + "']");
+        var currentValue = parseInt(input.value);
+        qInput = parseInt(input.value);
+        if (!isNaN(currentValue)) {
+          if (type === "minus" && currentValue > 1) {
+            fijuniArray = [];
+            input.value = currentValue - 1;
+            contadorPrecioTotal -= valorInicial;
+            contadorProductosTotal -= cantInicial;
+            qInput = parseInt(input.value);
+          } else if (type === "plus") {
+            fijuniArray = [];
+            input.value = currentValue + 1;
+            contadorPrecioTotal += valorInicial;
+            contadorProductosTotal += cantInicial;
+            qInput = parseInt(input.value);
+          }
+  
+          for (let x = 0; x < listaTransfer[pIndex].listaDetalle.length; x++) {
+            document.getElementById("total-desc_" + x + "").textContent =
+              "$" +
+              (
+                input.value *
+                listaTransfer[pIndex].listaDetalle[x].PrecioFinalTransfer *
+                listaTransfer[pIndex].listaDetalle[x].tde_fijuni
+              ).toFixed(2);
+            document.getElementById("precio-total-unidad_" + x + "").textContent =
+              "$" +
+              (
+                (input.value *
+                  precioUnitario[x] *
+                  listaTransfer[pIndex].listaDetalle[x].tde_fijuni) /
+                (input.value * (cantProductosTotal[x] + cantProductosBonif[x]))
+              ).toFixed(2);
+            document.getElementById("total-uni_" + x + "").textContent =
+              input.value * listaTransfer[pIndex].listaDetalle[x].tde_fijuni;
+              fijuniArray.push(input.value * listaTransfer[pIndex].listaDetalle[x].tde_fijuni); //Array
+            if (listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas == 0) {
+              document.getElementById("uni-bonif_" + x + "").textContent = "-";
+            } else {
+              document.getElementById("uni-bonif_" + x + "").textContent =
+                input.value * listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas;
+            }
+          }
+  
+          document.getElementById("productos-total").textContent = contadorProductosTotal;
+          document.getElementById("monto-total").textContent =
+            "$" + contadorPrecioTotal.toFixed(2);
+        }
+      });
+    });
+
+    // Modifica el evento keyup para actualizar todos los valores
+    document
+      .getElementById("quantityInput")
+      .addEventListener("keyup", function (event) {
+        if (event.key === "Enter") {
+          fijuniArray = [];
+          var input = this;
+          var enteredValue = parseInt(input.value);
+          qInput = parseInt(input.value);
+          if (!isNaN(enteredValue)) {
+            contadorProductosTotal = enteredValue * cantInicial;
+            contadorPrecioTotal = enteredValue * valorInicial;
+            document.getElementById("monto-total").textContent =
+              "$" + contadorPrecioTotal.toFixed(2);
+            document.getElementById("productos-total").textContent =
+              contadorProductosTotal;
+  
+            for (let x = 0; x < listaTransfer[pIndex].listaDetalle.length; x++) {
+              document.getElementById("total-desc_" + x + "").textContent =
+                "$" +
+                (
+                  input.value *
+                  listaTransfer[pIndex].listaDetalle[x].PrecioFinalTransfer *
+                  listaTransfer[pIndex].listaDetalle[x].tde_fijuni
+                ).toFixed(2);
+              document.getElementById(
+                "precio-total-unidad_" + x + ""
+              ).textContent =
+                "$" +
+                (
+                  (input.value *
+                    precioUnitario[x] *
+                    listaTransfer[pIndex].listaDetalle[x].tde_fijuni) /
+                  (input.value * (cantProductosTotal[x] + cantProductosBonif[x]))
+                ).toFixed(2);
+              document.getElementById("total-uni_" + x + "").textContent =
+                enteredValue * listaTransfer[pIndex].listaDetalle[x].tde_fijuni;
+                fijuniArray.push(input.value * listaTransfer[pIndex].listaDetalle[x].tde_fijuni); //Array
+              if (listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas == 0) {
+                document.getElementById("uni-bonif_" + x + "").textContent = "-";
+              } else {
+                document.getElementById("uni-bonif_" + x + "").textContent =
+                  input.value * listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas;
+              }
+            }
+          }
+        }
+      });
+  
+    // Modifica el evento blur para actualizar todos los valores al perder el foco
+    document
+      .getElementById("quantityInput")
+      .addEventListener("blur", function () {
+        fijuniArray = [];
+        var input = this;
+        var enteredValue = parseInt(input.value);
+        qInput = parseInt(input.value);
+        if (!isNaN(enteredValue)) {
+            contadorProductosTotal = enteredValue * cantInicial;
+            contadorPrecioTotal = enteredValue * valorInicial;
+          document.getElementById("monto-total").textContent =
+            "$" + contadorPrecioTotal.toFixed(2);
+          document.getElementById("productos-total").textContent = contadorProductosTotal;
+  
+          for (let x = 0; x < listaTransfer[pIndex].listaDetalle.length; x++) {
+            document.getElementById("total-desc_" + x + "").textContent =
+              "$" +
+              (
+                input.value *
+                listaTransfer[pIndex].listaDetalle[x].PrecioFinalTransfer *
+                listaTransfer[pIndex].listaDetalle[x].tde_fijuni
+              ).toFixed(2);
+            document.getElementById("precio-total-unidad_" + x + "").textContent =
+              "$" +
+              (
+                (input.value *
+                  precioUnitario[x] *
+                  listaTransfer[pIndex].listaDetalle[x].tde_fijuni) /
+                (input.value * cantProductosTotal[x] +
+                  input.value * cantProductosBonif[x])
+              ).toFixed(2);
+            document.getElementById("total-uni_" + x + "").textContent =
+              enteredValue * listaTransfer[pIndex].listaDetalle[x].tde_fijuni;
+              fijuniArray.push(input.value * listaTransfer[pIndex].listaDetalle[x].tde_fijuni); //Array
+            if (listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas == 0) {
+              document.getElementById("uni-bonif_" + x + "").textContent = "-";
+            } else {
+              document.getElementById("uni-bonif_" + x + "").textContent =
+                input.value * listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas;
+            }
+          }
+        }
+      });
+      
+  }
+
+function validateNumberInput(input) {
+    // Elimina cualquier caracter no numérico
+    input.value = input.value.replace(/[^0-9]/g, '');
+}
+// FIN CONTADOR <--------------
+
 function onClickTransfer(pIndice, pIndiceSucursal) {
     ValidarTransferTotal_sucursal(pIndice, pIndiceSucursal);
 }
 
 function ValidarTransferTotal_sucursal(pIndice, pIndiceSursal) {
-    var RenglonesMinimos = listaTransfer[pIndice].tfr_minrenglones; // Cantidad Minimo De Producto 
-    var UnidadesMinimas = listaTransfer[pIndice].tfr_minunidades;
-    var UnidadesMaximas = listaTransfer[pIndice].tfr_maxunidades;
-    var UnidadesMultiplo = listaTransfer[pIndice].tfr_mulunidades;
-    var UnidadesFijas = listaTransfer[pIndice].tfr_fijunidades;
 
-    var auxCantidadProductoElejido = 0;
     var isGrabar = true;
     var tempListaProductos = [];
     var cantTotalEnTransfer = 0;
-    // tfr_tipo
+
     for (var i = 0; i < listaTransfer[pIndice].listaDetalle.length; i++) {
         var isGrabarProducto = true;
-        var intMensajeProducto = ValidarTransferPorProducto(pIndice, i);
+        var intMensajeProducto = i+1;
         if (intMensajeProducto > 0) {
-            cantTotalEnTransfer += intMensajeProducto;
-            auxCantidadProductoElejido++;
+            cantTotalEnTransfer = intMensajeProducto;
         } else if (intMensajeProducto == -1) {
             isGrabarProducto = false;
-        }
-        if (listaTransfer[pIndice].listaDetalle[i].tde_proobligatorio) {
-            if (intMensajeProducto == 0) {
-                isGrabarProducto = false;
-                $('#tdError' + pIndice + '_' + i).html('Producto obligatorio');
-                mensaje_alert(listaTransfer[pIndice].listaDetalle[i].tde_codpro + ' es un producto obligatorio');
-            }
-        }
-        if (isGrabarProducto) {
-            var cantidad_paraFacturaTrazablesProvincia = $('#txtProdTransf' + pIndice + '_' + i).val();
-            if (isNotNullEmpty(cantidad_paraFacturaTrazablesProvincia)) {
-                cantidad_paraFacturaTrazablesProvincia = parseInt(cantidad_paraFacturaTrazablesProvincia);
-                if (cantidad_paraFacturaTrazablesProvincia > 0) {
-                    if (!isMostrarImput_FacturaTrazablesProvincia(listaSucursalesDependienteInfo[pIndiceSursal].sde_sucursal, listaTransfer[pIndice].listaDetalle[i].pro_isTrazable)) {
-                        isGrabarProducto = false;
-                        $('#tdError' + pIndice + '_' + i).html('Producto que no se puede agregar a la sucursal');
-                        mensaje_alert(listaTransfer[pIndice].listaDetalle[i].tde_codpro + ' es un producto que no se puede agregar en esta sucursal');
-
-                    }
-                }
-            }
         }
         if (isGrabarProducto) {
             if (intMensajeProducto > 0) {
                 var objProducto = new jcTransfersProductos();
                 objProducto.codProductoNombre = listaTransfer[pIndice].listaDetalle[i].tde_codpro; // Para la funcion en el servidor
-                objProducto.codProducto = listaTransfer[pIndice].listaDetalle[i].tde_codpro; 
+                objProducto.codProducto = listaTransfer[pIndice].listaDetalle[i].tde_codpro;
                 objProducto.tde_codpro = listaTransfer[pIndice].listaDetalle[i].tde_codpro;
-                objProducto.cantidad = intMensajeProducto;
+                objProducto.cantidad = fijuniArray[i];
                 objProducto.indexAuxProducto = i;
                 objProducto.indexAuxTransfer = pIndice;
                 tempListaProductos.push(objProducto);
@@ -698,60 +795,10 @@ function ValidarTransferTotal_sucursal(pIndice, pIndiceSursal) {
             break;
         }
     }
-    if (isGrabar) {
-        if (RenglonesMinimos > auxCantidadProductoElejido) {
-            isGrabar = false;
-            mensaje_alert('El transfer debe superar los renglones mínimos');
-        }
-    }
-    // Validacion Transfer
-
-    if (isGrabar) {
-        if (isNotNullEmpty(UnidadesMinimas)) {
-            if (UnidadesMinimas > cantTotalEnTransfer) {
-                mensaje_alert('El transfer no supera la unidad mínima');
-                isGrabar = false;
-            }
-        }
-    }
-    if (isGrabar) {
-        if (isNotNullEmpty(UnidadesMaximas)) {
-            if (UnidadesMaximas < cantTotalEnTransfer) {
-                mensaje_alert('El transfer supera la unidad máxima');
-                isGrabar = false;
-            }
-        }
-    }
-    if (isGrabar) {
-        if (isNotNullEmpty(UnidadesMultiplo)) {
-            if (cantTotalEnTransfer % UnidadesMultiplo == 0) {
-                // es multiplo
-            } else {
-                mensaje_alert('El transfer no es multiplo de ' + UnidadesMultiplo);
-                isGrabar = false;
-            }
-        }
-    }
-    if (isGrabar) {
-        if (isNotNullEmpty(UnidadesFijas)) {
-            if (UnidadesFijas != cantTotalEnTransfer) {
-                mensaje_alert('El transfer es diferente de la unidad fija');
-                isGrabar = false;
-            }
-        }
-    }
-    if (isGrabar) {
-        // validar cuando un transfer es del tipo como
-        if (listaTransfer[pIndice].tfr_tipo == 'C') {
-            if (auxCantidadProductoElejido < listaTransfer[pIndice].listaDetalle.length) {
-                mensaje_alert('En el transfer se debe rellenar todos los producto');
-                isGrabar = false;
-            }
-        }
-    }
-    // fin validacion Transfer
-    if (isGrabar) {
+    if (isGrabar && qInput == 0) {
         AgregarProductosTransfersAlCarrito(tempListaProductos, listaTransfer[pIndice].tfr_codigo, listaSucursalesDependienteInfo[pIndiceSursal].sde_sucursal, 'OnCallBackAgregarProductosTransfersAlCarrito');
+    }else if (isGrabar && qInput > 0){
+        AgregarProductosTransfersAlCarritoComboCerrado(tempListaProductos, listaTransfer[pIndice].tfr_codigo, listaSucursalesDependienteInfo[pIndiceSursal].sde_sucursal, qInput , 'OnCallBackAgregarProductosTransfersAlCarrito');
     }
 }
 

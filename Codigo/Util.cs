@@ -259,30 +259,40 @@ public class Util
         string result = string.Empty;
         DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
         string nameSession = "horario_" + pSucursal;
-        if (pHttpContextAccessor.HttpContext.Session.GetString(nameSession) == null)
+
+        string storedDateString = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
+        DateTime? fechaGuarda = null;
+        
+        if (!string.IsNullOrEmpty(storedDateString))
         {
-            string strObtenerHorarioCierre = DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierre(oCliente, oCliente.cli_codsuc, pSucursal, oCliente.cli_codrep);
-            if (strObtenerHorarioCierre != null)
+            if (DateTime.TryParse(storedDateString, out DateTime parsedDate))
             {
-                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, strObtenerHorarioCierre);
+                fechaGuarda = parsedDate;
             }
         }
-        if (pHttpContextAccessor.HttpContext.Session.GetString(nameSession) != null)
+
+        if (fechaGuarda == null)
         {
-            result = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
-            DateTime? fechaGuarda = DKbase.web.FuncionesPersonalizadas_base.getFecha_Horario(result);
-            if (fechaGuarda != null && fechaGuarda.Value < DateTime.Now)
+            DateTime strObtenerHorarioCierre = DKbase.web.capaDatos.capaCAR_base.spObtenerItinerarioCliente(oCliente.cli_codigo, oCliente.cli_codsuc); 
+            pHttpContextAccessor.HttpContext.Session.SetString(nameSession, strObtenerHorarioCierre.ToString("o")); 
+            fechaGuarda = strObtenerHorarioCierre;
+        }
+
+        if (fechaGuarda.HasValue)
+        {
+            result = fechaGuarda.Value.ToString("yyyy-MM-dd HH:mm:ss");
+
+            if (fechaGuarda.Value < DateTime.Now)
             {
-                string strObtenerHorarioCierre_2 = DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierre(oCliente, oCliente.cli_codsuc, pSucursal, oCliente.cli_codrep);
-                if (strObtenerHorarioCierre_2 != null)
-                {
-                    pHttpContextAccessor.HttpContext.Session.SetString(nameSession, strObtenerHorarioCierre_2);
-                    result = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
-                }
+                DateTime strObtenerHorarioCierre_2 = DKbase.web.capaDatos.capaCAR_base.spObtenerItinerarioCliente(oCliente.cli_codigo, oCliente.cli_codsuc); 
+                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, strObtenerHorarioCierre_2.ToString("o")); 
+                result = strObtenerHorarioCierre_2.ToString("yyyy-MM-dd HH:mm:ss");
             }
         }
+
         return result;
     }
+
     public static List<DKbase.web.capaDatos.cCarrito> RecuperarCarritosPorSucursalYProductos(IHttpContextAccessor pHttpContextAccessor, string pTipo)
     {
         DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
@@ -685,6 +695,11 @@ public class Util
         pListaProductosMasCantidad.ForEach((v) => v.tde_codtfr = pIdTransfers);
         System.Data.DataTable pTablaDetalle = DKbase.web.FuncionesPersonalizadas_base.ConvertProductosAndCantidadToDataTable_new(pListaProductosMasCantidad);
         return DKbase.web.capaDatos.capaCAR_base.spCargarCarrito(pTablaDetalle, pIdCliente, pIdUsuario, pCodSucursal, pTipo);
+    }
+
+        public static bool AgregarProductosComboCerrado( int pIdCliente, int pIdUsuario, int pIdTransfers, int pQinput, string pCodSucursal, string pTipo)
+    {
+        return DKbase.web.capaDatos.capaCAR_base.spCargarCarritoComboCerrado(pIdCliente, pIdUsuario, pIdTransfers, pCodSucursal, pTipo, pQinput);
     }
     public static List<DKbase.web.capaDatos.cSucursalCarritoTransfer> RecuperarCarritosTransfer_generico(IHttpContextAccessor pHttpContextAccessor, DKbase.web.capaDatos.cClientes pCliente, string pTipo)
     {

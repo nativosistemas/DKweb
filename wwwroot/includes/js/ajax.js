@@ -96,6 +96,23 @@ function AgregarProductosTransfersAlCarrito(pListaProductosMasCantidad, pIdTrans
         }
     });
 }
+function AgregarProductosTransfersAlCarritoComboCerrado(pListaProductosMasCantidad, pIdTransfers, pCodSucursal, pQinput , pOnCallBack) {
+    $.ajax({
+        type: "POST",
+        url: "/mvc/AgregarProductosTransfersAlCarritoComboCerrado" + (isCarritoDiferido ? 'Diferido' : ''),
+        data: { pListaProductosMasCantidad: pListaProductosMasCantidad, pIdTransfers: pIdTransfers, pCodSucursal: pCodSucursal, pQinput: pQinput},
+        success:
+            function (response) {
+                eval(pOnCallBack + '(' + response + ')');
+            },
+        failure: function (response) {
+            OnFail(response);
+        },
+        error: function (response) {
+            OnFail(response);
+        }
+    });
+}
 function CargarCarritoDiferido(pIdSucursal, pIdProduco, pCantidadProducto) {
     $.ajax({
         type: "POST",
@@ -1135,17 +1152,16 @@ function ControlarSesion() {
         }
     });
 }
-function ObtenerCreditoDisponible(pCli_login) {
+function ObtenerComprobanteCuentaCorriente(pValue, formattedFechaDesde, formattedFechaHasta, claseDoc){
     showCargandoBuscador();
     $.ajax({
         type: "POST",
-        url: "/ctacte/ObtenerCreditoDisponible",
-        data: { pCli_login: pCli_login },
-        success:
-            function (response) {
-                hideCargandoBuscador();
-                OnCallBackObtenerCreditoDisponible(response);
-            },
+        url: "/apisap/ZFI_WS_RFC_CTA_CTE",
+        data: {CLIENTE: pValue, FECHA_DESDE: formattedFechaDesde, FECHA_HASTA: formattedFechaHasta, CLASE_DOC: claseDoc},
+        success: function (response) {
+            hideCargandoBuscador();
+            generarTablaComprobantes(response);
+        },
         failure: function (response) {
             hideCargandoBuscador();
             OnFail(response);
@@ -1156,6 +1172,28 @@ function ObtenerCreditoDisponible(pCli_login) {
         }
     });
 }
+
+function ObtenerCreditoDisponible(pValue) {
+    showCargandoBuscador();
+    $.ajax({
+        type: "POST",
+        url: "/apisap/ZFI_WS_CRED_DISP_SET",
+        data: {CLIENTE: pValue},
+        success: function (response) {
+            hideCargandoBuscador();
+            OnCallBackObtenerCreditoDisponible(response);
+        },
+        failure: function (response) {
+            hideCargandoBuscador();
+            OnFail(response);
+        },
+        error: function (response) {
+            hideCargandoBuscador();
+            OnFail(response);
+        }
+    });
+}
+
 function ObtenerComprobantesObrasSocialesDePuntoDeVentaEntreFechas(pLoginWeb, pPlan, diaDesde, mesDesde, añoDesde, diaHasta, mesHasta, añoHasta) {
     showCargandoBuscador();
     $.ajax({

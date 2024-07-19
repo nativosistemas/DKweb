@@ -5,7 +5,7 @@
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-
+    
     <meta name="author" content="Nativo Sistemas" />
     <meta name="distribution" content="Global" />
     <meta name="city" content="Rosario" />
@@ -20,9 +20,11 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7D92XD5YD7"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
 
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
         gtag('config', 'G-7D92XD5YD7');
     </script>
     <link href="../includes/home/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -52,18 +54,16 @@
     WriteLiteral(DKweb.Codigo.Util.htmlCssBody(Accessor));
 }">
     @{
-        string formAction = "";
-        string strController = Accessor.HttpContext.GetRouteValue("action").ToString();
-        switch (strController)
-        {
-            case "contactocv":
-                formAction = " method=\"post\" action=\"contactocv_Post\" ";
-                break;
-        }
+    string formAction = "";
+    string strController = Accessor.HttpContext.GetRouteValue("action").ToString();
+    switch (strController)
+    {
+    case "contactocv":
+    formAction = " method=\"post\" action=\"contactocv_Post\" ";
+    break;
     }
-    <form id="form1" name="form1" @{
-        WriteLiteral(formAction);
-    } runat="server" enctype="multipart/form-data">
+    }
+    <form id="form1" name="form1" @{ WriteLiteral(formAction); } runat="server" enctype="multipart/form-data">
 
         <div id="modalModulo" class="modal md-effect-1 md-content portfolio-modal" tabindex="-1" role="dialog"
             aria-labelledby="myModalLabel" aria-hidden="true"></div>
@@ -126,19 +126,19 @@
                         <div class="col-lg-10 col-md-10 col-sm-10 hidden-xs">
                             <ul class="nav navbar-nav navbar-right">
                                 <li><a class="@{
-                                        WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor,"index"));
-}" href="../home/index">
+                                        WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor," index")); }"
+                                        href="../home/index">
                                         <h3>INICIO</h3>
                                     </a></li>
                                 <li><a class="@{
-                                        WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor,"promociones"));
-}" href="../home/promociones">
+                                        WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor," promociones")); }"
+                                        href="../home/promociones">
                                         <h3>OFERTAS</h3>
                                     </a></li>
 
                                 <li><a class="empresa hidden-sm @{
-                                        WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor,"promociones"));
-}" href="../home/empresa">
+                                        WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor," promociones")); }"
+                                        href="../home/empresa">
                                         <h3>EMPRESA</h3>
                                     </a></li>
                                 <li><a class=" hidden-sm " href="@{
@@ -147,13 +147,13 @@
                                         <h3>SUCURSALES</h3>
                                     </a></li>
                                 <li><a class=" hidden-sm @{
-                                        WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor,"recalls"));
-}" href="../home/recalls">
+                                        WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor," recalls")); }"
+                                        href="../home/recalls">
                                         <h3>RECALL</h3>
                                     </a></li>
                                 <li><a class="@{
-                                        WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor,"contacto"));
-}" href="../home/contacto">
+                                        WriteLiteral(DKweb.Codigo.Util.cssActive(Accessor," contacto")); }"
+                                        href="../home/contacto">
                                         <h3>CONTACTO</h3>
                                     </a></li>
                                 <li><a class="registracion " href="../home/registracion">
@@ -214,10 +214,7 @@
             </nav>
         </header>
 
-
-
         @RenderBody()
-
 
         <footer id="idFooter" class="footer">
             <div class="container-fluid">
@@ -446,7 +443,7 @@
                 <div class="col-lg-4 col-md-6 col-sm-5 col-xs-12 padding_left_ftr ftr_contacto">
                     <div class="clear15"></div>
                     <p class="p_11 color_white hidden-xs">&copy; @{
-                            WriteLiteral(DateTime.Now.Year.ToString());
+                        WriteLiteral(DateTime.Now.Year.ToString());
                         }
                         Droguer&iacute;a Kellerhoff. Todos los derechos reservados</p>
                     <div class="popup-button">
@@ -673,32 +670,28 @@
     </form>
     <!--fin Modal content-->
     <script type="text/javascript">
-        $("#menu-close").click(function (e) {
+        $("#menu-close").click(function(e) {
             e.preventDefault();
             $("#sidebar-wrapper").toggleClass("active");
         });
-
         // Opens the sidebar menu
-        $("#menu-toggle").click(function (e) {
+        $("#menu-toggle").click(function(e) {
             e.preventDefault();
             $("#sidebar-wrapper").toggleClass("active");
         });
-
-        $("#menu-close-sucursales").click(function (e) {
+        $("#menu-close-sucursales").click(function(e) {
             e.preventDefault();
             $("#sidebar-wrapper").toggleClass("active");
             location.href = 'index.aspx#idFooter';
             return false;
         });
-        $("#aAccesoClienteMobil").click(function (e) {
+        $("#aAccesoClienteMobil").click(function(e) {
             IngresarDsdMobil();
             return false;
         });
-
-        $('#myModal').on('shown.bs.modal', function () {
+        $('#myModal').on('shown.bs.modal', function() {
             $('#name_carrito').focus();
         });
-
     </script>
     <script src="https://www.google.com/recaptcha/api.js?render=6LeVNeQoAAAAAB8BX4-pJCSwCfdS7iWes-JQWhJe"></script>
     <script>

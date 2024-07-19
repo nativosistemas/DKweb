@@ -1,4 +1,4 @@
-﻿var varPalabraBuscador = '';
+﻿﻿var varPalabraBuscador = '';
 var listaProductosBuscados = null;
 var isCarritoDiferido = null;
 var isCarritoExclusivo = null;

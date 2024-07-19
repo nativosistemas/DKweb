@@ -305,6 +305,24 @@ public class mvcController : Controller
         }
         return resultado;
     }
+        public async Task<string> AgregarProductosTransfersAlCarritoComboCerrado(List<DKbase.web.capaDatos.cProductosAndCantidad> pListaProductosMasCantidad, int pIdTransfers, string pCodSucursal, int pQinput)
+    {
+        DKbase.web.ResultTransfer objResult = new DKbase.web.ResultTransfer();
+        string resultado = string.Empty;
+        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
+        DKbase.web.Usuario user = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
+        if (user != null && oCliente != null)
+        {
+           // DKbase.web.capaDatos.capaCAR_base.spCantidadProductosComboCerrado(pCodSucursal, user.usu_codCliente.Value,DKbase.generales.Constantes.cTipo_CarritoTransfers);
+            DKbase.Util.AgregarHistorialProductoCarritoTransfer(user.usu_codCliente.Value, pListaProductosMasCantidad, user.id);
+            objResult.isNotError = DKweb.Codigo.Util.AgregarProductosComboCerrado(user.usu_codCliente.Value, user.id, pIdTransfers, pQinput, pCodSucursal, DKbase.generales.Constantes.cTipo_CarritoTransfers);
+            objResult.oSucursalCarritoTransfer = DKweb.Codigo.Util.RecuperarCarritosTransferPorCliente_generico(_httpContextAccessor, oCliente, DKbase.generales.Constantes.cTipo_CarritoTransfers, pCodSucursal);
+            objResult.listProductosAndCantidadError = pListaProductosMasCantidad;
+            objResult.codSucursal = pCodSucursal;
+            resultado = DKbase.generales.Serializador_base.SerializarAJson(objResult);
+        }
+        return resultado;
+    }
     public async Task<string> ObtenerHorarioCierre(string pSucursalDependiente)
     {
         string resultado = null;
