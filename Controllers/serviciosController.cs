@@ -37,7 +37,7 @@ public class serviciosController : Controller
                 string contentType;
                 new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider().TryGetContentType(pathNameFile, out contentType);
                 contentType = contentType ?? "application/octet-stream";
-                string Content_Disposition = "attachment; filename=" + factura + ".txt";
+                string Content_Disposition = "attachment; filename=" + System.Text.RegularExpressions.Regex.Replace(factura, @"[^\u0000-\u007F]+", string.Empty) + ".txt";
                 byte[] bites = System.IO.File.ReadAllBytes(pathNameFile);
                 Response.Headers.Add("Content-Disposition", Content_Disposition);
                 return File(bites, contentType);
@@ -61,7 +61,7 @@ public class serviciosController : Controller
                 string contentType;
                 new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider().TryGetContentType(pathNameFile, out contentType);
                 contentType = contentType ?? "application/octet-stream";
-                string Content_Disposition = "attachment; filename=" + factura + ".csv";
+                string Content_Disposition = "attachment; filename=" + System.Text.RegularExpressions.Regex.Replace(factura, @"[^\u0000-\u007F]+", string.Empty) + ".csv";
                 byte[] bites = System.IO.File.ReadAllBytes(pathNameFile);
                 Response.Headers.Add("Content-Disposition", Content_Disposition);
                 return File(bites, contentType);
@@ -98,7 +98,7 @@ public class serviciosController : Controller
                 contentType = contentType ?? "application/octet-stream";
                 if (string.IsNullOrWhiteSpace(Content_Disposition))
                 {
-                    Content_Disposition = "attachment; filename=" + name;
+                    Content_Disposition = "attachment; filename=" + System.Text.RegularExpressions.Regex.Replace(name, @"[^\u0000-\u007F]+", string.Empty);
                 }
                 byte[] bites = System.IO.File.ReadAllBytes(path);
                 Response.Headers.Add("Content-Disposition", Content_Disposition);
@@ -215,7 +215,7 @@ public class serviciosController : Controller
                     contentType = contentType ?? "application/octet-stream";
                     if (string.IsNullOrWhiteSpace(Content_Disposition))
                     {
-                        Content_Disposition = "attachment; filename=" + nombre;
+                        Content_Disposition = "attachment; filename=" + System.Text.RegularExpressions.Regex.Replace(nombre, @"[^\u0000-\u007F]+", string.Empty);
                     }
                     byte[] bites = System.IO.File.ReadAllBytes(ChacheRutaYNombreArchivoRedimencionado);
                     Response.Headers.Add("Content-Disposition", Content_Disposition);
@@ -297,7 +297,7 @@ public class serviciosController : Controller
                 string contentType;
                 new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider().TryGetContentType(path, out contentType);
                 contentType = contentType ?? "application/octet-stream";
-                string Content_Disposition = "attachment; filename=" + nombreTXT;
+                string Content_Disposition = "attachment; filename=" + System.Text.RegularExpressions.Regex.Replace(nombreTXT, @"[^\u0000-\u007F]+", string.Empty);
                 byte[] bites = System.IO.File.ReadAllBytes(path);
                 Response.Headers.Add("Content-Disposition", Content_Disposition);
                 return File(bites, contentType);
@@ -322,7 +322,7 @@ public class serviciosController : Controller
             contentType = contentType ?? "application/octet-stream";
             if (string.IsNullOrWhiteSpace(Content_Disposition))
             {
-                Content_Disposition = "attachment; filename=" + nombrePDF;
+                Content_Disposition = "attachment; filename=" + System.Text.RegularExpressions.Regex.Replace(nombrePDF, @"[^\u0000-\u007F]+", string.Empty);
             }
             byte[] bites = System.IO.File.ReadAllBytes(path);
             Response.Headers.Add("Content-Disposition", Content_Disposition);
@@ -356,7 +356,7 @@ public class serviciosController : Controller
                 contentType = contentType ?? "application/octet-stream";
                 if (string.IsNullOrWhiteSpace(Content_Disposition))
                 {
-                    Content_Disposition = "attachment; filename=" + nombreTXT;
+                    Content_Disposition = "attachment; filename=" + System.Text.RegularExpressions.Regex.Replace(nombreTXT, @"[^\u0000-\u007F]+", string.Empty);
                 }
                 byte[] bites = System.IO.File.ReadAllBytes(pathAndFile);
                 Response.Headers.Add("Content-Disposition", Content_Disposition);
@@ -399,7 +399,7 @@ public class serviciosController : Controller
                 contentType = contentType ?? "application/octet-stream";
                 if (string.IsNullOrWhiteSpace(Content_Disposition))
                 {
-                    Content_Disposition = "attachment; filename=" + nombreTXT;
+                    Content_Disposition = "attachment; filename=" + System.Text.RegularExpressions.Regex.Replace(nombreTXT, @"[^\u0000-\u007F]+", string.Empty);
                 }
                 byte[] bites = System.IO.File.ReadAllBytes(pathAndFile);
                 Response.Headers.Add("Content-Disposition", Content_Disposition);

@@ -161,7 +161,7 @@ public class configController : Controller
             string contentType;
             new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider().TryGetContentType(f, out contentType);
             contentType = contentType ?? "application/octet-stream";
-            string Content_Disposition = "attachment; filename=" + nameFile;
+            string Content_Disposition = "attachment; filename=" + System.Text.RegularExpressions.Regex.Replace(nameFile, @"[^\u0000-\u007F]+", string.Empty);
             Response.Headers.Add("Content-Disposition", Content_Disposition);
             return File(bites, contentType, nameFile);
         }
