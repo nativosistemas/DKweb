@@ -362,7 +362,7 @@ function OnCallBackTomarPedidoCarrito(args) {
 }
 function OnCallBackTomarPedidoCarrito_sap(args) {
 
-    if (args.tipo == "SeProceso" && args.result_sap != null) {
+    if (args.tipo == "seProceso" && args.result_sap != null) {
         var l_result = args.result_sap;
         var html = '';
         html += '<table  class="table table-striped">';
