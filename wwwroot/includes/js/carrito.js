@@ -362,26 +362,26 @@ function OnCallBackTomarPedidoCarrito(args) {
 }
 function OnCallBackTomarPedidoCarrito_sap(args) {
 
-    var l_result = args.result_sap;
+    if (args.tipo == "SeProceso" && args.result_sap != null) {
+        var l_result = args.result_sap;
+        var html = '';
+        html += '<table  class="table table-striped">';
+        html += '<thead class="justify-content-between">';
+        html += '<tr>';
+        html += '<th class="text-center">MATERIAL</th>';
+        //  html += '<th>PEDIDO_SAP</th>';
+        //html += '<th>ID_CARRITO</th>';
+        html += '<th class="text-center">CANTIDAD PEDIDA</th>';
+        html += '<th class="text-center">CANTIDAD ACEPTADA</th>';
+        html += '<th class="text-center">MOTIVO RECHAZO</th>';
 
-    var html = '';
-    html += '<table  class="table table-striped">';
-    html += '<thead class="justify-content-between">';
-    html += '<tr>';
-    html += '<th class="text-center">MATERIAL</th>';
-    //  html += '<th>PEDIDO_SAP</th>';
-    //html += '<th>ID_CARRITO</th>';
-    html += '<th class="text-center">CANTIDAD PEDIDA</th>';
-    html += '<th class="text-center">CANTIDAD ACEPTADA</th>';
-    html += '<th class="text-center">MOTIVO RECHAZO</th>';
-
-    html += '</tr>';
-    html += '</thead>';
-    html += '<tbody>';
-    l_result.forEach(item => {
-        //       <td>${item.ID_CARRITO}</td>
-        //  <td>${item.PEDIDO_SAP}</td>
-        html += `<tr>
+        html += '</tr>';
+        html += '</thead>';
+        html += '<tbody>';
+        l_result.forEach(item => {
+            //       <td>${item.ID_CARRITO}</td>
+            //  <td>${item.PEDIDO_SAP}</td>
+            html += `<tr>
            
             <td>${item.MATERIAL}</td>        
             <td>${item.CANTIDAD_PEDIDA}</td>
@@ -389,20 +389,24 @@ function OnCallBackTomarPedidoCarrito_sap(args) {
             <td>${item.MOTIVO_RECHAZO}</td>
            </tr>
         `;
-    });
-    html += '</tbody>';
-    html += '</table >';
+        });
+        html += '</tbody>';
+        html += '</table >';
+        mensaje_alert_base(html, 'volverBuscador()');
+        isHacerBorradoCarritos = true;
+        HacerLimpiezaDeCarritosDspDeConfirmarPedido();
+    } else {
+        mensaje_alert_base(args.msg, 'volverBuscador()');
+    }
 
 
 
 
-    mensaje_alert_base(html, 'volverBuscador()');
     /*if (args.tipo == "seProceso_mostrarMsg") {
         mensaje_alert_base(args.msg, 'volverBuscador()');
     }*/
 
-    isHacerBorradoCarritos = true;
-    HacerLimpiezaDeCarritosDspDeConfirmarPedido();
+
 }
 function OnCallBackTomarPedidoCarrito_dll(args) {
     // Error dsd dll pedido
