@@ -502,7 +502,8 @@ function TomarTransferPedidoCarrito(pIdSucursal, pMensajeEnFactura, pMensajeEnRe
         data: { pIsDiferido: isCarritoDiferido, pIdSucursal: pIdSucursal, pMensajeEnFactura: pMensajeEnFactura, pMensajeEnRemito: pMensajeEnRemito, pTipoEnvio: pTipoEnvio },
         success:
             function (response) {
-                OnCallBackTomarTransferPedidoCarrito(response);
+                //OnCallBackTomarTransferPedidoCarrito(response);
+                OnCallBackTomarPedidoCarrito_sap(response);
                 hideCargando();
             },
         failure: function (response) {

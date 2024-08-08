@@ -637,7 +637,7 @@ public class mvcController : Controller
     {
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
-        List<DKbase.web.capaDatos.cCarrito> listaCarrito = DKbase.web.capaDatos.capaCAR_WebService_base.RecuperarCarritosPorSucursalYProductos_generica(oCliente, DKbase.generales.Constantes.cTipo_CarritoDiferido);
+        //List<DKbase.web.capaDatos.cCarrito> listaCarrito = DKbase.web.capaDatos.capaCAR_WebService_base.RecuperarCarritosPorSucursalYProductos_generica(oCliente, DKbase.generales.Constantes.cTipo_CarritoDiferido);
         string horarioCierre = DKweb.Codigo.Util.getObtenerHorarioCierre(_httpContextAccessor, pIdSucursal);
         pMensajeEnFactura = pMensajeEnFactura == null ? "" : pMensajeEnFactura;
         pMensajeEnRemito = pMensajeEnRemito == null ? "" : pMensajeEnRemito;
@@ -657,10 +657,11 @@ public class mvcController : Controller
         string tipo = pIsDiferido ? DKbase.generales.Constantes.cTipo_CarritoDiferidoTransfers : DKbase.generales.Constantes.cTipo_CarritoTransfers;
         DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(_httpContextAccessor);
         DKbase.web.Usuario oUsuario = DKweb.Codigo.Util.getSessionUsuario(_httpContextAccessor);
-        List<DKbase.web.capaDatos.cCarritoTransfer> pListaCarrito = DKweb.Codigo.Util.RecuperarCarritosTransferPorIdCliente(_httpContextAccessor, oCliente, tipo, pIdSucursal);
+      //  List<DKbase.web.capaDatos.cCarritoTransfer> pListaCarrito = DKweb.Codigo.Util.RecuperarCarritosTransferPorIdCliente(_httpContextAccessor, oCliente, tipo, pIdSucursal);
         pMensajeEnFactura = pMensajeEnFactura == null ? "" : pMensajeEnFactura;
         pMensajeEnRemito = pMensajeEnRemito == null ? "" : pMensajeEnRemito;
-        List<DKbase.dll.cDllPedidoTransfer> resultadoPedido = DKbase.web.capaDatos.capaCAR_WebService_base.TomarTransferPedidoCarrito(oUsuario, oCliente, pListaCarrito, pIsDiferido, pIdSucursal, pMensajeEnFactura, pMensajeEnRemito, pTipoEnvio);
+        //List<DKbase.dll.cDllPedidoTransfer> resultadoPedido = DKbase.web.capaDatos.capaCAR_WebService_base.TomarTransferPedidoCarrito(oUsuario, oCliente, pListaCarrito, pIsDiferido, pIdSucursal, pMensajeEnFactura, pMensajeEnRemito, pTipoEnvio);
+          DKbase.Models.TomarPedidoResponse resultadoPedido = await DKbase.capaSAP.TomarPedidoCarrito(oUsuario, oCliente, tipo, pIdSucursal);
         if (resultadoPedido == null)
         {
             return null;
