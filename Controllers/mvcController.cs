@@ -661,7 +661,7 @@ public class mvcController : Controller
         pMensajeEnFactura = pMensajeEnFactura == null ? "" : pMensajeEnFactura;
         pMensajeEnRemito = pMensajeEnRemito == null ? "" : pMensajeEnRemito;
         //List<DKbase.dll.cDllPedidoTransfer> resultadoPedido = DKbase.web.capaDatos.capaCAR_WebService_base.TomarTransferPedidoCarrito(oUsuario, oCliente, pListaCarrito, pIsDiferido, pIdSucursal, pMensajeEnFactura, pMensajeEnRemito, pTipoEnvio);
-          DKbase.Models.TomarPedidoResponse resultadoPedido = await DKbase.capaSAP.TomarPedidoCarrito(oUsuario, oCliente, tipo, pIdSucursal);
+        DKbase.Models.TomarPedidoResponse resultadoPedido = await DKbase.capaSAP.TomarPedidoCarrito(oUsuario, oCliente, tipo, pIdSucursal);
         if (resultadoPedido == null)
         {
             return null;

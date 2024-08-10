@@ -52,10 +52,10 @@ function OnCallBackAgregarProductosTransfersAlCarritoDesdeBuscador(args) {
         } else {
             var isEncontroEnLista = false;
             for (var i = 0; i < listaCarritoTransferPorSucursal.length; i++) {
-                if (listaCarritoTransferPorSucursal[i].Sucursal == resultArgs.oSucursalCarritoTransfer.Sucursal) {
+                if (listaCarritoTransferPorSucursal[i].Sucursal == resultArgs.codSucursal) {
                     isEncontroEnLista = true;
                     listaCarritoTransferPorSucursal[i] = resultArgs.oSucursalCarritoTransfer;
-                    $('#divContenedorBaseTransfer_' + resultArgs.oSucursalCarritoTransfer.Sucursal).html(AgregarCarritoTransfersPorSucursalHtml(i));
+                    $('#divContenedorBaseTransfer_' + resultArgs.codSucursal).html(AgregarCarritoTransfersPorSucursalHtml(i));
                     setScrollFinDeCarritoTransfer(i);
                     break;
                 }
@@ -63,7 +63,7 @@ function OnCallBackAgregarProductosTransfersAlCarritoDesdeBuscador(args) {
             if (!isEncontroEnLista) {
                 listaCarritoTransferPorSucursal.push(resultArgs.oSucursalCarritoTransfer);
                 var indexTransferADD = listaCarritoTransferPorSucursal.length - 1;
-                $('#divContenedorBaseTransfer_' + resultArgs.oSucursalCarritoTransfer.Sucursal).html(AgregarCarritoTransfersPorSucursalHtml(indexTransferADD));
+                $('#divContenedorBaseTransfer_' + resultArgs.codSucursal).html(AgregarCarritoTransfersPorSucursalHtml(indexTransferADD));
                 setScrollFinDeCarritoTransfer(indexTransferADD);
             }
         }
@@ -88,10 +88,10 @@ function OnCallBackAgregarProductosTransfersAlCarrito(args) {
     if (resultArgs.isNotError) {
         var isEncontroEnLista = false;
         for (var i = 0; i < listaCarritoTransferPorSucursal.length; i++) {
-            if (listaCarritoTransferPorSucursal[i].Sucursal == resultArgs.oSucursalCarritoTransfer.Sucursal) {
+            if (listaCarritoTransferPorSucursal[i].Sucursal == resultArgs.codSucursal) {
                 isEncontroEnLista = true;
                 listaCarritoTransferPorSucursal[i] = resultArgs.oSucursalCarritoTransfer;
-                $('#divContenedorBaseTransfer_' + resultArgs.oSucursalCarritoTransfer.Sucursal).html(AgregarCarritoTransfersPorSucursalHtml(i));
+                $('#divContenedorBaseTransfer_' + resultArgs.codSucursal).html(AgregarCarritoTransfersPorSucursalHtml(i));
                 setScrollFinDeCarritoTransfer(i);
                 break;
             }
@@ -99,7 +99,7 @@ function OnCallBackAgregarProductosTransfersAlCarrito(args) {
         if (!isEncontroEnLista) {
             listaCarritoTransferPorSucursal.push(resultArgs.oSucursalCarritoTransfer);
             var indexTransferADD = listaCarritoTransferPorSucursal.length - 1;
-            $('#divContenedorBaseTransfer_' + resultArgs.oSucursalCarritoTransfer.Sucursal).html(AgregarCarritoTransfersPorSucursalHtml(indexTransferADD));
+            $('#divContenedorBaseTransfer_' + resultArgs.codSucursal).html(AgregarCarritoTransfersPorSucursalHtml(indexTransferADD));
             setScrollFinDeCarritoTransfer(indexTransferADD);
         }
         //CargarCarritosTransfersPorSucursal();
@@ -138,103 +138,105 @@ function CargarCarritosTransfersPorSucursal() {
 
 function AgregarCarritoTransfersPorSucursalHtml(pIndice) {
     var strHTML = '';
-    strHTML += '<div class="div_carrito">';
-    strHTML += '<div class="tit">';
-    strHTML += 'Transfers ';
-    for (var iNombreSucursal = 0; iNombreSucursal < listaSucursalesDependienteInfo.length; iNombreSucursal++) {
-        if (listaSucursalesDependienteInfo[iNombreSucursal].sde_sucursal == listaCarritoTransferPorSucursal[pIndice].Sucursal) {
-            strHTML += listaSucursalesDependienteInfo[iNombreSucursal].suc_nombre;
-            break;
+    if (listaCarritoTransferPorSucursal[pIndice] != null) {
+        strHTML += '<div class="div_carrito">';
+        strHTML += '<div class="tit">';
+        strHTML += 'Transfers ';
+        for (var iNombreSucursal = 0; iNombreSucursal < listaSucursalesDependienteInfo.length; iNombreSucursal++) {
+            if (listaSucursalesDependienteInfo[iNombreSucursal].sde_sucursal == listaCarritoTransferPorSucursal[pIndice].Sucursal) {
+                strHTML += listaSucursalesDependienteInfo[iNombreSucursal].suc_nombre;
+                break;
+            }
         }
-    }
 
 
-    //var strHtmlCierre = '';
-    var isMostrarHorarioCierre = false;
-    var visibleCssHorarioCierreTitulo = ' style="visibility:hidden;" ';
-    if (isNotNullEmpty(listaCarritoTransferPorSucursal[pIndice].proximoHorarioEntrega) && cli_codsuc() != listaCarritoTransferPorSucursal[pIndice].Sucursal) {
-        isMostrarHorarioCierre = true;
-        visibleCssHorarioCierreTitulo = '';
-    }
-    strHTML += '<div class="clear5"></div>';
-    strHTML += '<span id="contenedorProximaEntregaTransfer_' + pIndice + '" ' + visibleCssHorarioCierreTitulo + '>';
-    strHTML += 'Próximo&nbsp;cierre:&nbsp;';
-    strHTML += '<font id="proximaEntregaTransfer_' + pIndice + '">';
-    if (isMostrarHorarioCierre) {
-        strHTML += listaCarritoTransferPorSucursal[pIndice].proximoHorarioEntrega;
-    }
-    strHTML += '</font>';
-    strHTML += '</span>';
-    strHTML += '</div>'; // <div class="tit">
-
-
-    strHTML += '<div class="div_carrito_head scroll">';
-    strHTML += '<table class="footable table carrito table-stripped" width="100%" align="center" cellspacing="0" cellpadding="0" border="0"><thead><tr>';
-    strHTML += '<th class="col-lg-7 col-md-3 col-sm-3 col-xs-10 text-left thProductoTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">Producto</th>';
-    strHTML += '<th class="col-lg-2 col-md-1 col-sm-1 col-xs-1 text-center thCantTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">Cant.</th>';
-    strHTML += '<th class="col-lg-3 col-md-1 col-sm-1 col-xs-1 text-center thPrecioTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '"><div style="display: inline-block;">Precio</div></th>';
-    strHTML += '</tr></thead></table>';
-    strHTML += '</div>'; //<div class="div_carrito_head scroll">
-    //
-    strHTML += '<div id="div_carrito_transfer_cont_' + pIndice + '" class="div_carrito_cont">';
-    strHTML += '<table class="footable table carrito table-stripped" data-empty="No hay informacion disponible" width="100%" align="center" cellspacing="0" cellpadding="0" border="0">';
-    strHTML += '<tbody>';
-    //
-    var nroTotalCarrito = parseFloat(0);
-    var contFilaColor = -1;
-    var cantProductosTransferTotales = 0;
-    var RenglonesTotales = 0;
-    for (var iTransfer = 0; iTransfer < listaCarritoTransferPorSucursal[pIndice].listaTransfer.length; iTransfer++) {
-        var nroTotalPrecioPorTransfer = 0;
-        for (var iTransferProductos = 0; iTransferProductos < listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos.length; iTransferProductos++) {
-            RenglonesTotales++;
-            contFilaColor++;
-            var strHtmlColor = 'grs';
-            if (contFilaColor % 2 != 0) {
-                strHtmlColor = 'wht';
-            }
-            cantProductosTransferTotales += listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].cantidad;
-            var PrecioTotalProductoTransfer = listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].cantidad * listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].PrecioFinalTransfer;
-            strHTML += '<tr class="' + strHtmlColor + '">';
-            /* falta */
-            var htmlColor = '';
-            if (listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].stk_stock == 'N') {
-                htmlColor = ' color_red ';
-            }
-            /* fin falta */
-            strHTML += '<td class="col-lg-7 col-md-3 col-sm-3 text-left ' + htmlColor + ' tdProductoTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">' + listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].pro_nombre + '</td>';
-            strHTML += '<td class="col-lg-2 col-md-1 col-sm-1 col-xs-1 text-center tdCantTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">';
-            strHTML += '<span>' + listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].cantidad + '</span>'; //De prueba, hasta que se conecte en la DB
-            strHTML += '</td>';
-            /* falta */
-            var strHtmlPrecioProducto = '';
-            if (listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].stk_stock == 'N') {
-                // nroTotalProducto = 0;
-            } else {
-                nroTotalCarrito += PrecioTotalProductoTransfer;
-                strHtmlPrecioProducto = '$&nbsp;' + FormatoDecimalConDivisorMiles(PrecioTotalProductoTransfer.toFixed(2));
-            }
-            /* fin falta */
-            strHTML += '<td class="col-lg-4 col-md-1 col-sm-1 text-right tdPrecioTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">' + strHtmlPrecioProducto + '</td> ';
-            strHTML += '</tr>';
-            //nroTotalCarrito += PrecioTotalProductoTransfer;
-
+        //var strHtmlCierre = '';
+        var isMostrarHorarioCierre = false;
+        var visibleCssHorarioCierreTitulo = ' style="visibility:hidden;" ';
+        if (isNotNullEmpty(listaCarritoTransferPorSucursal[pIndice].proximoHorarioEntrega) && cli_codsuc() != listaCarritoTransferPorSucursal[pIndice].Sucursal) {
+            isMostrarHorarioCierre = true;
+            visibleCssHorarioCierreTitulo = '';
         }
+        strHTML += '<div class="clear5"></div>';
+        strHTML += '<span id="contenedorProximaEntregaTransfer_' + pIndice + '" ' + visibleCssHorarioCierreTitulo + '>';
+        strHTML += 'Próximo&nbsp;cierre:&nbsp;';
+        strHTML += '<font id="proximaEntregaTransfer_' + pIndice + '">';
+        if (isMostrarHorarioCierre) {
+            strHTML += listaCarritoTransferPorSucursal[pIndice].proximoHorarioEntrega;
+        }
+        strHTML += '</font>';
+        strHTML += '</span>';
+        strHTML += '</div>'; // <div class="tit">
+
+
+        strHTML += '<div class="div_carrito_head scroll">';
+        strHTML += '<table class="footable table carrito table-stripped" width="100%" align="center" cellspacing="0" cellpadding="0" border="0"><thead><tr>';
+        strHTML += '<th class="col-lg-7 col-md-3 col-sm-3 col-xs-10 text-left thProductoTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">Producto</th>';
+        strHTML += '<th class="col-lg-2 col-md-1 col-sm-1 col-xs-1 text-center thCantTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">Cant.</th>';
+        strHTML += '<th class="col-lg-3 col-md-1 col-sm-1 col-xs-1 text-center thPrecioTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '"><div style="display: inline-block;">Precio</div></th>';
+        strHTML += '</tr></thead></table>';
+        strHTML += '</div>'; //<div class="div_carrito_head scroll">
+        //
+        strHTML += '<div id="div_carrito_transfer_cont_' + pIndice + '" class="div_carrito_cont">';
+        strHTML += '<table class="footable table carrito table-stripped" data-empty="No hay informacion disponible" width="100%" align="center" cellspacing="0" cellpadding="0" border="0">';
+        strHTML += '<tbody>';
+        //
+        var nroTotalCarrito = parseFloat(0);
+        var contFilaColor = -1;
+        var cantProductosTransferTotales = 0;
+        var RenglonesTotales = 0;
+        for (var iTransfer = 0; iTransfer < listaCarritoTransferPorSucursal[pIndice].listaTransfer.length; iTransfer++) {
+            var nroTotalPrecioPorTransfer = 0;
+            for (var iTransferProductos = 0; iTransferProductos < listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos.length; iTransferProductos++) {
+                RenglonesTotales++;
+                contFilaColor++;
+                var strHtmlColor = 'grs';
+                if (contFilaColor % 2 != 0) {
+                    strHtmlColor = 'wht';
+                }
+                cantProductosTransferTotales += listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].cantidad;
+                var PrecioTotalProductoTransfer = listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].cantidad * listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].PrecioFinalTransfer;
+                strHTML += '<tr class="' + strHtmlColor + '">';
+                /* falta */
+                var htmlColor = '';
+                if (listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].stk_stock == 'N') {
+                    htmlColor = ' color_red ';
+                }
+                /* fin falta */
+                strHTML += '<td class="col-lg-7 col-md-3 col-sm-3 text-left ' + htmlColor + ' tdProductoTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">' + listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].pro_nombre + '</td>';
+                strHTML += '<td class="col-lg-2 col-md-1 col-sm-1 col-xs-1 text-center tdCantTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">';
+                strHTML += '<span>' + listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].cantidad + '</span>'; //De prueba, hasta que se conecte en la DB
+                strHTML += '</td>';
+                /* falta */
+                var strHtmlPrecioProducto = '';
+                if (listaCarritoTransferPorSucursal[pIndice].listaTransfer[iTransfer].listaProductos[iTransferProductos].stk_stock == 'N') {
+                    // nroTotalProducto = 0;
+                } else {
+                    nroTotalCarrito += PrecioTotalProductoTransfer;
+                    strHtmlPrecioProducto = '$&nbsp;' + FormatoDecimalConDivisorMiles(PrecioTotalProductoTransfer.toFixed(2));
+                }
+                /* fin falta */
+                strHTML += '<td class="col-lg-4 col-md-1 col-sm-1 text-right tdPrecioTransf' + listaCarritoTransferPorSucursal[pIndice].Sucursal + '">' + strHtmlPrecioProducto + '</td> ';
+                strHTML += '</tr>';
+                //nroTotalCarrito += PrecioTotalProductoTransfer;
+
+            }
+        }
+        //
+        strHTML += '</tbody></table>';
+        strHTML += '</div>'; //<div class="div_carrito_cont">
+        //
+        strHTML += '<div class="col-lg-9 col-md-9 col-sm-9 text-left div_renglones">Renglones ' + RenglonesTotales + '<span class="pull-right">' + textUnidades + cantProductosTransferTotales + '</span></div>';
+        strHTML += '<div class="col-lg-3 col-md-3 col-sm-3 col-xs-1 text-center"></div>';
+        strHTML += '<div class="col-xs-12 div_total">Total<span class="pull-right">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(nroTotalCarrito.toFixed(2)) + '</span></div>';
+        strHTML += '<div class="col-xs-12 pad_lr_car">';
+        strHTML += '<a class="btn_confirmar" onclick="onclickIsPuedeUsarDllTransfer(' + pIndice + '); return false;" href="#">CONFIRMAR</a>';
+        strHTML += '<a class="btn_vaciar float-left" onclick="onclickVaciarCarritoTransfer(' + pIndice + '); return false;" href="#">VACIAR</a>';
+        strHTML += '</div>';
+        strHTML += '<div class="clear"></div>';
+        //
+        strHTML += '</div>';// class="div_carrito"
     }
-    //
-    strHTML += '</tbody></table>';
-    strHTML += '</div>'; //<div class="div_carrito_cont">
-    //
-    strHTML += '<div class="col-lg-9 col-md-9 col-sm-9 text-left div_renglones">Renglones ' + RenglonesTotales + '<span class="pull-right">' + textUnidades + cantProductosTransferTotales + '</span></div>';
-    strHTML += '<div class="col-lg-3 col-md-3 col-sm-3 col-xs-1 text-center"></div>';
-    strHTML += '<div class="col-xs-12 div_total">Total<span class="pull-right">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(nroTotalCarrito.toFixed(2)) + '</span></div>';
-    strHTML += '<div class="col-xs-12 pad_lr_car">';
-    strHTML += '<a class="btn_confirmar" onclick="onclickIsPuedeUsarDllTransfer(' + pIndice + '); return false;" href="#">CONFIRMAR</a>';
-    strHTML += '<a class="btn_vaciar float-left" onclick="onclickVaciarCarritoTransfer(' + pIndice + '); return false;" href="#">VACIAR</a>';
-    strHTML += '</div>';
-    strHTML += '<div class="clear"></div>';
-    //
-    strHTML += '</div>';// class="div_carrito"
     return strHTML;
 }
 function setScrollFinDeCarritoTransfer(pIndexCarrito) {
@@ -310,40 +312,42 @@ function onclickConfimarTransferPedidoOk() {
 }
 function OnCallBackTomarTransferPedidoCarrito(args) {
     //    CerrarContenedorTransfer();
-    isBotonNoEstaEnProceso = true;
-    if (!isNotNullEmpty(args)) {
-        args = null;
-    } else {
-        args = eval('(' + args + ')');
-    }
+    //isBotonNoEstaEnProceso = true;
+    OnCallBackTomarPedidoCarrito(args);
+    // CargarRespuestaDePedidoTransfer(args);
 
-    if (args == null) {
-        //alert(mensajeCuandoSeMuestraError);
-        mensaje_alert_base(mensajeCuandoSeMuestraError, 'volverBuscador()');
-        //location.href = '../mvc/Buscador';
-    } else {
-        var isError = false;
-        if (args.length > 0) {
-            if (args[0].Error != '' || args[0].web_Error ) {
-                isError = true;
-            }
-        }
-        if (isError) {
-            var msgError = '';
-            if (args[0].Error != '') {
-                msgError = args[0].Error;
-            } else if (args[0].web_Error != '') {
-                msgError = args[0].web_Error;
-            }
-            mensaje_alert_base(msgError, 'volverBuscador()');
-            //location.href = '../mvc/Buscador';
-        } else {
-            isHacerBorradoCarritos = true;
-            //document.getElementById('divConfirmarPedidoTransferContenedorGeneral').style.display = 'none';
-            CargarRespuestaDePedidoTransfer(args);
-        }
-    }
-    //    alert('O');
+    /*   if (!isNotNullEmpty(args)) {
+           args = null;
+       } else {
+           args = eval('(' + args + ')');
+       }
+   
+       if (args == null) {
+           //alert(mensajeCuandoSeMuestraError);
+           mensaje_alert_base(mensajeCuandoSeMuestraError, 'volverBuscador()');
+           //location.href = '../mvc/Buscador';
+       } else {
+           var isError = false;
+           if (args.length > 0) {
+               if (args[0].Error != '' || args[0].web_Error ) {
+                   isError = true;
+               }
+           }
+           if (isError) {
+               var msgError = '';
+               if (args[0].Error != '') {
+                   msgError = args[0].Error;
+               } else if (args[0].web_Error != '') {
+                   msgError = args[0].web_Error;
+               }
+               mensaje_alert_base(msgError, 'volverBuscador()');
+               //location.href = '../mvc/Buscador';
+           } else {
+               isHacerBorradoCarritos = true;
+               //document.getElementById('divConfirmarPedidoTransferContenedorGeneral').style.display = 'none';
+               CargarRespuestaDePedidoTransfer(args);
+           }
+       }*/
 }
 function onclickVaciarCarritoTransfer_ButtonOK(pIndice) {
     indiceCarritoTransferBorrar = pIndice;
@@ -364,7 +368,6 @@ function OnCallBackBorrarCarritoTransfer(args) {
             var sucur = listaCarritoTransferPorSucursal[indiceCarritoTransferBorrar].Sucursal;
             listaCarritoTransferPorSucursal[indiceCarritoTransferBorrar].Sucursal = '';
             modalModuloAlertHide();
-            limpiarTextBoxProductosBuscador(sucur);
             LimpiarTextBoxProductosBuscados(sucur);
         }
     }
@@ -405,7 +408,7 @@ function onclickMostrarUnTransferDeVarios(pValor) {
     //$('#modalModulo').modal('hide');
     $('#modalModulo').html(AgregarTransferHtmlAlPopUp(pValor));
     $('#modalModulo').modal();
-} 
+}
 function AgregarTransferHtmlAlPopUp(pIndex) {
     var strHtmlTransfer = '';
     strHtmlTransfer += '<div class="modal-background">&nbsp;</div>';
@@ -678,7 +681,7 @@ function AgregarTransferHtmlAlPopUp_ComboCerrado(pIndex) { //calcar y transforma
         subProductosTotal = listaTransfer[pIndex].listaDetalle[y].tde_fijuni + listaTransfer[pIndex].listaDetalle[y].tde_unidadesbonificadas;
         productosTotalString = subProductosTotal + productosTotalString;
         productosTotal = parseFloat(productosTotalString);
-        contadorProductosTotal  = productosTotal;
+        contadorProductosTotal = productosTotal;
         //Variables precio total unitario
         precioPorUnidad = parseFloat(precioTotal / productosTotal);
         cantUnidadesConBonificadas = precioInicial / subProductosTotal;
@@ -692,29 +695,29 @@ function AgregarTransferHtmlAlPopUp_ComboCerrado(pIndex) { //calcar y transforma
         strHtmlTransfer += '<div class="cant-unidadesCombo" >' + listaTransfer[pIndex].listaDetalle[y].tde_fijuni + '</div>'; //cant. unidades 
         strHtmlTransfer += '<div class="cant-total-unidades" id="total-uni_' + y + '">' + listaTransfer[pIndex].listaDetalle[y].tde_fijuni + '</div>'; //cant. total facturada
         if (listaTransfer[pIndex].listaDetalle[y].tde_unidadesbonificadas > 0) {
-            
-        strHtmlTransfer += '<div class="producto-bonificado">' + listaTransfer[pIndex].listaDetalle[y].tde_unidadesbonificadasdescripcion + '</div>'; //Producto Bonificado
-        strHtmlTransfer += '<div class="cant-bonificada">' + listaTransfer[pIndex].listaDetalle[y].tde_unidadesbonificadas + '</div>'; // Cantidad Bonificada
-        strHtmlTransfer += '<div class="cant-total-bonificada" id="uni-bonif_' + y + '">' + listaTransfer[pIndex].listaDetalle[y].tde_unidadesbonificadas + '</div>'; //total Bonificado
-        }else{
+
+            strHtmlTransfer += '<div class="producto-bonificado">' + listaTransfer[pIndex].listaDetalle[y].tde_unidadesbonificadasdescripcion + '</div>'; //Producto Bonificado
+            strHtmlTransfer += '<div class="cant-bonificada">' + listaTransfer[pIndex].listaDetalle[y].tde_unidadesbonificadas + '</div>'; // Cantidad Bonificada
+            strHtmlTransfer += '<div class="cant-total-bonificada" id="uni-bonif_' + y + '">' + listaTransfer[pIndex].listaDetalle[y].tde_unidadesbonificadas + '</div>'; //total Bonificado
+        } else {
             strHtmlTransfer += '<div class="producto-bonificado"> - </div>'; //Producto Bonificado
             strHtmlTransfer += '<div class="cant-bonificada"> - </div>'; // Cantidad Bonificada
             strHtmlTransfer += '<div class="cant-total-bonificada" id="uni-bonif_' + y + '"> - </div>'; //cantidad total Bonificada
         }
         strHtmlTransfer += '<div class="precio-total-descuento" id="total-desc_' + y + '">$&nbsp;' + FormatoDecimalConDivisorMiles(precioInicial.toFixed(2)) + '</div>'; //precio total facturado
-        strHtmlTransfer += '<div class="precio-unidad" id="precio-total-unidad_' + y + '">$&nbsp;'+ cantUnidadesConBonificadas.toFixed(2) + ' </div>'; //Precio final por unidad
+        strHtmlTransfer += '<div class="precio-unidad" id="precio-total-unidad_' + y + '">$&nbsp;' + cantUnidadesConBonificadas.toFixed(2) + ' </div>'; //Precio final por unidad
         strHtmlTransfer += '</div>'; // Cierre de la fila de datos
 
         if (y === listaTransfer[pIndex].listaDetalle.length - 1) {
-        strHtmlTransfer += '<hr style="margin-top: 2px; margin-bottom: 2px; border-bottom: 2px solid #000; margin-left: 2px; margin-right: 2px; class="no-padding">';
-        }else{
-        strHtmlTransfer += '<hr style="margin-top: 2px; margin-bottom: 2px; margin-left: 2px; margin-right: 2px;">';
-        }; 
+            strHtmlTransfer += '<hr style="margin-top: 2px; margin-bottom: 2px; border-bottom: 2px solid #000; margin-left: 2px; margin-right: 2px; class="no-padding">';
+        } else {
+            strHtmlTransfer += '<hr style="margin-top: 2px; margin-bottom: 2px; margin-left: 2px; margin-right: 2px;">';
+        };
         strHtmlTransfer += '<div id="tdError' + pIndex + '_' + y + '"  class="errorFilaTransfer" ></div>';
 
-    } 
-    
-    
+    }
+
+
 
     strHtmlTransfer += '<div class="style-bottom">';
     strHtmlTransfer += '<div class="clear10"></div>';
@@ -737,9 +740,9 @@ function AgregarTransferHtmlAlPopUp_ComboCerrado(pIndex) { //calcar y transforma
     strHtmlTransfer += '</div>';
     strHtmlTransfer += '</div>';
     strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total1">MONTO TOTAL:</div>&nbsp';
-    strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total2" id="monto-total">$&nbsp;' + precioTotal.toFixed(2) + '</div>&nbsp'; 
+    strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total2" id="monto-total">$&nbsp;' + precioTotal.toFixed(2) + '</div>&nbsp';
     strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total1">CANTIDAD PRODUCTOS:</div>&nbsp';
-    strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total2" id="productos-total">' + productosTotal + '</div>&nbsp'; 
+    strHtmlTransfer += '<div class="col-md-2 col-sm-4 monto-total2" id="productos-total">' + productosTotal + '</div>&nbsp';
     strHtmlTransfer += '</div>';
     strHtmlTransfer += '</div>';
 
@@ -824,157 +827,157 @@ function Contador(pIndex) {
     const valorInicial = contadorPrecioTotal;
     var buttons = document.querySelectorAll(".btn-number");
     buttons.forEach(function (button) {
-      button.addEventListener("click", function (e) {
-        e.preventDefault();
-        var fieldName = this.getAttribute("data-field");
-        var type = this.getAttribute("data-type");
-        var input = document.querySelector("input[name='" + fieldName + "']");
-        var currentValue = parseInt(input.value);
-        qInput = parseInt(input.value);
-        if (!isNaN(currentValue)) {
-          if (type === "minus" && currentValue > 1) {
-            fijuniArray = [];
-            input.value = currentValue - 1;
-            contadorPrecioTotal -= valorInicial;
-            contadorProductosTotal -= cantInicial;
+        button.addEventListener("click", function (e) {
+            e.preventDefault();
+            var fieldName = this.getAttribute("data-field");
+            var type = this.getAttribute("data-type");
+            var input = document.querySelector("input[name='" + fieldName + "']");
+            var currentValue = parseInt(input.value);
             qInput = parseInt(input.value);
-          } else if (type === "plus") {
-            fijuniArray = [];
-            input.value = currentValue + 1;
-            contadorPrecioTotal += valorInicial;
-            contadorProductosTotal += cantInicial;
-            qInput = parseInt(input.value);
-          }
-  
-          for (let x = 0; x < listaTransfer[pIndex].listaDetalle.length; x++) {
-            document.getElementById("total-desc_" + x + "").textContent =
-              "$" +
-              (
-                input.value *
-                listaTransfer[pIndex].listaDetalle[x].PrecioFinalTransfer *
-                listaTransfer[pIndex].listaDetalle[x].tde_fijuni
-              ).toFixed(2);
-            document.getElementById("precio-total-unidad_" + x + "").textContent =
-              "$" +
-              (
-                (input.value *
-                  precioUnitario[x] *
-                  listaTransfer[pIndex].listaDetalle[x].tde_fijuni) /
-                (input.value * (cantProductosTotal[x] + cantProductosBonif[x]))
-              ).toFixed(2);
-            document.getElementById("total-uni_" + x + "").textContent =
-              input.value * listaTransfer[pIndex].listaDetalle[x].tde_fijuni;
-              fijuniArray.push(input.value * listaTransfer[pIndex].listaDetalle[x].tde_fijuni); //Array
-            if (listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas == 0) {
-              document.getElementById("uni-bonif_" + x + "").textContent = "-";
-            } else {
-              document.getElementById("uni-bonif_" + x + "").textContent =
-                input.value * listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas;
+            if (!isNaN(currentValue)) {
+                if (type === "minus" && currentValue > 1) {
+                    fijuniArray = [];
+                    input.value = currentValue - 1;
+                    contadorPrecioTotal -= valorInicial;
+                    contadorProductosTotal -= cantInicial;
+                    qInput = parseInt(input.value);
+                } else if (type === "plus") {
+                    fijuniArray = [];
+                    input.value = currentValue + 1;
+                    contadorPrecioTotal += valorInicial;
+                    contadorProductosTotal += cantInicial;
+                    qInput = parseInt(input.value);
+                }
+
+                for (let x = 0; x < listaTransfer[pIndex].listaDetalle.length; x++) {
+                    document.getElementById("total-desc_" + x + "").textContent =
+                        "$" +
+                        (
+                            input.value *
+                            listaTransfer[pIndex].listaDetalle[x].PrecioFinalTransfer *
+                            listaTransfer[pIndex].listaDetalle[x].tde_fijuni
+                        ).toFixed(2);
+                    document.getElementById("precio-total-unidad_" + x + "").textContent =
+                        "$" +
+                        (
+                            (input.value *
+                                precioUnitario[x] *
+                                listaTransfer[pIndex].listaDetalle[x].tde_fijuni) /
+                            (input.value * (cantProductosTotal[x] + cantProductosBonif[x]))
+                        ).toFixed(2);
+                    document.getElementById("total-uni_" + x + "").textContent =
+                        input.value * listaTransfer[pIndex].listaDetalle[x].tde_fijuni;
+                    fijuniArray.push(input.value * listaTransfer[pIndex].listaDetalle[x].tde_fijuni); //Array
+                    if (listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas == 0) {
+                        document.getElementById("uni-bonif_" + x + "").textContent = "-";
+                    } else {
+                        document.getElementById("uni-bonif_" + x + "").textContent =
+                            input.value * listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas;
+                    }
+                }
+
+                document.getElementById("productos-total").textContent = contadorProductosTotal;
+                document.getElementById("monto-total").textContent =
+                    "$" + contadorPrecioTotal.toFixed(2);
             }
-          }
-  
-          document.getElementById("productos-total").textContent = contadorProductosTotal;
-          document.getElementById("monto-total").textContent =
-            "$" + contadorPrecioTotal.toFixed(2);
-        }
-      });
+        });
     });
 
     // Modifica el evento keyup para actualizar todos los valores
     document
-      .getElementById("quantityInput")
-      .addEventListener("keyup", function (event) {
-        if (event.key === "Enter") {
-          fijuniArray = [];
-          var input = this;
-          var enteredValue = parseInt(input.value);
-          qInput = parseInt(input.value);
-          if (!isNaN(enteredValue)) {
-            contadorProductosTotal = enteredValue * cantInicial;
-            contadorPrecioTotal = enteredValue * valorInicial;
-            document.getElementById("monto-total").textContent =
-              "$" + contadorPrecioTotal.toFixed(2);
-            document.getElementById("productos-total").textContent =
-              contadorProductosTotal;
-  
-            for (let x = 0; x < listaTransfer[pIndex].listaDetalle.length; x++) {
-              document.getElementById("total-desc_" + x + "").textContent =
-                "$" +
-                (
-                  input.value *
-                  listaTransfer[pIndex].listaDetalle[x].PrecioFinalTransfer *
-                  listaTransfer[pIndex].listaDetalle[x].tde_fijuni
-                ).toFixed(2);
-              document.getElementById(
-                "precio-total-unidad_" + x + ""
-              ).textContent =
-                "$" +
-                (
-                  (input.value *
-                    precioUnitario[x] *
-                    listaTransfer[pIndex].listaDetalle[x].tde_fijuni) /
-                  (input.value * (cantProductosTotal[x] + cantProductosBonif[x]))
-                ).toFixed(2);
-              document.getElementById("total-uni_" + x + "").textContent =
-                enteredValue * listaTransfer[pIndex].listaDetalle[x].tde_fijuni;
-                fijuniArray.push(input.value * listaTransfer[pIndex].listaDetalle[x].tde_fijuni); //Array
-              if (listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas == 0) {
-                document.getElementById("uni-bonif_" + x + "").textContent = "-";
-              } else {
-                document.getElementById("uni-bonif_" + x + "").textContent =
-                  input.value * listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas;
-              }
+        .getElementById("quantityInput")
+        .addEventListener("keyup", function (event) {
+            if (event.key === "Enter") {
+                fijuniArray = [];
+                var input = this;
+                var enteredValue = parseInt(input.value);
+                qInput = parseInt(input.value);
+                if (!isNaN(enteredValue)) {
+                    contadorProductosTotal = enteredValue * cantInicial;
+                    contadorPrecioTotal = enteredValue * valorInicial;
+                    document.getElementById("monto-total").textContent =
+                        "$" + contadorPrecioTotal.toFixed(2);
+                    document.getElementById("productos-total").textContent =
+                        contadorProductosTotal;
+
+                    for (let x = 0; x < listaTransfer[pIndex].listaDetalle.length; x++) {
+                        document.getElementById("total-desc_" + x + "").textContent =
+                            "$" +
+                            (
+                                input.value *
+                                listaTransfer[pIndex].listaDetalle[x].PrecioFinalTransfer *
+                                listaTransfer[pIndex].listaDetalle[x].tde_fijuni
+                            ).toFixed(2);
+                        document.getElementById(
+                            "precio-total-unidad_" + x + ""
+                        ).textContent =
+                            "$" +
+                            (
+                                (input.value *
+                                    precioUnitario[x] *
+                                    listaTransfer[pIndex].listaDetalle[x].tde_fijuni) /
+                                (input.value * (cantProductosTotal[x] + cantProductosBonif[x]))
+                            ).toFixed(2);
+                        document.getElementById("total-uni_" + x + "").textContent =
+                            enteredValue * listaTransfer[pIndex].listaDetalle[x].tde_fijuni;
+                        fijuniArray.push(input.value * listaTransfer[pIndex].listaDetalle[x].tde_fijuni); //Array
+                        if (listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas == 0) {
+                            document.getElementById("uni-bonif_" + x + "").textContent = "-";
+                        } else {
+                            document.getElementById("uni-bonif_" + x + "").textContent =
+                                input.value * listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas;
+                        }
+                    }
+                }
             }
-          }
-        }
-      });
-  
+        });
+
     // Modifica el evento blur para actualizar todos los valores al perder el foco
     document
-      .getElementById("quantityInput")
-      .addEventListener("blur", function () {
-        fijuniArray = [];
-        var input = this;
-        var enteredValue = parseInt(input.value);
-        qInput = parseInt(input.value);
-        if (!isNaN(enteredValue)) {
-            contadorProductosTotal = enteredValue * cantInicial;
-            contadorPrecioTotal = enteredValue * valorInicial;
-          document.getElementById("monto-total").textContent =
-            "$" + contadorPrecioTotal.toFixed(2);
-          document.getElementById("productos-total").textContent = contadorProductosTotal;
-  
-          for (let x = 0; x < listaTransfer[pIndex].listaDetalle.length; x++) {
-            document.getElementById("total-desc_" + x + "").textContent =
-              "$" +
-              (
-                input.value *
-                listaTransfer[pIndex].listaDetalle[x].PrecioFinalTransfer *
-                listaTransfer[pIndex].listaDetalle[x].tde_fijuni
-              ).toFixed(2);
-            document.getElementById("precio-total-unidad_" + x + "").textContent =
-              "$" +
-              (
-                (input.value *
-                  precioUnitario[x] *
-                  listaTransfer[pIndex].listaDetalle[x].tde_fijuni) /
-                (input.value * cantProductosTotal[x] +
-                  input.value * cantProductosBonif[x])
-              ).toFixed(2);
-            document.getElementById("total-uni_" + x + "").textContent =
-              enteredValue * listaTransfer[pIndex].listaDetalle[x].tde_fijuni;
-              fijuniArray.push(input.value * listaTransfer[pIndex].listaDetalle[x].tde_fijuni); //Array
-            if (listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas == 0) {
-              document.getElementById("uni-bonif_" + x + "").textContent = "-";
-            } else {
-              document.getElementById("uni-bonif_" + x + "").textContent =
-                input.value * listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas;
+        .getElementById("quantityInput")
+        .addEventListener("blur", function () {
+            fijuniArray = [];
+            var input = this;
+            var enteredValue = parseInt(input.value);
+            qInput = parseInt(input.value);
+            if (!isNaN(enteredValue)) {
+                contadorProductosTotal = enteredValue * cantInicial;
+                contadorPrecioTotal = enteredValue * valorInicial;
+                document.getElementById("monto-total").textContent =
+                    "$" + contadorPrecioTotal.toFixed(2);
+                document.getElementById("productos-total").textContent = contadorProductosTotal;
+
+                for (let x = 0; x < listaTransfer[pIndex].listaDetalle.length; x++) {
+                    document.getElementById("total-desc_" + x + "").textContent =
+                        "$" +
+                        (
+                            input.value *
+                            listaTransfer[pIndex].listaDetalle[x].PrecioFinalTransfer *
+                            listaTransfer[pIndex].listaDetalle[x].tde_fijuni
+                        ).toFixed(2);
+                    document.getElementById("precio-total-unidad_" + x + "").textContent =
+                        "$" +
+                        (
+                            (input.value *
+                                precioUnitario[x] *
+                                listaTransfer[pIndex].listaDetalle[x].tde_fijuni) /
+                            (input.value * cantProductosTotal[x] +
+                                input.value * cantProductosBonif[x])
+                        ).toFixed(2);
+                    document.getElementById("total-uni_" + x + "").textContent =
+                        enteredValue * listaTransfer[pIndex].listaDetalle[x].tde_fijuni;
+                    fijuniArray.push(input.value * listaTransfer[pIndex].listaDetalle[x].tde_fijuni); //Array
+                    if (listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas == 0) {
+                        document.getElementById("uni-bonif_" + x + "").textContent = "-";
+                    } else {
+                        document.getElementById("uni-bonif_" + x + "").textContent =
+                            input.value * listaTransfer[pIndex].listaDetalle[x].tde_unidadesbonificadas;
+                    }
+                }
             }
-          }
-        }
-      });
-      
-  }
+        });
+
+}
 
 function validateNumberInput(input) {
     // Elimina cualquier caracter no numérico
@@ -985,8 +988,121 @@ function validateNumberInput(input) {
 function onClickTransfer(pIndice, pIndiceSucursal) {
     ValidarTransferTotal_sucursal(pIndice, pIndiceSucursal);
 }
-
 function ValidarTransferTotal_sucursal(pIndice, pIndiceSursal) {
+    var RenglonesMinimos = listaTransfer[pIndice].tfr_minrenglones; // Cantidad Minimo De Producto 
+    var UnidadesMinimas = listaTransfer[pIndice].tfr_minunidades;
+    var UnidadesMaximas = listaTransfer[pIndice].tfr_maxunidades;
+    var UnidadesMultiplo = listaTransfer[pIndice].tfr_mulunidades;
+    var UnidadesFijas = listaTransfer[pIndice].tfr_fijunidades;
+
+    var auxCantidadProductoElejido = 0;
+    var isGrabar = true;
+    var tempListaProductos = [];
+    var cantTotalEnTransfer = 0;
+    // tfr_tipo
+    for (var i = 0; i < listaTransfer[pIndice].listaDetalle.length; i++) {
+        var isGrabarProducto = true;
+        var intMensajeProducto = ValidarTransferPorProducto(pIndice, i);
+        if (intMensajeProducto > 0) {
+            cantTotalEnTransfer += intMensajeProducto;
+            auxCantidadProductoElejido++;
+        } else if (intMensajeProducto == -1) {
+            isGrabarProducto = false;
+        }
+        if (listaTransfer[pIndice].listaDetalle[i].tde_proobligatorio) {
+            if (intMensajeProducto == 0) {
+                isGrabarProducto = false;
+                $('#tdError' + pIndice + '_' + i).html('Producto obligatorio');
+                mensaje_alert(listaTransfer[pIndice].listaDetalle[i].tde_codpro + ' es un producto obligatorio');
+            }
+        }
+        if (isGrabarProducto) {
+            var cantidad_paraFacturaTrazablesProvincia = $('#txtProdTransf' + pIndice + '_' + i).val();
+            if (isNotNullEmpty(cantidad_paraFacturaTrazablesProvincia)) {
+                cantidad_paraFacturaTrazablesProvincia = parseInt(cantidad_paraFacturaTrazablesProvincia);
+                if (cantidad_paraFacturaTrazablesProvincia > 0) {
+                    if (!isMostrarImput_FacturaTrazablesProvincia(listaSucursalesDependienteInfo[pIndiceSursal].sde_sucursal, listaTransfer[pIndice].listaDetalle[i].pro_isTrazable)) {
+                        isGrabarProducto = false;
+                        $('#tdError' + pIndice + '_' + i).html('Producto que no se puede agregar a la sucursal');
+                        mensaje_alert(listaTransfer[pIndice].listaDetalle[i].tde_codpro + ' es un producto que no se puede agregar en esta sucursal');
+
+                    }
+                }
+            }
+        }
+        if (isGrabarProducto) {
+            if (intMensajeProducto > 0) {
+                var objProducto = new jcTransfersProductos();
+                objProducto.codProductoNombre = listaTransfer[pIndice].listaDetalle[i].tde_codpro; // Para la funcion en el servidor
+                objProducto.tde_codpro = listaTransfer[pIndice].listaDetalle[i].tde_codpro;
+                objProducto.cantidad = intMensajeProducto;
+                objProducto.indexAuxProducto = i;
+                objProducto.indexAuxTransfer = pIndice;
+                tempListaProductos.push(objProducto);
+            }
+        } else {
+            isGrabar = false;
+            break;
+        }
+    }
+    if (isGrabar) {
+        if (RenglonesMinimos > auxCantidadProductoElejido) {
+            isGrabar = false;
+            mensaje_alert('El transfer debe superar los renglones mínimos');
+        }
+    }
+    // Validacion Transfer
+
+    if (isGrabar) {
+        if (isNotNullEmpty(UnidadesMinimas)) {
+            if (UnidadesMinimas > cantTotalEnTransfer) {
+                mensaje_alert('El transfer no supera la unidad mínima');
+                isGrabar = false;
+            }
+        }
+    }
+    if (isGrabar) {
+        if (isNotNullEmpty(UnidadesMaximas)) {
+            if (UnidadesMaximas < cantTotalEnTransfer) {
+                mensaje_alert('El transfer supera la unidad máxima');
+                isGrabar = false;
+            }
+        }
+    }
+    if (isGrabar) {
+        if (isNotNullEmpty(UnidadesMultiplo)) {
+            if (cantTotalEnTransfer % UnidadesMultiplo == 0) {
+                // es multiplo
+            } else {
+                mensaje_alert('El transfer no es multiplo de ' + UnidadesMultiplo);
+                isGrabar = false;
+            }
+        }
+    }
+    if (isGrabar) {
+        if (isNotNullEmpty(UnidadesFijas)) {
+            if (UnidadesFijas != cantTotalEnTransfer) {
+                mensaje_alert('El transfer es diferente de la unidad fija');
+                isGrabar = false;
+            }
+        }
+    }
+    if (isGrabar) {
+        // validar cuando un transfer es del tipo como
+        if (listaTransfer[pIndice].tfr_tipo == 'C') {
+            if (auxCantidadProductoElejido < listaTransfer[pIndice].listaDetalle.length) {
+                mensaje_alert('En el transfer se debe rellenar todos los producto');
+                isGrabar = false;
+            }
+        }
+    }
+    // fin validacion Transfer
+    if (isGrabar) {
+        AgregarProductosTransfersAlCarrito(tempListaProductos, listaTransfer[pIndice].tfr_codigo, listaSucursalesDependienteInfo[pIndiceSursal].sde_sucursal, 'OnCallBackAgregarProductosTransfersAlCarrito');
+    }
+}
+
+function ValidarTransferTotal_sucursal_ComboCerrado(pIndice, pIndiceSursal) {
 
     var isGrabar = true;
     var tempListaProductos = [];
@@ -994,7 +1110,7 @@ function ValidarTransferTotal_sucursal(pIndice, pIndiceSursal) {
 
     for (var i = 0; i < listaTransfer[pIndice].listaDetalle.length; i++) {
         var isGrabarProducto = true;
-        var intMensajeProducto = i+1;
+        var intMensajeProducto = i + 1;
         if (intMensajeProducto > 0) {
             cantTotalEnTransfer = intMensajeProducto;
         } else if (intMensajeProducto == -1) {
@@ -1018,8 +1134,8 @@ function ValidarTransferTotal_sucursal(pIndice, pIndiceSursal) {
     }
     if (isGrabar && qInput == 0) {
         AgregarProductosTransfersAlCarrito(tempListaProductos, listaTransfer[pIndice].tfr_codigo, listaSucursalesDependienteInfo[pIndiceSursal].sde_sucursal, 'OnCallBackAgregarProductosTransfersAlCarrito');
-    }else if (isGrabar && qInput > 0){
-        AgregarProductosTransfersAlCarritoComboCerrado(tempListaProductos, listaTransfer[pIndice].tfr_codigo, listaSucursalesDependienteInfo[pIndiceSursal].sde_sucursal, qInput , 'OnCallBackAgregarProductosTransfersAlCarrito');
+    } else if (isGrabar && qInput > 0) {
+        AgregarProductosTransfersAlCarritoComboCerrado(tempListaProductos, listaTransfer[pIndice].tfr_codigo, listaSucursalesDependienteInfo[pIndiceSursal].sde_sucursal, qInput, 'OnCallBackAgregarProductosTransfersAlCarrito');
     }
 }
 

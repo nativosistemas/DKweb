@@ -503,7 +503,8 @@ function TomarTransferPedidoCarrito(pIdSucursal, pMensajeEnFactura, pMensajeEnRe
         success:
             function (response) {
                 //OnCallBackTomarTransferPedidoCarrito(response);
-                OnCallBackTomarPedidoCarrito_sap(response);
+                //OnCallBackTomarPedidoCarrito_sap(response);
+                OnCallBackTomarPedidoCarrito(response);
                 hideCargando();
             },
         failure: function (response) {
