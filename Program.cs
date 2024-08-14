@@ -34,7 +34,21 @@ builder.Services.AddHostedService<DKweb.BackgroundServiceDK>();
 ///        
 builder.Services.AddControllersWithViews();//.AddRazorRuntimeCompilation();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddDistributedMemoryCache();
+
+var dkWebCache = builder.Configuration.GetConnectionString("DkWebCache");
+
+if (String.IsNullOrEmpty(dkWebCache))
+{
+    builder.Services.AddDistributedMemoryCache();
+} else
+{
+    builder.Services.AddDistributedSqlServerCache(options =>
+    {
+        options.ConnectionString = dkWebCache;
+        options.SchemaName = "dbo";
+        options.TableName = "DkWebCache";
+    });
+}
 
 builder.Services.AddSession(options =>
 {
@@ -117,40 +131,40 @@ if (!app.Environment.IsDevelopment())
 {
     //app.UseExceptionHandler("/config/Error");
     app.UseExceptionHandler(exceptionHandlerApp =>
- {
+    {
 
-     //exceptionHandlerApp.ex
-     //"/Home/Error"
-     exceptionHandlerApp.Run(async context =>
-     {
+        //exceptionHandlerApp.ex
+        //"/Home/Error"
+        exceptionHandlerApp.Run(async context =>
+        {
 
 
-         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-         // using static System.Net.Mime.MediaTypeNames;
-         context.Response.ContentType = System.Net.Mime.MediaTypeNames.Text.Plain;
+            // using static System.Net.Mime.MediaTypeNames;
+            context.Response.ContentType = System.Net.Mime.MediaTypeNames.Text.Plain;
 
-         await context.Response.WriteAsync("Se produjo un error.");//"/Home/Error"
+            await context.Response.WriteAsync("Se produjo un error.");//"/Home/Error"
 
-         var exceptionHandlerPathFeature =
-             context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerPathFeature>();
-         if (exceptionHandlerPathFeature?.Error is Exception)
-         {
+            var exceptionHandlerPathFeature =
+                context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerPathFeature>();
+            if (exceptionHandlerPathFeature?.Error is Exception)
+            {
 
-             DKbase.generales.Log.grabarLog_generico("Program_cs: Excepción no controlada", exceptionHandlerPathFeature?.Error, DateTime.Now, string.Empty, DKbase.Helper.getTipoApp);
-         }
-         if (exceptionHandlerPathFeature?.Error is FileNotFoundException)
-         {
-             await context.Response.WriteAsync("El archivo no se encontro.");
-         }
+                DKbase.generales.Log.grabarLog_generico("Program_cs: Excepción no controlada", exceptionHandlerPathFeature?.Error, DateTime.Now, string.Empty, DKbase.Helper.getTipoApp);
+            }
+            if (exceptionHandlerPathFeature?.Error is FileNotFoundException)
+            {
+                await context.Response.WriteAsync("El archivo no se encontro.");
+            }
 
-         if (exceptionHandlerPathFeature?.Path == "/")
-         {
+            if (exceptionHandlerPathFeature?.Path == "/")
+            {
 
-             await context.Response.WriteAsync(" Page: Home.");
-         }
-     });
- });
+                await context.Response.WriteAsync(" Page: Home.");
+            }
+        });
+    });
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
