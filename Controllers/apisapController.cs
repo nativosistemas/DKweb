@@ -54,5 +54,19 @@ public class apisapController : Controller
         
         return Json(result);
     }
+[HttpPost]
+    public async Task<IActionResult> ZFI_RFC_DEUDA_VENCIDA(DKbase.Models.SAP_RES_DEUDA_VENCIDA pValue)
+    {
+        int idCliente = Int32.Parse(pValue.IV_CLIENTE);
+
+        List<DKbase.Models.SAP_REQ_DEUDA_VENCIDA> deudaVencidaList = await DKbase.capaSAP.DEUDA_VENCIDA(idCliente);
+
+        DKbase.Models.SAP_REQ_DEUDA_VENCIDA_LIST result = new DKbase.Models.SAP_REQ_DEUDA_VENCIDA_LIST()
+        {
+            item = deudaVencidaList
+        };
+
+        return Json(result);
+    }
 
 }
