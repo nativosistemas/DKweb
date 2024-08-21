@@ -10,8 +10,9 @@
               <PackageReference Include="NativoSistemas.DKbase" Version="1.0.91" />
         
   -->
-  <ProjectReference Include="../DKbase/DKbase.csproj"   />
-  <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices"  Version="8.0.0"/>
+  <ProjectReference Include="../DKbase/DKbase.csproj" />
+  <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="8.0.7" />
+  <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="8.0.0" />
   </ItemGroup>
 
 </Project>
