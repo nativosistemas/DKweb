@@ -51,7 +51,7 @@ else
     });
 }
 
-var sessionIdleTimeout = Convert.ToDouble(builder.Configuration.GetSection("appSettings")["SessionIdleTimeout"] ?? "3600");
+var sessionIdleTimeout = Convert.ToDouble(builder.Configuration.GetSection("appSettings")["SessionIdleTimeout"] ?? "360");
 
 builder.Services.AddSession(options =>
 {
