@@ -40,7 +40,8 @@ var dkWebCache = builder.Configuration.GetConnectionString("DkWebCache");
 if (String.IsNullOrEmpty(dkWebCache))
 {
     builder.Services.AddDistributedMemoryCache();
-} else
+}
+else
 {
     builder.Services.AddDistributedSqlServerCache(options =>
     {
@@ -50,9 +51,11 @@ if (String.IsNullOrEmpty(dkWebCache))
     });
 }
 
+var sessionIdleTimeout = Convert.ToDouble(builder.Configuration.GetSection("appSettings")["SessionIdleTimeout"] ?? "3600");
+
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromDays(14);
+    options.IdleTimeout = TimeSpan.FromMinutes(sessionIdleTimeout);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -62,7 +65,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 .AddCookie(option =>
 {
     option.LoginPath = "/Home/Index";
-    option.ExpireTimeSpan = TimeSpan.FromDays(14);
     option.AccessDeniedPath = "/config/sinpermiso";
 });
 // inicio admin
