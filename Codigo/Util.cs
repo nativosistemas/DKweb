@@ -262,7 +262,7 @@ public class Util
 
         string storedDateString = pHttpContextAccessor.HttpContext.Session.GetString(nameSession);
         DateTime? fechaGuarda = null;
-        
+
         if (!string.IsNullOrEmpty(storedDateString))
         {
             if (DateTime.TryParse(storedDateString, out DateTime parsedDate))
@@ -273,8 +273,8 @@ public class Util
 
         if (fechaGuarda == null)
         {
-            DateTime strObtenerHorarioCierre = DKbase.web.capaDatos.capaCAR_base.spObtenerItinerarioCliente(oCliente.cli_codigo, oCliente.cli_codsuc); 
-            pHttpContextAccessor.HttpContext.Session.SetString(nameSession, strObtenerHorarioCierre.ToString("o")); 
+            DateTime strObtenerHorarioCierre = DKbase.web.capaDatos.capaCAR_base.spObtenerItinerarioCliente(oCliente.cli_codigo, oCliente.cli_codsuc);
+            pHttpContextAccessor.HttpContext.Session.SetString(nameSession, strObtenerHorarioCierre.ToString("o"));
             fechaGuarda = strObtenerHorarioCierre;
         }
 
@@ -284,8 +284,8 @@ public class Util
 
             if (fechaGuarda.Value < DateTime.Now)
             {
-                DateTime strObtenerHorarioCierre_2 = DKbase.web.capaDatos.capaCAR_base.spObtenerItinerarioCliente(oCliente.cli_codigo, oCliente.cli_codsuc); 
-                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, strObtenerHorarioCierre_2.ToString("o")); 
+                DateTime strObtenerHorarioCierre_2 = DKbase.web.capaDatos.capaCAR_base.spObtenerItinerarioCliente(oCliente.cli_codigo, oCliente.cli_codsuc);
+                pHttpContextAccessor.HttpContext.Session.SetString(nameSession, strObtenerHorarioCierre_2.ToString("o"));
                 result = strObtenerHorarioCierre_2.ToString("yyyy-MM-dd HH:mm:ss");
             }
         }
@@ -308,17 +308,21 @@ public class Util
     }
     public static List<DKbase.web.capaDatos.cSucursalCarritoTransfer> RecuperarCarritosTransfer_generico(IHttpContextAccessor pHttpContextAccessor, string pTipo)
     {
-        List<DKbase.web.capaDatos.cSucursalCarritoTransfer> result = null;
+
         DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
-        result = DKbase.web.capaDatos.capaCAR_WebService_base.RecuperarCarritosTransferPorIdClienteOrdenadosPorSucursal(oCliente, pTipo);
-        if (result != null)
-        {
-            foreach (var item in result)
-            {
-                item.proximoHorarioEntrega = getObtenerHorarioCierre(pHttpContextAccessor, item.Sucursal);
-            }
-        }
-        return result;
+        return RecuperarCarritosTransfer_generico(pHttpContextAccessor, oCliente, pTipo);
+
+        /*  List<DKbase.web.capaDatos.cSucursalCarritoTransfer> result = null;
+          DKbase.web.capaDatos.cClientes oCliente = getSessionCliente(pHttpContextAccessor);
+          result = DKbase.web.capaDatos.capaCAR_WebService_base.RecuperarCarritosTransferPorIdClienteOrdenadosPorSucursal(oCliente, pTipo);
+          if (result != null)
+          {
+              foreach (var item in result)
+              {
+                  item.proximoHorarioEntrega = getObtenerHorarioCierre(pHttpContextAccessor, item.Sucursal);
+              }
+          }
+          return result;*/
     }
     public static int RecuperarProductoParametrizadoCantidad(IHttpContextAccessor pHttpContextAccessor)
     {
@@ -692,12 +696,12 @@ public class Util
     }
     public static bool AgregarProductosTransfersAlCarrito(List<DKbase.web.capaDatos.cProductosAndCantidad> pListaProductosMasCantidad, int pIdCliente, int pIdUsuario, int pIdTransfers, string pCodSucursal, string pTipo)
     {
-        pListaProductosMasCantidad.ForEach((v) => v.tde_codtfr = pIdTransfers);
+        pListaProductosMasCantidad.ForEach((v) => { v.tde_codtfr = pIdTransfers; v.codProducto = Convert.ToInt32(v.codProductoNombre); });
         System.Data.DataTable pTablaDetalle = DKbase.web.FuncionesPersonalizadas_base.ConvertProductosAndCantidadToDataTable_new(pListaProductosMasCantidad);
         return DKbase.web.capaDatos.capaCAR_base.spCargarCarrito(pTablaDetalle, pIdCliente, pIdUsuario, pCodSucursal, pTipo);
     }
 
-        public static bool AgregarProductosComboCerrado( int pIdCliente, int pIdUsuario, int pIdTransfers, int pQinput, string pCodSucursal, string pTipo)
+    public static bool AgregarProductosComboCerrado(int pIdCliente, int pIdUsuario, int pIdTransfers, int pQinput, string pCodSucursal, string pTipo)
     {
         return DKbase.web.capaDatos.capaCAR_base.spCargarCarritoComboCerrado(pIdCliente, pIdUsuario, pIdTransfers, pCodSucursal, pTipo, pQinput);
     }
