@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Rewrite;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Rewrite;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,16 +54,18 @@ var sessionIdleTimeout = Convert.ToDouble(builder.Configuration.GetSection("appS
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(sessionIdleTimeout);
+    options.Cookie.Name = ".AspNetCore.Session.dkweb";
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-.AddCookie(option =>
+.AddCookie(options =>
 {
-    option.LoginPath = "/Home/Index";
-    option.AccessDeniedPath = "/config/sinpermiso";
+    options.LoginPath = "/Home/Index";
+    options.AccessDeniedPath = "/config/sinpermiso";
+    options.Cookie.Name = ".AspNetCore.Cookies.dkweb";
 });
 // inicio admin
 builder.Services.AddAuthorization(options =>
