@@ -1288,4 +1288,25 @@ function enviarReservaVacunas(pValue) {
             OnFail(response);
         }
     });
+    
+}
+function obtenerDeudaVencida(pValue) {
+    showCargandoBuscador();
+    $.ajax({
+        type: "POST",
+        url: "/apisap/ZFI_RFC_DEUDA_VENCIDA",
+        data: {IV_CLIENTE: pValue},
+        success: function (response) {
+            hideCargandoBuscador();
+            generarTablaDeudaVencida(response);
+        },
+        failure: function (response) {
+            hideCargandoBuscador();
+            OnFail(response);
+        },
+        error: function (response) {
+            hideCargandoBuscador();
+            OnFail(response);
+        }
+    });
 }

@@ -500,6 +500,10 @@ $(function () {
   $('[data-toggle="tooltip"]').tooltip();
 });
 
+function onclickDeudaVencida(){
+  obtenerDeudaVencida(cli_codigo());
+};
+
 function onclickCreditoDisponible() {
   ObtenerCreditoDisponible(cli_codigo());
 }
@@ -806,4 +810,45 @@ function getCantidad_SubirArchivo_pedirCC(
     }
   }
   return "";
+}
+function generarTablaDeudaVencida(response){
+  var objListaDeuda = response.item;
+
+  var strHtml = '';
+
+  if (Array.isArray(objListaDeuda) && objListaDeuda.length > 0) {
+      strHtml += '<table class="table table-striped table-bordered table-hover">';
+      strHtml += '<thead class="thead-dark">';
+      strHtml += '<tr>';
+      strHtml += '<th class="custom-padding">Comprobante</th>';
+      strHtml += '<th class="custom-padding">Fecha</th>';
+      strHtml += '<th class="custom-padding">Importe</th>';
+      strHtml += '<th class="custom-padding">N° Comprobante</th>';
+      strHtml += '<th class="custom-padding">Semana</th>';
+      strHtml += '<th class="custom-padding">Vencimiento</th>';
+      strHtml += '</tr>';
+      strHtml += '</thead>';
+
+      strHtml += '<tbody>';
+      for (var i = 0; i < objListaDeuda.length; i++) {
+          var deuda = objListaDeuda[i];
+          strHtml += '<tr>';
+          strHtml += '<td class="text-center">' + deuda.comprobante + '</td>';
+          strHtml += '<td class="text-center">' + deuda.fecha + '</td>';
+          strHtml += '<td class="text-right">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(parseFloat(deuda.importe).toFixed(2)) + '</td>';
+          strHtml += '<td class="text-center">' + deuda.numero_comprobante+ '</td>';
+          strHtml += '<td class="text-center">' + deuda.semana + '</td>';
+          strHtml += '<td class="text-center">' + deuda.vencimiento + '</td>';
+          strHtml += '</tr>';
+      }
+      strHtml += '</tbody>';
+      strHtml += '</table>';
+  } else {
+      strHtml += '<div class="alert alert-warning text-center" role="alert">';
+      strHtml += 'No hay información disponible';
+      strHtml += '</div>';
+  }
+
+  $('#divResultadoDeudaVencida').html(strHtml);
+  $('.footable').footable();
 }

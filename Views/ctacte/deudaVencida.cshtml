@@ -1,42 +1,10 @@
 @inject IHttpContextAccessor Accessor
 @Html.Partial("_nav_ctacte")
-@section sectionHidden{
 
-    @{
-        string resultado_sub = string.Empty;
-        DKbase.web.capaDatos.cClientes oCliente = DKweb.Codigo.Util.getSessionCliente(Accessor);
-        if (oCliente != null)
-        {
-            DKweb.Codigo.Util.deudaVencida_Set(Accessor,null);
-            DKweb.Codigo.Util.saldoSinImputar_Set(Accessor,null);
-            List<DKbase.dll.cCtaCteMovimiento> l =
-            DKbase.Util.getHiddenDeudaVencida(oCliente.cli_login);
-            if (l != null)
-            {
-                decimal? limiteSaldo = DKbase.Util.RecuperarLimiteSaldo();
-                DateTime fechaActual = DateTime.Now;
-                DateTime Fecha = DateTime.Today;
-                DateTime fechaHasta = Fecha.AddDays(1);
-                List<DKbase.dll.cCtaCteMovimiento> l_deudaVencida = l.Where(x => x.FechaVencimiento.HasValue && x.FechaVencimiento.Value
-                < fechaHasta && x.Saldo.HasValue && limiteSaldo.HasValue && x.Saldo > limiteSaldo).ToList();
-                List<DKbase.dll.cCtaCteMovimiento> l_saldoSinImputar = l.Where(x => x.FechaVencimiento.HasValue &&
-                x.FechaVencimiento.Value < fechaActual && x.Saldo != null && x.Saldo.Value < 0).ToList();
-                DKweb.Codigo.Util.deudaVencida_Set(Accessor, l_deudaVencida);
-                DKweb.Codigo.Util.saldoSinImputar_Set(Accessor, l_saldoSinImputar);
-                resultado_sub += "<input type=\"hidden\" id=\"hiddenListaDeudaVencida\" value=\"" +
-                System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(l_deudaVencida)) + "\" />";
-                resultado_sub += "<input type=\"hidden\" id=\"hiddenListaSaldoSinImputar\" value=\"" +
-                System.Net.WebUtility.HtmlEncode(DKbase.generales.Serializador_base.SerializarAJson(l_saldoSinImputar)) + "\" />";
-            }
-        }
-        WriteLiteral(resultado_sub);
-    }
-}
 @section Scripts{
     @Html.Partial("_scriptsCtacte")
 
     <script type="text/javascript">
-
         jQuery(document).ready(function () {
             if (listaDeudaVencida == null) {
                 listaDeudaVencida = eval('(' + $('#hiddenListaDeudaVencida').val() + ')');
@@ -53,8 +21,9 @@
             CargarHtmlDeudaVencida();
             CargarHtmlSaldoSinImputar();
         });
-
-            //
+        document.addEventListener('DOMContentLoaded', function() {
+        onclickDeudaVencida();
+        });
     </script>
 
 }
@@ -63,6 +32,7 @@
     <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
         <div class="padding_l-10 pad_7 tit_secund">DEUDA VENCIDA</div>
     </div>
+    <div id="divResultadoDeudaVencida" class="col-xs-12" style="padding-top: 20px;"></div>
     <div class="clear5 visible-xs"></div>
     <div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 text-right">
         <a class="btn_download float-right noImprimir" href="../../servicios/generarCSV.aspx?t=deudaVencida"
