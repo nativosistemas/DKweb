@@ -713,8 +713,6 @@ function CargarHtmlCabecera_Generico(objDocumento) {
         strMontoTotal = '$&nbsp;' + FormatoDecimalConDivisorMiles(objDocumento.MontoTotal.toFixed(2));
     }
     strHtml += '<div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 doc_info"><span>Total:</span>' + strMontoTotal + '</div>';
-    strHtml += '<div class="clear10 visible-lg"></div>';
-
     if (isMostrarEnCabezadoTodo) {
         var strMontoExento = '&nbsp;';
         if (isNotNullEmpty(objDocumento.MontoExento)) {
@@ -722,6 +720,7 @@ function CargarHtmlCabecera_Generico(objDocumento) {
         }
         strHtml += '<div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 doc_info"><span>Monto Exento:</span>' + strMontoExento + '</div>';
     }
+    strHtml += '<div class="clear10 visible-lg"></div>';
     if (isMostrarEnCabezadoTodo) {
         var strMontoGravado = '&nbsp;';
         if (isNotNullEmpty(objDocumento.MontoGravado)) {
@@ -757,9 +756,12 @@ function CargarHtmlCabecera_Generico(objDocumento) {
         }
         strHtml += '<div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 doc_info"><span>Percepci&oacute;n Municipal:</span>' + strMontoPercepcionMunicipal + '</div>';
         // Fin parte nueva
-
     }
-
+    var strMontoPercepcionIVA = '&nbsp;';
+    if (isNotNullEmpty(objDocumento.MontoPercepcionIVA)) {
+        strMontoPercepcionIVA = '$&nbsp;' + FormatoDecimalConDivisorMiles(objDocumento.MontoPercepcionIVA.toFixed(2));
+    }
+    strHtml += '<div class="col-lg-2 col-md-3 col-sm-6 col-xs-12 doc_info"><span>Percepcion IVA:</span>' + strMontoPercepcionIVA + '</div>';
     strHtml += '<div class="clear0"></div>';
     strHtml += '</div>';
 
