@@ -577,7 +577,7 @@ function onclickEnviarConsultaAReclamos() {
     strHtml += "</div>";
 
     mensaje_alert_generic("Información", strHtml);
-  }
+  } 
 }
 function onclickEnviarConsultaAValePsicotropico() {
   var vMail = $("#idValeMail").val();
@@ -811,44 +811,104 @@ function getCantidad_SubirArchivo_pedirCC(
   }
   return "";
 }
-function generarTablaDeudaVencida(response){
+function generarTablaDeudaVencida(response) {
   var objListaDeuda = response.item;
 
   var strHtml = '';
+  var strHtmlPositivos = '';
+  var strHtmlNegativos = '';
+  var hayCreditosPositivos = false;
+  var hayCreditosNegativos = false;
 
   if (Array.isArray(objListaDeuda) && objListaDeuda.length > 0) {
-      strHtml += '<table class="table table-striped table-bordered table-hover">';
-      strHtml += '<thead class="thead-dark">';
-      strHtml += '<tr>';
-      strHtml += '<th class="custom-padding">Comprobante</th>';
-      strHtml += '<th class="custom-padding">Fecha</th>';
-      strHtml += '<th class="custom-padding">Importe</th>';
-      strHtml += '<th class="custom-padding">N° Comprobante</th>';
-      strHtml += '<th class="custom-padding">Semana</th>';
-      strHtml += '<th class="custom-padding">Vencimiento</th>';
-      strHtml += '</tr>';
-      strHtml += '</thead>';
+      // Crear tabla para importes positivos
+      strHtmlPositivos += '<h3>Deuda Vencida</h3>';
+      strHtmlPositivos += '<table class="table table-striped table-bordered table-hover">';
+      strHtmlPositivos += '<thead class="thead-dark">';
+      strHtmlPositivos += '<tr>';
+      strHtmlPositivos += '<th class="custom-padding">Comprobante</th>';
+      strHtmlPositivos += '<th class="custom-padding">Fecha</th>';
+      strHtmlPositivos += '<th class="custom-padding">Importe</th>';
+      strHtmlPositivos += '<th class="custom-padding">N° Comprobante</th>';
+      strHtmlPositivos += '<th class="custom-padding">Semana</th>';
+      strHtmlPositivos += '<th class="custom-padding">Vencimiento</th>';
+      strHtmlPositivos += '</tr>';
+      strHtmlPositivos += '</thead>';
+      strHtmlPositivos += '<tbody>';
 
-      strHtml += '<tbody>';
+      // Crear tabla para importes negativos (créditos)
+      strHtmlNegativos += '<h3>Créditos sin Imputar</h3>';
+      strHtmlNegativos += '<table class="table table-striped table-bordered table-hover">';
+      strHtmlNegativos += '<thead class="thead-dark">';
+      strHtmlNegativos += '<tr>';
+      strHtmlNegativos += '<th class="custom-padding">Comprobante</th>';
+      strHtmlNegativos += '<th class="custom-padding">Fecha</th>';
+      strHtmlNegativos += '<th class="custom-padding">Importe</th>';
+      strHtmlNegativos += '<th class="custom-padding">N° Comprobante</th>';
+      strHtmlNegativos += '<th class="custom-padding">Semana</th>';
+      strHtmlNegativos += '<th class="custom-padding">Vencimiento</th>';
+      strHtmlNegativos += '</tr>';
+      strHtmlNegativos += '</thead>';
+      strHtmlNegativos += '<tbody>';
+
+      // Recorrer la lista de deudas
       for (var i = 0; i < objListaDeuda.length; i++) {
           var deuda = objListaDeuda[i];
-          strHtml += '<tr>';
-          strHtml += '<td class="text-center">' + deuda.comprobante + '</td>';
-          strHtml += '<td class="text-center">' + deuda.fecha + '</td>';
-          strHtml += '<td class="text-right">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(parseFloat(deuda.importe).toFixed(2)) + '</td>';
-          strHtml += '<td class="text-center">' + deuda.numero_comprobante+ '</td>';
-          strHtml += '<td class="text-center">' + deuda.semana + '</td>';
-          strHtml += '<td class="text-center">' + deuda.vencimiento + '</td>';
-          strHtml += '</tr>';
+          var importe = parseFloat(deuda.importe.replace(",", ""));
+
+          if (importe < 0) {
+              hayCreditosNegativos = true;
+              // Agregar a la tabla de créditos sin imputar (importe negativo)
+              strHtmlNegativos += '<tr>';
+              strHtmlNegativos += '<td class="text-center">' + deuda.comprobante + '</td>';
+              strHtmlNegativos += '<td class="text-center">' + deuda.fecha + '</td>';
+              strHtmlNegativos += '<td class="text-right">' + '$&nbsp;' + deuda.importe + '</td>';
+              strHtmlNegativos += '<td class="text-center">' + deuda.numerO_COMPROBANTE + '</td>';
+              strHtmlNegativos += '<td class="text-center">' + deuda.semana + '</td>';
+              strHtmlNegativos += '<td class="text-center">' + deuda.vencimiento + '</td>';
+              strHtmlNegativos += '</tr>';
+          } else {
+              hayCreditosPositivos = true;
+              // Agregar a la tabla de deuda vencida (importe positivo)
+              strHtmlPositivos += '<tr>';
+              strHtmlPositivos += '<td class="text-center">' + deuda.comprobante + '</td>';
+              strHtmlPositivos += '<td class="text-center">' + deuda.fecha + '</td>';
+              strHtmlPositivos += '<td class="text-right">' + '$&nbsp;' + deuda.importe + '</td>';
+              strHtmlPositivos += '<td class="text-center">' + deuda.numerO_COMPROBANTE + '</td>';
+              strHtmlPositivos += '<td class="text-center">' + deuda.semana + '</td>';
+              strHtmlPositivos += '<td class="text-center">' + deuda.vencimiento + '</td>';
+              strHtmlPositivos += '</tr>';
+          }
       }
-      strHtml += '</tbody>';
-      strHtml += '</table>';
+
+      strHtmlPositivos += '</tbody>';
+      strHtmlPositivos += '</table>';
+
+      strHtmlNegativos += '</tbody>';
+      strHtmlNegativos += '</table>';
   } else {
+      // Si no hay datos disponibles
       strHtml += '<div class="alert alert-warning text-center" role="alert">';
       strHtml += 'No hay información disponible';
       strHtml += '</div>';
   }
 
+  // Si no hay créditos positivos
+  if (!hayCreditosPositivos) {
+      strHtmlPositivos = '<div class="alert alert-info text-center" role="alert">No hay deuda vencida</div>';
+  }
+
+  // Si no hay créditos negativos
+  if (!hayCreditosNegativos) {
+      strHtmlNegativos = '<div class="alert alert-info text-center" role="alert">No hay créditos sin imputar</div>';
+  }
+
+  // Combinar ambas tablas o mensajes en una sola variable
+  strHtml = strHtmlPositivos + strHtmlNegativos;
+
+  // Mostrar el contenido en el mismo div
   $('#divResultadoDeudaVencida').html(strHtml);
+
+  // Inicializar footable si es necesario
   $('.footable').footable();
 }
