@@ -650,7 +650,7 @@ public class Util
             result = horario_siguiente;
             DateTime? fechaHorarioCierre = DKbase.web.FuncionesPersonalizadas_base.getFecha_Horario(getObtenerHorarioCierre(pHttpContextAccessor, pSucursal));
             DateTime? fechaGuarda = DKbase.web.FuncionesPersonalizadas_base.getFecha_Horario(result);
-            if (fechaHorarioCierre != null && fechaGuarda != null && fechaGuarda.Value < fechaHorarioCierre.Value)
+            if (fechaHorarioCierre != null && fechaGuarda != null && fechaGuarda.Value <= fechaHorarioCierre.Value)
             {
                 string horarioCierre_2 = DKbase.web.FuncionesPersonalizadas_base.ObtenerHorarioCierreAnterior(oCliente, pSucursalDependiente, pHorarioCierre);
                 if (!string.IsNullOrEmpty(horarioCierre_2))
