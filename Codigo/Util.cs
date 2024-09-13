@@ -1233,6 +1233,8 @@ public class Util
             strCabeceraCSV += ";";
             strCabeceraCSV += "Monto Percepciones Municipal";
             strCabeceraCSV += ";";
+            strCabeceraCSV += "Monto Percepcion IVA";
+            strCabeceraCSV += ";";
             strCabeceraCSV += "Monto Total";
             FAC_txt.WriteLine(strCabeceraCSV);
             for (int i = 0; i < resultadoObjLista.Count; i++)
@@ -1255,6 +1257,8 @@ public class Util
                 detalleCSV += DKbase.generales.Numerica.FormatoNumeroPuntoMilesComaDecimal(resultadoObjLista[i].MontoPercepcionesDGR);
                 detalleCSV += ";";
                 detalleCSV += DKbase.generales.Numerica.FormatoNumeroPuntoMilesComaDecimal(resultadoObjLista[i].MontoPercepcionesMunicipal);
+                detalleCSV += ";";
+                detalleCSV += DKbase.generales.Numerica.FormatoNumeroPuntoMilesComaDecimal(resultadoObjLista[i].MontoPercepcionIVA);
                 detalleCSV += ";";
                 detalleCSV += DKbase.generales.Numerica.FormatoNumeroPuntoMilesComaDecimal(resultadoObjLista[i].MontoTotal);
                 FAC_txt.WriteLine(detalleCSV);
