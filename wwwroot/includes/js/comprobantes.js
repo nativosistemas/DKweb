@@ -136,6 +136,13 @@ function CargarListaComprobanteCompleto() {
             strHtml += '</table>';
             strHtml += '<span class="thd_letra_chica visible-sm visible-xs">Percepci&oacute;n Municipal</span>';
             strHtml += '</th>';
+            strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-1 text-center no-padding" data-breakpoints="xs sm">';
+            strHtml += '<table class="hidden-xs hidden-sm" width="100%" cellpadding="0" cellspacing="0">';
+            strHtml += '<tr><td class="col-lg-12 text-center">&nbsp;<div class="clear5"></div></td></tr>';
+            strHtml += '<tr class="tr_thead"><td class="col-lg-12 text-center">Percepci&oacute;n IVA</td></tr>';
+            strHtml += '</table>';
+            strHtml += '<span class="thd_letra_chica visible-sm visible-xs">Percepci&oacute;n IVA</span>';
+            strHtml += '</th>';
             strHtml += '<th class="col-lg-1 col-md-1 col-sm-2 col-xs-3 text-center no-padding">';
             strHtml += '<table width="100%" cellpadding="0" cellspacing="0">';
             strHtml += '<tr><td class="col-lg-12 text-center">&nbsp;<div class="clear5"></div></td></tr>';
@@ -188,6 +195,7 @@ function CargarListaComprobanteCompleto() {
                 strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 r_to_l-sm">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(objListaComprobante[i].MontoIvaNoInscripto.toFixed(2)) + '</td>';
                 strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 r_to_l-sm">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(objListaComprobante[i].MontoPercepcionesDGR.toFixed(2)) + '</td>';
                 strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 r_to_l-sm">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(objListaComprobante[i].MontoPercepcionesMunicipal.toFixed(2)) + '</td>';
+                strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 r_to_l-sm">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(objListaComprobante[i].MontoPercepcionIVA.toFixed(2)) + '</td>';
                 strHtml += '<td class="col-lg-1 col-md-1 col-sm-2 col-xs-3 text-right">' + '$&nbsp;' + FormatoDecimalConDivisorMiles(objListaComprobante[i].MontoTotal.toFixed(2)) + '</td>';
                 strHtml += '</tr>';
             } // fin for (var i = 0; i < objListaComprobante.length; i++) {
