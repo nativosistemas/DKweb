@@ -823,12 +823,12 @@ function generarTablaDeudaVencida(response) {
   if (Array.isArray(objListaDeuda) && objListaDeuda.length > 0) {
       // Crear tabla para importes positivos
       //strHtmlPositivos += '<div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">'
-      strHtmlPositivos += '<div class="padding_l-10 pad_7 tit_secund">DEUDA VENCIDA</div>'
+      strHtmlPositivos += '<div class="padding_l-10 pad_7 tit_secund">DEUDA VENCIDA'
       //strHtmlPositivos += '</div>'
-      strHtmlPositivos += '<div class="col-lg-6 col-md-6 col-sm-8 col-xs-12 text-right">';
+      strHtmlPositivos += '<div class="text-right">';
       strHtmlPositivos += '<a class="btn_download float-right noImprimir" href="../../servicios/generarCSV.aspx?t=deudaVencida" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Descargar en Excel">EXCEL</a>';
       strHtmlPositivos += '<a class="btn_print float-right noImprimir" href="#" onclick="printDiv("deudaVencidaPrint"); return false;"data-toggle="tooltip" data-placement="bottom" title="">IMPRIMIR</a>';
-      strHtmlPositivos += '</div>';
+      strHtmlPositivos += '</div></div>';
       strHtmlPositivos += '<table class="table table-striped table-bordered table-hover">';
       strHtmlPositivos += '<thead class="thead-dark">';
       strHtmlPositivos += '<tr>';
