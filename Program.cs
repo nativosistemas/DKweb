@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Rewrite;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Rewrite;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +38,8 @@ var dkWebCache = builder.Configuration.GetConnectionString("DkWebCache");
 if (String.IsNullOrEmpty(dkWebCache))
 {
     builder.Services.AddDistributedMemoryCache();
-} else
+}
+else
 {
     builder.Services.AddDistributedSqlServerCache(options =>
     {
@@ -50,20 +49,23 @@ if (String.IsNullOrEmpty(dkWebCache))
     });
 }
 
+var sessionIdleTimeout = Convert.ToDouble(builder.Configuration.GetSection("appSettings")["SessionIdleTimeout"] ?? "360");
+
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromDays(14);
+    options.IdleTimeout = TimeSpan.FromMinutes(sessionIdleTimeout);
+    options.Cookie.Name = ".AspNetCore.Session.dkweb";
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-.AddCookie(option =>
+.AddCookie(options =>
 {
-    option.LoginPath = "/Home/Index";
-    option.ExpireTimeSpan = TimeSpan.FromDays(14);
-    option.AccessDeniedPath = "/config/sinpermiso";
+    options.LoginPath = "/Home/Index";
+    options.AccessDeniedPath = "/config/sinpermiso";
+    options.Cookie.Name = ".AspNetCore.Cookies.dkweb";
 });
 // inicio admin
 builder.Services.AddAuthorization(options =>
